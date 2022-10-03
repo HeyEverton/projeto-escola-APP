@@ -30,6 +30,36 @@ const router = new VueRouter({
       name: 'lista-alunos',
       component: () => import('@/views/alunos/AlunosLista.vue'),
       meta: {
+        pageTitle: 'Todos os alunos',
+        breadcrumb: [
+          {
+            text: 'Lista de alunos',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    // {
+    //   path: '/cadastrar-aluno',
+    //   name: 'cadastrar-aluno',
+    //   component: () => import('@/views/cadastro-alunos/FormWizardIcon.vue'),
+    //   meta: {
+    //     pageTitle: 'Home',
+    //     breadcrumb: [
+    //       {
+    //         text: 'Home',
+    //         active: true,
+    //       },
+    //     ],
+    //   },
+    // },
+
+    {
+      path: '/cadastrar-alunos',
+      name: 'cadastrar-alunos',
+      component: () => import('@/views/cadastro-alunos/FormWizard.vue'),
+      meta: {
         pageTitle: 'Home',
         breadcrumb: [
           {
@@ -40,20 +70,20 @@ const router = new VueRouter({
       },
     },
 
-    {
-      path: '/second-page',
-      name: 'second-page',
-      component: () => import('@/views/SecondPage.vue'),
-      meta: {
-        pageTitle: 'Second Page',
-        breadcrumb: [
-          {
-            text: 'Second Page',
-            active: true,
-          },
-        ],
-      },
-    },
+    // {
+    //   path: '/cadastrar-teste',
+    //   name: 'cadastrar-teste',
+    //   component: () => import('@/views/cadastro-alunos/FormWizardVertical.vue'),
+    //   meta: {
+    //     pageTitle: 'Home',
+    //     breadcrumb: [
+    //       {
+    //         text: 'Home',
+    //         active: true,
+    //       },
+    //     ],
+    //   },
+    // },
 
     {
       path: '/login',

@@ -295,7 +295,6 @@ export default {
                     buttonsStyling: false,
                   })
                 }
-              
               })
           }
         })
