@@ -13,19 +13,8 @@ export default [
 
   {
     title: 'Cadastrar aluno',
-    route: 'cadastrar-aluno',
+    route: 'cadastrar-alunos',
     icon: 'UserPlusIcon',
   },
 
-  {
-    title: 'wizard normal',
-    route: 'cadastrar-alunos',
-    icon: 'UserIcon',
-  },
-
-  // {
-  //   title: 'wizard vertical',
-  //   route: 'cadastrar-teste',
-  //   icon: 'UserIcon',
-  // },
 ]

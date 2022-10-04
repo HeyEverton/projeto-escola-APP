@@ -76,13 +76,13 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="users"
+        :items="alunos"
         responsive
         :fields="tableColumns"
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
-        empty-text="Nenhum usuário encontrado"
+        empty-text="Nenhum aluno foi encontrado"
         :sort-desc.sync="isSortDirDesc"
       >
 
@@ -90,24 +90,24 @@
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
-                size="32"
-                :src="data.item.profile_photo_path"
-                :text="avatarText(data.item.name)"
+                size="30"
+                :src="data.item.aluno_foto"
+                :text="avatarText(data.item.nome)"
                 :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
               />
             </template>
             <b-link
-              :to="{ name: 'perfil', params: { id: data.item.id } }"
+              :to="{ name: 'dados-aluno', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.name }}
+              {{ data.item.nome }}
             </b-link>
             <!-- <small >@{{ data.item.perfil }}</small> -->
           </b-media>
         </template>
 
         <!-- Column: Actions -->
-        <template #cell(actions)="data">
+        <!-- <template #cell(actions)="data">
           <b-button
             v-b-tooltip.hover
             variant="primary"
@@ -127,7 +127,7 @@
           >
             <feather-icon icon="TrashIcon" />
           </b-button>
-        </template>
+        </template> -->
 
       </b-table>
       <div class="mx-2 mb-2">
@@ -204,7 +204,7 @@ import { avatarText } from '@core/utils/filter'
 import { debounce } from 'lodash'
 import UsersListFilters from './AlunosFiltros.vue'
 import useUsersList from './useUsersList'
-// import userStoreModule from '../userStoreModule'
+import userStoreModule from './userStoreModule'
 import UserListAddNew from './AlunosListaNew.vue'
 
 export default {
@@ -258,23 +258,23 @@ export default {
         .then(res => {
           if (res.isConfirmed) {
             this.$http
-              .delete(`/users/${id}`)
+              .delete(`/alunos/${id}`)
               .then(response => {
                 if (response.status == 200 || response.status == 204) {
                   this.$swal({
                     icon: 'success',
                     title: 'Excluído',
-                    text: 'Este usuário foi excluído com sucesso',
+                    text: 'Este aluno foi excluído com sucesso',
                     customClass: {
                       confirmButton: 'btn btn-success',
                     },
                   })
-                  this.$http.get('usuarios/perfis')
-                    .then(response => this.users = response.data.data)
+                  this.$http.get('alunos')
+                    .then(response => this.alunos = response.data.data)
                 } else {
                   this.$swal({
                     title: 'Falha ao excluir!',
-                    text: 'Ops! parece que houve um erro ao excluir este usuário!',
+                    text: 'Ops! parece que houve um erro ao excluir este aluno!',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',
@@ -287,7 +287,7 @@ export default {
                 if (error.message) {
                   this.$swal({
                     title: 'Acesso negado!',
-                    text: 'Você não tem autorização para excluir um usuário.',
+                    text: 'Você não tem autorização para excluir um aluno.',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',
@@ -300,16 +300,16 @@ export default {
         })
     },
 
-    pesquisarUsuarios() {
-      this.$http.get(`users?search=${this.searchQuery}`)
-        .then(response => {
-          this.users = response.data.data
-        })
-    },
+    // pesquisarUsuarios() {
+    //   this.$http.get(`users?search=${this.searchQuery}`)
+    //     .then(response => {
+    //       this.users = response.data.data
+    //     })
+    // },
 
-    handleInput: debounce(function () {
-      this.pesquisarUsuarios()
-    }, 1000),
+    // handleInput: debounce(function () {
+    //   this.pesquisarUsuarios()
+    // }, 1000),
   },
 
   created() {

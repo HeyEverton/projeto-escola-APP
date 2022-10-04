@@ -16,7 +16,8 @@ export default function useUsersList() {
   const tableColumns = [
     { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
     // { key: z'name', label: 'Nome', sortable: true },
-    { key: 'user', label: 'Usuário', sortable: true },
+    { key: 'user', label: 'Aluno', sortable: true },
+    { key: 'cpf_aluno', label: 'CPF', sortable: true },
     // { key: 'profile_photo_path', label:'Foto', sortable: true },
     { key: 'email', label: 'E-mail', sortable: true },
     { key: 'actions', label: 'Ações' },
