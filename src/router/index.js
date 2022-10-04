@@ -70,25 +70,28 @@ const router = new VueRouter({
       },
     },
 
-    // {
-    //   path: '/cadastrar-teste',
-    //   name: 'cadastrar-teste',
-    //   component: () => import('@/views/cadastro-alunos/FormWizardVertical.vue'),
-    //   meta: {
-    //     pageTitle: 'Home',
-    //     breadcrumb: [
-    //       {
-    //         text: 'Home',
-    //         active: true,
-    //       },
-    //     ],
-    //   },
-    // },
-
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/Login.vue'),
+      component: () => import('@/views/auth/Login.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+
+    {
+      path: '/esqueceu-senha',
+      name: 'esqueceu-senha',
+      component: () => import('@/views/auth/EsqueceuSenha.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+
+    {
+      path: '/recuperar-senha',
+      name: 'recuperar-senha',
+      component: () => import('@/views/auth/RecuperarSenha.vue'),
       meta: {
         layout: 'full',
       },

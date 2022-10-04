@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          HTech
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,26 +41,26 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            Welcome to Vuexy! 👋
+            Seja bem-vindo!
           </b-card-title>
           <b-card-text class="mb-2">
-            Please sign-in to your account and start the adventure
+            Faça login para continuar
           </b-card-text>
 
           <!-- form -->
-          <validation-observer ref="loginValidation">
+          <validation-observer ref="loginForm">
             <b-form
               class="auth-login-form mt-2"
               @submit.prevent
             >
               <!-- email -->
               <b-form-group
-                label="Email"
-                label-for="login-email"
+                label="E-mail"
+                label-for="email"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Email"
+                  name="E-mail"
                   rules="required|email"
                 >
                   <b-form-input
@@ -68,7 +68,7 @@
                     v-model="userEmail"
                     :state="errors.length > 0 ? false:null"
                     name="login-email"
-                    placeholder="john@example.com"
+                    placeholder="joao@exemplo.com"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -77,14 +77,14 @@
               <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
-                  <b-link :to="{name:'auth-forgot-password-v2'}">
-                    <small>Forgot Password?</small>
+                  <label for="senha">Senha</label>
+                  <b-link :to="{name:'esqueceu-senha'}">
+                    <small>Esqueceu a senha?</small>
                   </b-link>
                 </div>
                 <validation-provider
                   #default="{ errors }"
-                  name="Password"
+                  name="Senha"
                   rules="required"
                 >
                   <b-input-group
@@ -119,7 +119,7 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  Remember Me
+                  Lembrar meu acesso
                 </b-form-checkbox>
               </b-form-group>
 
@@ -128,17 +128,17 @@
                 type="submit"
                 variant="primary"
                 block
-                @click="validationForm"
+                @click="login"
               >
-                Sign in
+                Entrar
               </b-button>
             </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
+            <span>Novo aqui? </span>
             <b-link :to="{name:'page-auth-register-v2'}">
-              <span>&nbsp;Create an account</span>
+              <span>&nbsp;Crie uma conta</span>
             </b-link>
           </b-card-text>
 
@@ -194,6 +194,8 @@ import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import useJwt from '@/auth/jwt/useJwt'
+import message from '@/utils/messages'
 
 export default {
   components: {
@@ -240,19 +242,57 @@ export default {
     },
   },
   methods: {
-    validationForm() {
-      this.$refs.loginValidation.validate().then(success => {
-        if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
-          })
-        }
-      })
+    login() {
+      this.$refs.loginForm.validate()
+        .then(success => {
+          if (success) {
+            useJwt.login({
+              email: this.userEmail,
+              password: this.password,
+            })
+              .then(response => {
+                console.log(response)
+                if (response.status == 401) {
+                  alert('401 erro no if')
+                }
+                const token = `${response.data.access_token}`
+                useJwt.setToken(token)
+                localStorage.setItem('user_data', response.data.data.name)
+                localStorage.setItem('user_email', response.data.data.email)
+                localStorage.setItem('user_role', response.data.data.role)
+                localStorage.setItem('user_id', response.data.data.id)
+
+                this.$store.commit('user/STORE_USER', response.data.data)
+                this.$router.replace('/')
+                  .then(() => {
+                    this.$toast({
+                      component: ToastificationContent,
+                      position: 'top-left',
+                      props: {
+                        title: `Bem-vindo ${response.data.data.name}`,
+                        text: 'Seja muito bem vindo a HTech! Aproveite!',
+                        icon: 'CoffeeIcon',
+                        variant: 'success',
+                      },
+                    })
+                  })
+              })
+              .catch(e => {
+                const errorCode = e?.response?.data?.error || 'ServerError'
+                if (errorCode == 'LoginInvalidException') {
+                  this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'Ops! E-mail e/ou senha incorretos!',
+                      icon: 'AlertCircleIcon',
+                      variant: 'danger',
+                    },
+                  })
+                }
+              })
+          }
+        })
     },
   },
 }

@@ -669,7 +669,7 @@ export default {
       estado: '',
       numero_residencia: '',
       observacao: '',
-      
+
       landMark: '',
       pincode: '',
       twitterUrl: '',

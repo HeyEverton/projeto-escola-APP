@@ -30,15 +30,16 @@
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
             <p class="user-name font-weight-bolder mb-0">
-              John Doe
+              {{ user.name }}
             </p>
-            <span class="user-status">Admin</span>
+            <span class="user-status">{{ user.role }}</span>
           </div>
           <b-avatar
             size="40"
             variant="light-primary"
             badge
-            :src="require('@/assets/images/avatars/13-small.png')"
+            :src="user.profile_photo"
+            :text="avatarText(user.name)"
             class="badge-minimal"
             badge-variant="success"
           />
@@ -82,7 +83,10 @@
 
         <b-dropdown-divider />
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          @click="logout"
+        >
           <feather-icon
             size="16"
             icon="LogOutIcon"
@@ -97,9 +101,17 @@
 
 <script>
 import {
-  BLink, BNavbarNav, BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
+  BLink,
+  BNavbarNav,
+  BNavItemDropdown,
+  BDropdownItem,
+  BDropdownDivider,
+  BAvatar,
+
 } from 'bootstrap-vue'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { avatarText } from '@core/utils/filter'
 
 export default {
   components: {
@@ -113,11 +125,46 @@ export default {
     // Navbar Components
     DarkToggler,
   },
+
   props: {
     toggleVerticalMenuActive: {
       type: Function,
       default: () => {},
     },
   },
+
+  data() {
+    return {
+      user: {},
+      avatarText,
+    }
+  },
+
+  mounted() {
+    this.$http.get('auth/me')
+      .then((response => {
+        this.user = response.data
+        // console.log(response.data)
+      }))
+  },
+
+  methods: {
+    logout() {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('user_data')
+      localStorage.removeItem('user_email')
+      localStorage.removeItem('user_role')
+      this.$router.replace('/login')
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Até logo ',
+          icon: 'LogOutIcon',
+          variant: 'success',
+        },
+      })
+    },
+  },
+
 }
 </script>

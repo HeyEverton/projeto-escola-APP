@@ -42,7 +42,7 @@ export default class JwtService {
         const originalRequest = config
 
         // if (status === 401) {
-        if (response && response.status === 401) {
+        if (response && response.status === 404) {
           if (!this.isAlreadyFetchingAccessToken) {
             this.isAlreadyFetchingAccessToken = true
             this.refreshToken().then(r => {

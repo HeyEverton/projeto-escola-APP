@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
+import VueSweetalert2 from 'vue-sweetalert2'
 
 import router from './router'
 import store from './store'
@@ -19,6 +20,9 @@ Vue.use(ModalPlugin)
 
 // Composition API
 Vue.use(VueCompositionAPI)
+
+// Sweet alert plugin
+Vue.use(VueSweetalert2)
 
 // import core styles
 require('@core/scss/core.scss')
