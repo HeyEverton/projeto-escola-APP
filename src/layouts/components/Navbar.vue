@@ -144,7 +144,6 @@ export default {
     this.$http.get('auth/me')
       .then((response => {
         this.user = response.data
-        // console.log(response.data)
       }))
   },
 
@@ -153,6 +152,7 @@ export default {
       localStorage.removeItem('access_token')
       localStorage.removeItem('user_data')
       localStorage.removeItem('user_email')
+      localStorage.removeItem('user_id')
       localStorage.removeItem('user_role')
       this.$router.replace('/login')
       this.$toast({

@@ -137,7 +137,7 @@
 
           <b-card-text class="text-center mt-2">
             <span>Novo aqui? </span>
-            <b-link :to="{name:'page-auth-register-v2'}">
+            <b-link :to="{name:'cadastre-se'}">
               <span>&nbsp;Crie uma conta</span>
             </b-link>
           </b-card-text>
@@ -145,7 +145,7 @@
           <!-- divider -->
           <div class="divider my-2">
             <div class="divider-text">
-              or
+              ou
             </div>
           </div>
 

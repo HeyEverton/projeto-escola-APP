@@ -80,6 +80,15 @@ const router = new VueRouter({
     },
 
     {
+      path: '/cadastre-se',
+      name: 'cadastre-se',
+      component: () => import('@/views/auth/Cadastro.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+
+    {
       path: '/esqueceu-senha',
       name: 'esqueceu-senha',
       component: () => import('@/views/auth/EsqueceuSenha.vue'),
