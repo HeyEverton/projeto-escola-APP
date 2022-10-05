@@ -300,16 +300,16 @@ export default {
         })
     },
 
-    // pesquisarUsuarios() {
-    //   this.$http.get(`users?search=${this.searchQuery}`)
-    //     .then(response => {
-    //       this.users = response.data.data
-    //     })
-    // },
+    pesquisarUsuarios() {
+      this.$http.get(`users?search=${this.searchQuery}`)
+        .then(response => {
+          this.users = response.data.data
+        })
+    },
 
-    // handleInput: debounce(function () {
-    //   this.pesquisarUsuarios()
-    // }, 1000),
+    handleInput: debounce(function () {
+      this.pesquisarUsuarios()
+    }, 1000),
   },
 
   created() {

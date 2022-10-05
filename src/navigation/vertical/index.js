@@ -17,4 +17,10 @@ export default [
     icon: 'UserPlusIcon',
   },
 
+  {
+    title: 'Cadastrar professor',
+    route: 'cadastrar-professores',
+    icon: 'UserPlusIcon',
+  },
+
 ]

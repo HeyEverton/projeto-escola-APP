@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Guard from '@/service/middleware.js'
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,7 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'home',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/Home.vue'),
       meta: {
         pageTitle: 'Home',
@@ -40,30 +42,30 @@ const router = new VueRouter({
       },
     },
 
-    // {
-    //   path: '/cadastrar-aluno',
-    //   name: 'cadastrar-aluno',
-    //   component: () => import('@/views/cadastro-alunos/FormWizardIcon.vue'),
-    //   meta: {
-    //     pageTitle: 'Home',
-    //     breadcrumb: [
-    //       {
-    //         text: 'Home',
-    //         active: true,
-    //       },
-    //     ],
-    //   },
-    // },
-
     {
       path: '/cadastrar-alunos',
       name: 'cadastrar-alunos',
       component: () => import('@/views/cadastro-alunos/FormWizard.vue'),
       meta: {
-        pageTitle: 'Home',
+        pageTitle: 'Matricular aluno',
         breadcrumb: [
           {
-            text: 'Home',
+            text: 'Matrículas',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/cadastrar-professores',
+      name: 'cadastrar-professores',
+      component: () => import('@/views/professores/ProfessorCadastro.vue'),
+      meta: {
+        pageTitle: 'Cadastrar professor',
+        breadcrumb: [
+          {
+            text: 'cadastrar professor',
             active: true,
           },
         ],

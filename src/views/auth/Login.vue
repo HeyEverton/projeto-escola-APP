@@ -251,10 +251,6 @@ export default {
               password: this.password,
             })
               .then(response => {
-                console.log(response)
-                if (response.status == 401) {
-                  alert('401 erro no if')
-                }
                 const token = `${response.data.access_token}`
                 useJwt.setToken(token)
                 localStorage.setItem('user_data', response.data.data.name)

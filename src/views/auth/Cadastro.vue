@@ -72,69 +72,67 @@
                 </validation-provider>
               </b-form-group>
 
-
-              
               <!-- email -->
               <b-form-group
-              label="Email"
-              label-for="register-email"
+                label="Email"
+                label-for="register-email"
               >
-              <validation-provider
-              #default="{ errors }"
-              name="E-mail"
-              rules="required|email"
-              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="E-mail"
+                  rules="required|email"
+                >
                   <b-form-input
                     id="register-email"
                     v-model="email"
                     name="register-email"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira seu e-mail"
-                    />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-                <b-form-group
-                  label="Por favor, envie sua foto de perfil"
-                  label-for="profile_photo"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+              <b-form-group
+                label="Por favor, envie sua foto de perfil"
+                label-for="profile_photo"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Foto"
+                  rules="required|image"
                 >
-                  <validation-provider
-                    #default="{ errors }"
-                    name="Foto"
-                    rules="required|image"
-                  >
-                    <b-form-file
-                      id="photo"
-                      v-model="foto"
-                      accept="image/jpeg, image/png, image/jpg"
-                      placeholder="Escolha sua foto de perfil"
-                      @change="newFile"
-                    />
-  
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-                <b-form-group
-                  label="Selecione o seu cargo"
-                  label-for="role"
+                  <b-form-file
+                    id="photo"
+                    v-model="foto"
+                    accept="image/jpeg, image/png, image/jpg"
+                    placeholder="Escolha sua foto de perfil"
+                    @change="newFile"
+                  />
+
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+              <b-form-group
+                label="Selecione o seu cargo"
+                label-for="role"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Cargo"
+                  rules="required"
                 >
-                  <validation-provider
-                    #default="{ errors }"
-                    name="Cargo"
-                    rules="required"
-                  >
-                    <v-select
+                  <v-select
                     v-model="cargo"
                     label="nome"
                     :options="cargos"
                     :reduce="cargos => cargos.code"
                     placeholder="Selecione seu cargo"
                   />
-  
-                    <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>
-                </b-form-group>
-                
+
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+
               <!-- password -->
               <b-form-group
                 label-for="password"
@@ -257,8 +255,8 @@ import {
   BImg,
   BCardTitle,
   BCardText,
-  BFormFile
-  
+  BFormFile,
+
 } from 'bootstrap-vue'
 
 import { required, email } from '@validations'
@@ -304,9 +302,9 @@ export default {
       required,
       email,
       cargos: [
-        {code: 'Aluno', nome: 'Aluno(a)'},
-        {code: 'Professor', nome: 'Professor(a)'},
-        {code: 'Secretária', nome: 'Secretário(a)'},
+        { code: 'Aluno', nome: 'Aluno(a)' },
+        { code: 'Professor', nome: 'Professor(a)' },
+        { code: 'Secretária', nome: 'Secretário(a)' },
       ],
     }
   },
@@ -341,7 +339,7 @@ export default {
       payload.append('role', this.cargo)
 
       this.$http
-        .post('cadastro', payload,)
+        .post('cadastro', payload)
         .then(response => {
           this.$toast({
             component: ToastificationContent,
@@ -364,4 +362,3 @@ export default {
   @import '@core/scss/vue/libs/vue-select.scss';
 @import '@core/scss/vue/pages/page-auth.scss';
 </style>
-

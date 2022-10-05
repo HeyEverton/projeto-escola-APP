@@ -9,12 +9,12 @@
       back-button-text="Anterior"
       next-button-text="Próximo"
       class="mb-3"
-      @on-complete="formSubmitted"
+      @on-complete="cadastrarProfessor"
     >
 
       <!--tab informacoes pessiais -->
       <tab-content
-        title="Dados do aluno"
+        title="Dados do professor"
         :before-change="validationForm"
       >
         <validation-observer
@@ -30,7 +30,7 @@
                 Informações pessoais
               </h5>
               <small class="text-muted">
-                Insira as informações do aluno
+                Insira as informações do professor
               </small>
             </b-col>
 
@@ -39,7 +39,7 @@
                 <template #aside>
                   <b-avatar
                     ref="previewEl"
-                    :src="aluno_foto"
+                    :src="professor_foto"
                     :text="avatarText(nome)"
                     size="90px"
                     rounded
@@ -55,17 +55,14 @@
                       ref="refInputEl"
                       type="file"
                       class="d-none"
+                      @change="InputImageRenderer"
                     >
-                    <span class="d-none d-sm-inline">Escolha a foto do aluno</span>
+                    <span class="d-none d-sm-inline">Escolha a foto do professor</span>
                     <feather-icon
                       icon="EditIcon"
                       class="d-inline d-sm-none"
                     />
                   </b-button>
-                  <!-- <b-button variant="outline-secondary" class="ml-1">
-                    <span class="d-none d-sm-inline">Remove</span>
-                    <feather-icon icon="TrashIcon" class="d-inline d-sm-none" />
-                  </b-button> -->
                 </div>
               </b-media>
             </b-col>
@@ -83,16 +80,17 @@
                   <b-form-input
                     id="nome"
                     v-model="nome"
-                    placeholder="Insira o nome do aluno"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o nome do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col md="12">
+            <b-col md="6">
               <b-form-group
                 label="CPF"
-                label-for="cpf_aluno"
+                label-for="professor_cpf"
               >
                 <validation-provider
                   #default="{ errors }"
@@ -100,11 +98,35 @@
                   rules="required"
                 >
                   <b-form-input
-                    id="cpf_aluno"
-                    v-model="cpf_aluno"
+                    id="professor_cpf"
+                    v-model="professor_cpf"
+                    :state="errors.length > 0 ? false:null"
                     type="text"
                     maxlength="14"
-                    placeholder="Insira o CPF do aluno"
+                    placeholder="Insira o CPF do professor"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="RG"
+                label-for="professor_rg"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="CPF"
+                  rules="required"
+                >
+                  <b-form-input
+                    id="professor_cpf"
+                    v-model="professor_rg"
+                    :state="errors.length > 0 ? false:null"
+                    type="text"
+                    maxlength="14"
+                    placeholder="Insira o RG do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -125,7 +147,8 @@
                     v-model="nacionalidade"
                     label="nome"
                     :options="nacionalidades"
-                    placeholder="Selecione a nacionalidade do aluno"
+                    :reduce="nacionalidades => nacionalidades.code"
+                    placeholder="Selecione a nacionalidade do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -134,21 +157,21 @@
 
             <b-col md="6">
               <b-form-group
-                label="Data de nascimento"
-                label-for="data_nascimento"
+                label="Estado civil"
+                label-for="estado_civil"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Data de nascimento"
+                  name="Estado civil"
                   rules="required"
                 >
-                  <cleave
-                    id="date"
-                    v-model="data_nascimento"
-                    class="form-control"
-                    :raw="false"
-                    :options="options.date"
-                    placeholder="DD/MM/AA"
+                  <v-select
+                    v-model="estado_civil"
+                    label="nome"
+                    :options="estados_civil"
+                    :reduce="estados_civil => estados_civil.code"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Selecione o estado civil do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -158,7 +181,7 @@
             <b-col md="6">
               <b-form-group
                 label="Sexo"
-                label-for="nacionalidade"
+                label-for="sexo"
               >
                 <validation-provider
                   #default="{ errors }"
@@ -169,47 +192,11 @@
                     v-model="sexo"
                     label="nome"
                     :options="sexos"
-                    placeholder="Selecione o sexo do aluno"
+                    :reduce="sexos => sexos.code"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Selecione o sexo do professor"
                   />
 
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-
-            <b-col md="6">
-              <b-form-group
-                label="Whatsapp"
-                label-for="whatsapp"
-              >
-                <b-form-input
-                  id="whatsapp"
-                  v-model="whatsapp"
-                  type="number"
-                  placeholder="Insira o whatsapp do aluno"
-                />
-
-              </b-form-group>
-            </b-col>
-
-            <b-col md="6">
-              <b-form-group
-                label="Telefone para contato"
-                label-for="telefone_contato"
-              >
-
-                <validation-provider
-                  #default="{ errors }"
-                  name="Telefone para contato"
-                  rules="required|integer"
-                >
-
-                  <b-form-input
-                    id="tel_contato"
-                    v-model="telefone_contato"
-                    type="number"
-                    placeholder="Insira o telefone de contato do aluno"
-                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -217,20 +204,68 @@
 
             <b-col md="12">
               <b-form-group
-                label="Escolaridade"
-                label-for="escolaridade"
+                label="Formação"
+                label-for="formacao"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Escolaridade"
+                  name="Formação"
                   rules="required"
                 >
-                  <v-select
-                    v-model="escolaridade"
-                    label="nome"
-                    :options="escolaridades"
-                    placeholder="Selecione a escolaridade do aluno"
+                  <b-form-input
+                    id="formacao"
+                    v-model="formacao"
+                    type="text"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira a formação do professor"
                   />
+
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="E-mail"
+                label-for="email"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="E-mail"
+                  rules="required|email"
+                >
+                  <b-form-input
+                    id="email"
+                    v-model="email"
+                    type="email"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o email do professor"
+                  />
+
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Telefone para contato"
+                label-for="tel_contato"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Telefone"
+                  rules="required"
+                >
+                  <b-form-input
+                    id="tel_contato"
+                    v-model="tel_contato"
+                    type="number"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o telefone para contato do professor"
+                  />
+
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -255,12 +290,12 @@
               class="mb-2"
             >
               <h5 class="mb-0">
-                Endereço do aluno
+                Endereço do professor
               </h5>
-              <small class="text-muted">Insira as informações de endereço do aluno.</small>
+              <small class="text-muted">Insira as informações de endereço do professor.</small>
 
             </b-col>
-            <b-col md="12">
+            <b-col md="6">
               <b-form-group
                 label="CEP"
                 label-for="cep"
@@ -273,7 +308,7 @@
                   <b-form-input
                     id="cep"
                     v-model="cep"
-                    placeholder="Insira CEP do aluno"
+                    placeholder="Insira CEP do professor"
                     :state="errors.length > 0 ? false:null"
                     @input="handleInput"
                   />
@@ -282,7 +317,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="6">
+            <b-col md="4">
               <b-form-group
                 label="Nome da rua"
                 label-for="nome-da-rua"
@@ -296,13 +331,13 @@
                     id="nome-rua"
                     v-model="nome_rua"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Insira o nome da rua do aluno"
+                    placeholder="Insira o nome da rua do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col md="6">
+            <b-col md="2">
               <validation-provider
                 #default="{ errors }"
                 name="Número da residência"
@@ -317,13 +352,33 @@
                     id="numero_residencia"
                     v-model="numero_residencia"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Insira o número da residência do aluno"
                   />
                 </b-form-group>
               </validation-provider>
             </b-col>
 
             <b-col md="6">
+              <validation-provider
+                #default="{ errors }"
+                name="Bairro"
+                rules="required"
+              >
+                <b-form-group
+                  label="Bairro"
+                  label-for="cidade"
+                  :state="errors.length > 0 ? false:null"
+                >
+                  <b-form-input
+                    id="cidade"
+                    v-model="bairro"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira a cidade do professor"
+                  />
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+
+            <b-col md="4">
               <validation-provider
                 #default="{ errors }"
                 name="Cidade"
@@ -338,13 +393,13 @@
                     id="cidade"
                     v-model="cidade"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Insira a cidade do aluno"
+                    placeholder="Insira a cidade do professor"
                   />
                 </b-form-group>
               </validation-provider>
             </b-col>
 
-            <b-col md="6">
+            <b-col md="2">
               <validation-provider
                 #default="{ errors }"
                 name="Estado"
@@ -360,36 +415,17 @@
                     label="estado"
                     :reduce="estados => estados.code"
                     :options="estados"
-                    placeholder="Selecione estado do aluno"
+                    placeholder="Selecione estado do professor"
                   />
-
                 </b-form-group>
               </validation-provider>
             </b-col>
-
-            <b-col
-              md="12"
-            >
-              <b-form-group
-                label="Observação"
-                label-for="observacao"
-              >
-                <b-form-textarea
-                  id="observacao"
-                  v-model="observacao"
-                  rows="5"
-                  placeholder="Tem alguma observação sobre o aluno?"
-                />
-              </b-form-group>
-            </b-col>
-
           </b-row>
         </validation-observer>
       </tab-content>
 
-      <!-- address  -->
       <tab-content
-        title="Fazer matrícla"
+        title="Dados bancários"
         :before-change="validationFormAddress"
       >
         <validation-observer
@@ -402,95 +438,49 @@
               class="mb-2"
             >
               <h5 class="mb-0">
-                Matrícula
+                Dados bancários do professor
               </h5>
-              <small class="text-muted">Fazer matrícula do aluno.</small>
+              <small class="text-muted">Insira os dados bancários do professor.</small>
+
             </b-col>
-           <b-col md="12">
-              <b-form-group
-                label="Selecione o aluno"
-                label-for="selecione-aluno"
+            <b-col md="12">
+              <validation-provider
+                #default="{ errors }"
+                name="Banco"
+                rules="required"
               >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Aluno"
-                  rules="required"
+                <b-form-group
+                  label="Banco"
+                  label-for="estado"
+                  :state="errors.length > 0 ? false:null"
                 >
                   <v-select
-                    v-model="aluno_id"        
-                    label="nome"            
-                    :options="alunos"
-                    :value="alunos.nome"
-                    :reduce="alunos=> alunos.id"
-                    placeholder="Selecione o aluno para ser matriculado"
+                    v-model="banco"
+                    label="nome"
+                    :reduce="bancos => bancos.code"
+                    :options="bancos"
+                    placeholder="Selecione banco"
                   />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-
-           <b-col md="12">
-              <b-form-group
-                label="Selecione a turma"
-                label-for="selecione-turma"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Turma"
-                  rules="required"
-                >
-                  <v-select
-                    v-model="turma_id"        
-                    label="nome"            
-                    :options="turmas"
-                    :value="turmas.nome"
-                    :reduce="turmas => turmas.id"
-                    @input="selectTurma"
-                    placeholder="Selecione o aluno para ser matriculado"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </validation-observer>
-      </tab-content>
-
-      <!-- social link -->
-      <tab-content
-        title="Forma de pagamento"
-        :before-change="validationFormSocial"
-      >
-        <validation-observer
-          ref="socialRules"
-          tag="form"
-        >
-          <b-row>
-            <b-col
-              cols="12"
-              class="mb-2"
-            >
-              <h5 class="mb-0">
-                Forma de pagamento
-              </h5>
-              <small class="text-muted">Informe como o aluno vai pagar o curso</small>
+                </b-form-group>
+              </validation-provider>
             </b-col>
 
             <b-col md="6">
               <b-form-group
-                label="Valor do curso"
-                label-for="valor_curso"
+                label="Número da conta"
+                label-for="numero_conta"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Valor do curso"
+                  name="Número da conta"
                   rules="required"
                 >
                   <b-form-input
-                    id="twitter"
-                    v-model="valor_curso"
+                    id="numero_conta"
+                    v-model="numero_conta"
+                    maxlength="9"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Insira o valor do curso"
+                    placeholder="Insira o número da conta do professor"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -498,62 +488,26 @@
             </b-col>
 
             <b-col md="6">
-              <b-form-group
-                label="Desconto"
-                label-for="desconto"
+              <validation-provider
+                #default="{ errors }"
+                name="Agência"
+                rules="required"
               >
-                  <b-form-input
-                    id="facebook"
-                    v-model="desconto_curso"
-                    placeholder="O curso tem desconto?"
-                  />
-                 
-              </b-form-group>
-            </b-col>
-
-            <b-col md="6">
-              <b-form-group
-                label="Valor total do curso"
-                label-for="valor_curso"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Valor total do"
-                  rules="required"
+                <b-form-group
+                  label="Agência"
+                  label-for="agencia"
+                  :state="errors.length > 0 ? false:null"
                 >
                   <b-form-input
-                    id="google-plus"
-                    v-model="valor_curso"
+                    id="agencia"
+                    v-model="agencia"
+                    maxlength="4"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="Insira o valor total do curso"
                   />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
+                </b-form-group>
+              </validation-provider>
             </b-col>
 
-            <b-col md="6">
-              <b-form-group
-                label="Data de vencimento"
-                label-for="data_vencimento"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Data de vencimento"
-                  rules="required"
-                >
-                  <cleave
-                    id="data_vencimento"
-                    v-model="data_vencimento"
-                    class="form-control"
-                    :raw="false"
-                    :options="vencimento.dateV"
-                    placeholder="DD/MM"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
           </b-row>
         </validation-observer>
       </tab-content>
@@ -614,43 +568,32 @@ export default {
   },
   data() {
     return {
-      //DADOS ALUNOS
+      // DADOS ALUNOS
       nome: '',
-      cpf_aluno: '',
-      data_nascimento: '',
+      professor_cpf: '',
+      professor_rg: '',
+      professor_foto: '',
+      estado_civil: '',
       sexo: '',
+      formacao: '',
       nacionalidade: '',
-      aluno_foto: '',
-      aluno_cpf: '',
-      whatsapp: '',
-      telefone_contato: '',
+
+      tel_contato: '',
       escolaridade: '',
 
-      //ENDERECO
+      // ENDERECO
       cep: '',
       nome_rua: '',
       cidade: '',
+      bairro: '',
       estado: '',
       numero_residencia: '',
-      observacao: '',
 
-      //MATRICULA 
-      turmas: [],
-      alunos: [],
-      aluno_id: '',
-      turma_id: '',
-      valor_curso: '',
-      desconto_curso: '',
-      data_vencimento: '',
-      valor_total: '',
+      // DADOS BANCARIOS
+      banco: '',
+      numero_conta: '',
+      agencia: '',
 
-      landMark: '',
-      pincode: '',
-      twitterUrl: '',
-      facebookUrl: '',
-      googleUrl: '',
-      linkedinUrl: '',
-      city: '',
       required,
       email,
       codeIcon,
@@ -663,6 +606,7 @@ export default {
         date: null,
         phone: null,
       },
+
       options: {
         date: {
           date: true,
@@ -689,13 +633,23 @@ export default {
         { code: 'F', nome: 'Feminino' },
         { code: 'N', nome: 'Preferiu não informar' },
       ],
+      bancos: [
+        { code: 'BBR', nome: 'Banco do Brasil' },
+        { code: 'S', nome: 'Santander' },
+        { code: 'BR', nome: 'Bradesco' },
+        { code: 'N', nome: 'Neon' },
+        { code: 'P', nome: 'PicPay' },
+        { code: 'NB', nome: 'Nubank' },
+        { code: 'CE', nome: 'Caixa Econômica' },
+        { code: 'I', nome: 'Itaú' },
+        { code: 'BP', nome: 'Banco Pan' },
+      ],
 
-      escolaridades: [
-        { code: 'MC', nome: 'Ensino médio completo' },
-        { code: 'MI', nome: 'Ensino médio incompleto' },
-        { code: 'FC', nome: 'Fundamental completo' },
-        { code: 'FI', nome: 'Fundamental incompleto' },
-        { code: 'S', nome: 'Cursando superior' },
+      estados_civil: [
+        { code: 'S', nome: 'Solteiro(a)' },
+        { code: 'C', nome: 'Casado(a)' },
+        { code: 'SJ', nome: 'Separado(a) Judicialmente' },
+        { code: 'V', nome: 'Viúvo(a)' },
       ],
 
       estados: [
@@ -730,39 +684,57 @@ export default {
     }
   },
 
-  created() {
-    this.$http.get('alunos')
-      .then(response => this.alunos = response.data.data,)
-    this.$http.get('turmas')
-      .then(response => this.turmas = response.data.data)
-   
-      
-  },
+  // created() {
+  //   this.$http.get('alunos')
+  //     .then(response => this.alunos = response.data.data,)
+  //   this.$http.get('turmas')
+  //     .then(response => this.turmas = response.data.data)
+  // },
+
   methods: {
 
     InputImageRenderer(event) {
-      console.log(event)
-    },
-    selectTurma() {
-      // console.log(this.turmas[0].id)
-      this.$http.get('turma/curso/' + this.turmas[0].id)
-        .then(response => {
-          // console.log(response.data.data.curso)          
-          this.valor_curso = response.data.data.curso.preco
-          // this.desconto_curso = response.data.data.curso.desconto
-          this.desconto = response.data.data.curso.preco
-        })
+      this.professor_foto = event.target.files[0]
+      console.log(event.target.files[0])
     },
 
-    formSubmitted() {
-      this.$toast({
-        component: ToastificationContent,
-        props: {
-          title: 'Form Submitted',
-          icon: 'EditIcon',
-          variant: 'success',
-        },
+    cadastrarProfessor() {
+      alert('chegou')
+      let payload = ''
+      payload = new FormData()
+      payload.append('nome', this.nome)
+      payload.append('email', this.email)
+      payload.append('professor_cpf', this.professor_cpf)
+      payload.append('professor_rg', this.professor_rg)
+      payload.append('professor_foto', this.professor_foto)
+      payload.append('estado_civil', this.estado_civil)
+      payload.append('sexo', this.sexo)
+      payload.append('formacao', this.formacao)
+      payload.append('nacionalidade', this.nacionalidade)
+      payload.append('tel_contato', this.tel_contato)
+      payload.append('nome_rua', this.nome_rua)
+      payload.append('numero_residencia', this.numero_residencia)
+      payload.append('cep', this.cep)
+      payload.append('estado', this.estado)
+      payload.append('bairro', this.bairro)
+      payload.append('cidade', this.cidade)
+      payload.append('banco', this.banco)
+      payload.append('agencia', this.agencia)
+      payload.append('numero_conta', this.numero_conta)
+
+      this.$http.post('professores', payload)
+      .then(response => {
+        console.log(response)
       })
+
+      // this.$toast({
+      //   component: ToastificationContent,
+      //   props: {
+      //     title: 'Form Submitted',
+      //     icon: 'EditIcon',
+      //     variant: 'success',
+      //   },
+      // })
     },
 
     handleInput: debounce(function () {
@@ -775,6 +747,7 @@ export default {
           this.nome_rua = response.data.logradouro
           this.cidade = response.data.localidade
           this.estado = response.data.uf
+          this.bairro = response.data.bairro
         })
     },
 
@@ -825,3 +798,8 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+  @import '@core/scss/vue/libs/vue-wizard.scss';
+  @import '@core/scss/vue/libs/vue-select.scss';
+</style>
