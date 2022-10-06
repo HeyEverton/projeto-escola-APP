@@ -406,7 +406,7 @@
               </h5>
               <small class="text-muted">Fazer matrícula do aluno.</small>
             </b-col>
-           <b-col md="12">
+            <b-col md="12">
               <b-form-group
                 label="Selecione o aluno"
                 label-for="selecione-aluno"
@@ -417,8 +417,8 @@
                   rules="required"
                 >
                   <v-select
-                    v-model="aluno_id"        
-                    label="nome"            
+                    v-model="aluno_id"
+                    label="nome"
                     :options="alunos"
                     :value="alunos.nome"
                     :reduce="alunos=> alunos.id"
@@ -429,7 +429,7 @@
               </b-form-group>
             </b-col>
 
-           <b-col md="12">
+            <b-col md="12">
               <b-form-group
                 label="Selecione a turma"
                 label-for="selecione-turma"
@@ -440,13 +440,13 @@
                   rules="required"
                 >
                   <v-select
-                    v-model="turma_id"        
-                    label="nome"            
+                    v-model="turma_id"
+                    label="nome"
                     :options="turmas"
                     :value="turmas.nome"
                     :reduce="turmas => turmas.id"
-                    @input="selectTurma"
                     placeholder="Selecione o aluno para ser matriculado"
+                    @input="selectTurma"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -502,12 +502,12 @@
                 label="Desconto"
                 label-for="desconto"
               >
-                  <b-form-input
-                    id="facebook"
-                    v-model="desconto_curso"
-                    placeholder="O curso tem desconto?"
-                  />
-                 
+                <b-form-input
+                  id="facebook"
+                  v-model="desconto_curso"
+                  placeholder="O curso tem desconto?"
+                />
+
               </b-form-group>
             </b-col>
 
@@ -614,7 +614,7 @@ export default {
   },
   data() {
     return {
-      //DADOS ALUNOS
+      // DADOS ALUNOS
       nome: '',
       cpf_aluno: '',
       data_nascimento: '',
@@ -626,7 +626,7 @@ export default {
       telefone_contato: '',
       escolaridade: '',
 
-      //ENDERECO
+      // ENDERECO
       cep: '',
       nome_rua: '',
       cidade: '',
@@ -634,7 +634,7 @@ export default {
       numero_residencia: '',
       observacao: '',
 
-      //MATRICULA 
+      // MATRICULA
       turmas: [],
       alunos: [],
       aluno_id: '',
@@ -732,11 +732,9 @@ export default {
 
   created() {
     this.$http.get('alunos')
-      .then(response => this.alunos = response.data.data,)
+      .then(response => this.alunos = response.data.data)
     this.$http.get('turmas')
       .then(response => this.turmas = response.data.data)
-   
-      
   },
   methods: {
 
@@ -745,9 +743,9 @@ export default {
     },
     selectTurma() {
       // console.log(this.turmas[0].id)
-      this.$http.get('turma/curso/' + this.turmas[0].id)
+      this.$http.get(`turma/curso/${this.turmas[0].id}`)
         .then(response => {
-          // console.log(response.data.data.curso)          
+          // console.log(response.data.data.curso)
           this.valor_curso = response.data.data.curso.preco
           // this.desconto_curso = response.data.data.curso.desconto
           this.desconto = response.data.data.curso.preco

@@ -6,7 +6,7 @@
       class="mb-0 d-flex"
     >
       <h1 class="mx-auto mt-2 mb-2">
-        Todos os alunos
+        Todos os professores
       </h1>
 
       <div class="m-2">
@@ -58,13 +58,13 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="alunos"
+        :items="professores"
         responsive
         :fields="tableColumns"
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
-        empty-text="Nenhum aluno foi encontrado"
+        empty-text="Nenhum professor foi encontrado"
         :sort-desc.sync="isSortDirDesc"
       >
 
@@ -73,13 +73,13 @@
             <template #aside>
               <b-avatar
                 size="30"
-                :src="data.item.aluno_foto"
+                :src="data.item.professor_foto"
                 :text="avatarText(data.item.nome)"
                 :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
               />
             </template>
             <b-link
-              :to="{ name: 'dados-aluno', params: { id: data.item.id } }"
+              :to="{ name: 'dados-professor', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.nome }}
@@ -184,15 +184,13 @@ import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import { debounce } from 'lodash'
-import UsersListFilters from './AlunosFiltros.vue'
-import useUsersList from './useUsersList'
+import configProfessor from './configProfessor'
 import userStoreModule from './userStoreModule'
-import UserListAddNew from './AlunosListaNew.vue'
+
 
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
+  
     BCard,
     BRow,
     BCol,
@@ -216,7 +214,7 @@ export default {
 
   data() {
     return {
-      alunos: [],
+      professores: [],
       searchQuery: '',
 
     }
@@ -240,19 +238,19 @@ export default {
         .then(res => {
           if (res.isConfirmed) {
             this.$http
-              .delete(`/alunos/${id}`)
+              .delete(`/professores/${id}`)
               .then(response => {
                 if (response.status == 200 || response.status == 204) {
                   this.$swal({
                     icon: 'success',
                     title: 'Excluído',
-                    text: 'Este aluno foi excluído com sucesso',
+                    text: 'Este professor foi excluído com sucesso',
                     customClass: {
                       confirmButton: 'btn btn-success',
                     },
                   })
-                  this.$http.get('alunos')
-                    .then(response => this.alunos = response.data.data)
+                  this.$http.get('professores')
+                    .then(response => this.professores = response.data.data)
                 } else {
                   this.$swal({
                     title: 'Falha ao excluir!',
@@ -269,7 +267,7 @@ export default {
                 if (error.message) {
                   this.$swal({
                     title: 'Acesso negado!',
-                    text: 'Você não tem autorização para excluir um aluno.',
+                    text: 'Você não tem autorização para excluir um professor.',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',
@@ -295,8 +293,8 @@ export default {
   },
 
   created() {
-    this.$http.get('alunos')
-      .then(response => this.alunos = response.data.data)
+    this.$http.get('professores')
+      .then(response => this.professores = response.data.data)
   },
 
   setup() {
@@ -356,7 +354,7 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-    } = useUsersList()
+    } = configProfessor()
 
     return {
 

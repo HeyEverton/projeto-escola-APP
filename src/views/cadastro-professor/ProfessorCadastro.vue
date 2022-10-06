@@ -47,25 +47,26 @@
                 </template>
                 <div class="d-flex flex-wrap">
                   <b-button
-                    class="mt-4"
-                    variant="primary"
-                    @click="$refs.refInputEl.click()"
+                  class="mt-4"
+                  variant="primary"
+                  @click="$refs.refInputEl.click()"
                   >
-                    <input
-                      ref="refInputEl"
-                      type="file"
-                      class="d-none"
-                      @change="InputImageRenderer"
-                    >
-                    <span class="d-none d-sm-inline">Escolha a foto do professor</span>
-                    <feather-icon
-                      icon="EditIcon"
-                      class="d-inline d-sm-none"
-                    />
-                  </b-button>
-                </div>
-              </b-media>
-            </b-col>
+                  <input
+                  ref="refInputEl"
+                  type="file"
+                  class="d-none"
+                  @change="InputImageRenderer"
+                  >
+                  <span class="d-none d-sm-inline">Escolha a foto do professor</span>
+                  <feather-icon
+                  icon="EditIcon"
+                  class="d-inline d-sm-none"
+                  />
+                </b-button>
+              </div>
+            </b-media>
+            
+          </b-col>
 
             <b-col md="12">
               <b-form-group

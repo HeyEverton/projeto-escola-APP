@@ -27,22 +27,7 @@ const router = new VueRouter({
       },
     },
 
-    {
-      path: '/lista-alunos',
-      name: 'lista-alunos',
-      component: () => import('@/views/alunos/AlunosLista.vue'),
-      meta: {
-        pageTitle: 'Todos os alunos',
-        breadcrumb: [
-          {
-            text: 'Lista de alunos',
-            active: true,
-          },
-        ],
-      },
-    },
-
-    {
+   {
       path: '/cadastrar-alunos',
       name: 'cadastrar-alunos',
       component: () => import('@/views/cadastro-alunos/FormWizard.vue'),
@@ -58,14 +43,90 @@ const router = new VueRouter({
     },
 
     {
+      path: '/lista-alunos',
+      name: 'lista-alunos',
+      component: () => import('@/views/alunos/AlunosLista.vue'),
+      meta: {
+        pageTitle: 'Todos os alunos',
+        breadcrumb: [
+          {
+            text: 'Lista de alunos',
+            active: true,
+          },
+        ],
+      },
+    },
+
+
+    {
       path: '/cadastrar-professores',
       name: 'cadastrar-professores',
-      component: () => import('@/views/professores/ProfessorCadastro.vue'),
+      component: () => import('@/views/cadastro-professor/ProfessorCadastro.vue'),
       meta: {
         pageTitle: 'Cadastrar professor',
         breadcrumb: [
           {
             text: 'cadastrar professor',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/lista-professores',
+      name: 'lista-professores',
+      component: () => import('@/views/professores/ProfessoresLista.vue'),
+      meta: {
+        pageTitle: 'Lista de professores',
+        breadcrumb: [
+          {
+            text: 'lista de professores',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/dados-professor/:id',
+      name: 'dados-professor',
+      component: () => import('@/views/professores/DadosProfessor.vue'),
+      meta: {
+        pageTitle: 'Lista de professores',
+        breadcrumb: [
+          {
+            text: 'lista de professores',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/cadastrar-curso',
+      name: 'cadastrar-curso',
+      component: () => import('@/views/curso/CadastroCurso.vue'),
+      meta: {
+        pageTitle: 'Cadastrar curso',
+        breadcrumb: [
+          {
+            text: 'cadastrar profescursosor',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/lista-cursos',
+      name: 'lista-cursos',
+      component: () => import('@/views/curso/CursoLista.vue'),
+      meta: {
+        pageTitle: 'Cadastrar curso',
+        breadcrumb: [
+          {
+            text: 'cadastrar profescursosor',
             active: true,
           },
         ],
