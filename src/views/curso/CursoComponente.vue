@@ -1,27 +1,32 @@
 <template>
     <div>
         <b-card img-top :title="nome">
-            <b-card-text>
+            <b-card-text class="blog-content-truncate">
                 <p>{{descricao}}</p>
             </b-card-text>
             
             <b-card-text class="text-danger d-flex justify-content-between">
                  <h5>{{preco}} R$</h5>
                  <h6>{{carga_horaria}} horas</h6>
-                 {{desconto}}%
+                 {{desconto}}
             </b-card-text>
 
+            
+
+            
             <b-card-text class="text-muted">
-                {{moment(created_at).format('Do MMM YYYY')}}
+                Criado em {{moment(created_at).format('Do MMM YYYY')}}
             </b-card-text>
-            <b-row class="match-height">
-                <b-col md="12" lg="6" sm="12">
-                    <b-button v-ripple.400="'rgba(113, 102, 240, 0.15)'" variant="primary" class="mt-1">
+            <b-row class="match-height d-flex justify-content-between">
+                <!-- <b-col md="12" lg="6" sm="12">
+                    <b-button v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                     variant="primary" class="mt-1" v-b-modal.modal-center>
                         Ver mais
                     </b-button>
-                </b-col>
 
-                <b-col md="6" lg="3" sm="6">
+                </b-col> -->
+
+                <b-col md="6" lg="4" sm="4">
                     <b-button variant="outline-primary" class=" btn-icon mt-1 mb-1"
                         v-ripple.400="'rgba(255, 255, 255, 0.15)'">
                         <router-link :to="{name: 'editar-curso', params: { id:id } }">
@@ -31,9 +36,9 @@
                     </b-button>
                 </b-col>
 
-                <b-col md="6" lg="3" sm="6">
-                    <b-button variant="outline-primary" class=" btn-icon mt-1 "
-                        v-ripple.400="'rgba(255, 255, 255, 0.15)'" @click="deletar(id)">
+                <b-col md="6" lg="4" sm="6">
+                    <b-button variant="outline-danger" class=" btn-icon mt-1 "
+                        v-ripple.400="'rgba(255, 255, 255, 0.15)'" @click="apagarCurso(id)">
                         <feather-icon icon="TrashIcon" />
                     </b-button>
                 </b-col>
@@ -53,6 +58,7 @@ import {
 } from 'bootstrap-vue'
 
 import Ripple from 'vue-ripple-directive'
+
 
 export default {
     components: {
@@ -88,7 +94,7 @@ export default {
 
 
     methods: {
-        deletar(codigo) {
+        apagarCurso(id) {
             this.$swal({
                 title: 'Você tem certeza?',
                 text: "Você não será capaz de desfazer isso.",
@@ -102,8 +108,8 @@ export default {
                 },
                 buttonsStyling: false,
             }).then(result => {
-                if (result.value) {
-                    this.$http.delete("cursos/" + codigo)
+                if (result.isConfirmed) {
+                    this.$http.delete("cursos/" + id)
                         .then(
                             this.$emit('afterDeleting')
                         )

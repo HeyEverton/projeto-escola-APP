@@ -108,10 +108,25 @@ const router = new VueRouter({
       name: 'cadastrar-curso',
       component: () => import('@/views/curso/CadastroCurso.vue'),
       meta: {
-        pageTitle: 'Cadastrar curso',
+        pageTitle: 'Cursos',
         breadcrumb: [
           {
-            text: 'cadastrar profescursosor',
+            text: 'Cadastrar curso',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/editar-curso/:id',
+      name: 'editar-curso',
+      component: () => import('@/views/curso/EditarCurso.vue'),
+      meta: {
+        pageTitle: 'Curso',
+        breadcrumb: [
+          {
+            text: 'Editar curso',
             active: true,
           },
         ],
@@ -123,10 +138,10 @@ const router = new VueRouter({
       name: 'lista-cursos',
       component: () => import('@/views/curso/CursoLista.vue'),
       meta: {
-        pageTitle: 'Cadastrar curso',
+        pageTitle: 'Cursos',
         breadcrumb: [
           {
-            text: 'cadastrar profescursosor',
+            text: 'lista de cursos',
             active: true,
           },
         ],

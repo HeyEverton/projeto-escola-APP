@@ -90,6 +90,29 @@
     
                 <b-col md="12">
                   <b-form-group
+                    label="Status"
+                    label-for="status"
+                   
+                  >
+                  <validation-provider
+                      #default="{ errors }"
+                      rules=""
+                      name="Status"
+                    > 
+                    <v-select
+                    v-model="ativo"
+                    :options="status"
+                    :reduce="status => status.code"
+                    label="nome"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+                  
+                  </b-form-group>
+                </b-col>
+    
+                <b-col md="6">
+                  <b-form-group
                     label="Preço"
                     label-for="preco"
                    
@@ -111,6 +134,29 @@
                 </validation-provider>            
                   </b-form-group>
                 </b-col>
+
+                <b-col md="6">
+                  <b-form-group
+                    label="Aplicar desconto"
+                    label-for="preco"
+                   
+                  >       
+                  <validation-provider
+                      #default="{ errors }"
+                      rules=""
+                      name="Desconto"
+                    > 
+                    <b-form-input
+                      id="desconto"
+                      v-model="desconto"
+                      type="text"
+                      :state="errors.length > 0 ? false : null"
+                      placeholder="O curso vai ter algum desconto?"
+                    />
+                    <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>            
+                  </b-form-group>
+                </b-col>
     
                 <!-- submit and reset -->
                 <b-col
@@ -122,9 +168,9 @@
                     type="submit"
                     variant="primary"
                     class="mr-1"
-                    @click="cadastrarCurso"
+                    @click="editarCurso"
                   >
-                    Enviar
+                    Salvar
                     <feather-icon
                       size="18"
                       icon="SendIcon"
@@ -167,11 +213,10 @@
     BCardHeader,
     BFormTextarea,
     } from 'bootstrap-vue'
-
- 
-
+    import router from '@/router'
     import { ValidationProvider, ValidationObserver, } from 'vee-validate'
     import { required } from '@validations'
+    import vSelect from 'vue-select'
 
 export default {
     components: {
@@ -187,6 +232,7 @@ export default {
     ValidationProvider,
     ValidationObserver,
     BFormTextarea,
+    vSelect,
 
   },
 
@@ -196,13 +242,30 @@ export default {
       descricao: '',
       carga_horaria: '',
       preco: '',
-      ativo: '1',
+      ativo: '',
+      desconto: '',
       required,
+      status: [
+        {code: '1', nome: 'Ativo'},
+        {code: '0', nome: 'Inativo'},
+      ],
     }
+  },
+
+  created () {
+    this.$http.get(`cursos/${router.currentRoute.params.id}`)
+    .then(response => {
+      this.nome = response.data.data.nome
+      this.descricao = response.data.data.descricao
+      this.carga_horaria = response.data.data.carga_horaria
+      this.preco = response.data.data.preco
+      this.desconto = response.data.data.desconto
+      this.ativo = response.data.data.ativo
+    })
   },
   
   methods: {
-    cadastrarCurso() {
+    editarCurso() {
         this.$refs.form.validate().then(success => {
             if (success) {
                 const payload = {
@@ -211,20 +274,24 @@ export default {
                     carga_horaria: this.carga_horaria,
                     preco: this.preco,
                     ativo: this.ativo,
+                    desconto: this.desconto,
                 }
 
-                this.$http.post('cursos', payload)
+                this.$http.put(`cursos/${router.currentRoute.params.id}`, payload)
                 .then(response => {
                     this.$swal({
                     icon: 'success',
-                    title: 'Criado',
-                    text: 'O curso foi criado com sucesso',
+                    title: 'Editado',
+                    text: 'Este curso foi editado com sucesso',
                     customClass: {
                       confirmButton: 'btn btn-success',
                     },
                   })
+                })
+                .then(()=> {
                   this.$router.replace('/lista-cursos')
                 })
+                
             }
         })
         
@@ -233,6 +300,6 @@ export default {
 
 }
 </script>
-<style lang="">
-    
+<style lang="scss">
+  @import '@core/scss/vue/libs/vue-select.scss';
 </style>
