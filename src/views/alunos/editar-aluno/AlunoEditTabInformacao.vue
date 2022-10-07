@@ -6,14 +6,14 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userData[0].aluno.aluno_foto"
-          :text="avatarText(userData[0].aluno.nome)"
+          :src="userData.aluno_foto"
+          :text="avatarText(userData.nome)"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ userData[0].aluno.nome }}
+        {{ userData.nome }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -50,10 +50,7 @@
       <validation-observer
           ref="infoRules"
           tag="form"
-        >
-      
-      
-        
+        >   
         <b-row>
   
           <!-- Field: Full Name -->
@@ -67,7 +64,7 @@
             >
               <b-form-input
                 id="full-name"
-                v-model="userData[0].aluno.nome"
+                v-model="userData.nome"
               />
             </b-form-group>
           </b-col>
@@ -88,7 +85,7 @@
             rules="required"
           >
           <cleave
-            v-model="userData[0].aluno.cpf_aluno"
+            v-model="userData.cpf_aluno"
             class="form-control"
             id="cpf_aluno"
             :raw="false"
@@ -113,7 +110,7 @@
             >
               <b-form-input
                 id="email"
-                v-model="userData[0].aluno.email"
+                v-model="userData.email"
                 type="email"
               />
             </b-form-group>
@@ -130,7 +127,7 @@
                 rules="required"
               >
                 <v-select
-                  v-model="userData[0].aluno.nacionalidade"
+                  v-model="userData.nacionalidade"
                   label="nome"
                   :options="nacionalidades"
                   :reduce="nacionalidades => nacionalidades.code"
@@ -153,7 +150,7 @@
                 >
                 <b-form-input
                 id="email"
-                v-model="userData[0].aluno.data_nasc"
+                v-model="userData.data_nasc"
                 type="date"
                 placeholder="Insira a data de nascimento do aluno"
                 />
@@ -173,7 +170,7 @@
                 rules="required"
               >
                 <v-select
-                  v-model="userData[0].aluno.sexo"
+                  v-model="userData.sexo"
                   label="nome"
                   :options="sexos"
                   :reduce="sexos => sexos.code"
@@ -192,7 +189,7 @@
             >
               <b-form-input
                 id="whatsapp"
-                v-model="userData[0].aluno.whatsapp"
+                v-model="userData.whatsapp"
                 type="number"
                 placeholder="Insira o whatsapp do aluno"
               />
@@ -212,7 +209,7 @@
               >
               <cleave
               id="tel_contato"
-              v-model="userData[0].aluno.tel_contato"
+              v-model="userData.tel_contato"
               class="form-control"
               :raw="false"
               :options="options.prefix"
@@ -235,7 +232,7 @@
                 rules="required"
               >
                 <v-select
-                  v-model="userData[0].aluno.escolaridade"
+                  v-model="userData.escolaridade"
                   label="nome"
                   :options="escolaridades"
                   :reduce="escolaridades => escolaridades.code"
@@ -245,6 +242,21 @@
               </validation-provider>
             </b-form-group>
           </b-col>
+          <b-col
+          md="12"
+          >
+          <b-form-group
+            label="Observação"
+            label-for="observacao"
+            >
+            <b-form-textarea
+              id="observacao"
+              v-model="userData.observacao"
+              rows="5"
+              placeholder="Tem alguma observação sobre o aluno?"
+              />
+          </b-form-group>
+        </b-col>  
   
   
   
@@ -317,6 +329,7 @@ import {
   BCardHeader,
   BCardTitle,
   BFormCheckbox,
+  BFormTextarea,
 
 } from 'bootstrap-vue'
 
@@ -348,6 +361,7 @@ export default {
     Cleave,
     ValidationProvider,
     ValidationObserver,
+    BFormTextarea,
   },
   // props: {
   //   userData: {
@@ -403,16 +417,27 @@ export default {
 
   created() {
     this.$http
-      .get(`aluno/matricula/${router.currentRoute.params.id}`)
-      .then(response => {
-        // console.log(response.data.data)
-        this.userData = response.data.data
-      })
-      .catch(error => {
-        if (error.response.status === 404) {
-          userData.value = undefined
-        }
-      })
+        .get(`alunos/${router.currentRoute.params.id}`)
+        .then(response => {
+          // console.log(response.data.data)
+          this.userData = response.data.data
+        })
+        .catch(error => {
+          if (error.response.status === 404) {
+            userData.value = undefined
+          }
+        })
+    // this.$http
+    //     .get(`aluno/matricula/${router.currentRoute.params.id}`)
+    //     .then(response => {
+    //       // console.log(response.data.data)
+    //       this.userData = response.data.data
+    //     })
+    //     .catch(error => {
+    //       if (error.response.status === 404) {
+    //         userData.value = undefined
+    //       }
+    //     })
   },
   methods: {
     inputImageRenderer(event) {

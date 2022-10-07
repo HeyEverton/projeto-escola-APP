@@ -57,6 +57,21 @@ const router = new VueRouter({
       },
     },
 
+    {
+      path: '/editar-aluno/:id',
+      name: 'editar-aluno',
+      component: () => import('@/views/alunos/editar-aluno/AlunoEdit.vue'),
+      meta: {
+        pageTitle: 'Editar aluno',
+        breadcrumb: [
+          {
+            text: 'Edição de aluno',
+            active: true,
+          },
+        ],
+      },
+    },
+
 
     {
       path: '/cadastrar-professores',

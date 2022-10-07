@@ -331,6 +331,7 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
+
             <b-col md="6">
               <validation-provider
                 #default="{ errors }"
@@ -380,7 +381,7 @@
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="CEP"
+                  name="Bairro"
                   rules="required"
                 >
                   <b-form-input
@@ -388,12 +389,12 @@
                     v-model="bairro"
                     placeholder="Insira o Bairro do aluno"
                     :state="errors.length > 0 ? false:null"
-                    @input="handleInput"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
+
             <b-col md="6">
               <validation-provider
                 #default="{ errors }"
