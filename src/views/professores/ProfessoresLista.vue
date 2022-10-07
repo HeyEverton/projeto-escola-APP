@@ -50,12 +50,21 @@
                     >
                       Nome
                     </b-dropdown-item>
+
                     <b-dropdown-item
-                      id="turno"
+                      id="cpf"
                       @click="event"
                     >
-                      Turno
+                      CPF
                     </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="email"
+                      @click="event"
+                    >
+                      E-mail
+                    </b-dropdown-item>
+
                     <b-dropdown-item
                       id="turno"
                       @click="get"
@@ -134,6 +143,10 @@
           {{ data.item.formacao | truncate(12, '...') }}
         </template>
 
+        <template #cell(numero_conta)="data">
+          {{ data.item.numero_conta | truncate(6, '...') }}
+        </template>
+
         <template #empty>
           <div class="d-flex justify-content-center align-items-center">
             <b-spinner
@@ -164,8 +177,8 @@
           <b-button
             v-b-tooltip.hover
             variant="danger"
-            class="btn-icon "
-            title="Excluir usuário"
+            class="btn-icon"
+            title="Excluir professor"
             @click="() => excluirProfessor(data.item.id)"
           >
             <feather-icon icon="TrashIcon" />
@@ -284,7 +297,8 @@ export default {
   data() {
     return {
       professores: [],
-      searchQuery: '',
+      campo: '',
+      campoPesquisa: '',
 
     }
   },
@@ -349,15 +363,58 @@ export default {
         })
     },
 
-    pesquisarUsuarios() {
-      this.$http.get(`users?search=${this.searchQuery}`)
+
+
+ 
+
+    event(e) {
+      this.campo = e.target.id
+    },
+    pesquisar() {
+      if(this.campo == 'nome') {
+        this.pesquisarNome(this.campoPesquisa)
+      }
+      if(this.campo == 'cpf') {
+        this.pesquisarCpf(this.campoPesquisa)
+      }
+      if(this.campo == 'email') { 
+        this.pesquisarEmail(this.campoPesquisa)
+      }
+    },
+
+    pesquisarNome(nome) {
+      this.$http.get(`professores/pesquisar/nome/${nome}`)
         .then(response => {
-          this.users = response.data.data
+          this.professores = response.data.data
+        })
+    },
+
+    pesquisarCpf(cpf) {
+      this.$http.get(`professores/pesquisar/cpf/${cpf}`)
+        .then(response => {
+          this.professores = response.data.data
+        })
+    },
+
+    pesquisarEmail(email) {
+      this.$http.get(`professores/pesquisar/email/${email}`)
+        .then(response => {
+          this.professores = response.data.data
+        })
+    },
+
+    get() {
+      this.$http.get('professores')
+        .then(response => 
+          this.professores = response.data.data
+        )
+        .finally(()=> {
+          this.campoPesquisa = ''
         })
     },
 
     handleInput: debounce(function () {
-      this.pesquisarUsuarios()
+      this.pesquisar()
     }, 1000),
   },
 

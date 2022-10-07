@@ -32,10 +32,10 @@ const router = new VueRouter({
       name: 'cadastrar-alunos',
       component: () => import('@/views/cadastro-alunos/CadastroAluno.vue'),
       meta: {
-        pageTitle: 'Matricular aluno',
+        pageTitle: 'Matricular',
         breadcrumb: [
           {
-            text: 'Matrículas',
+            text: 'Matricular aluno',
             active: true,
           },
         ],
@@ -47,7 +47,7 @@ const router = new VueRouter({
       name: 'lista-alunos',
       component: () => import('@/views/alunos/AlunosLista.vue'),
       meta: {
-        pageTitle: 'Todos os alunos',
+        pageTitle: 'Alunos',
         breadcrumb: [
           {
             text: 'Lista de alunos',
@@ -62,10 +62,10 @@ const router = new VueRouter({
       name: 'editar-aluno',
       component: () => import('@/views/alunos/editar-aluno/AlunoEdit.vue'),
       meta: {
-        pageTitle: 'Editar aluno',
+        pageTitle: 'Editar',
         breadcrumb: [
           {
-            text: 'Edição de aluno',
+            text: 'Editar de aluno',
             active: true,
           },
         ],
@@ -77,10 +77,10 @@ const router = new VueRouter({
       name: 'cadastrar-professores',
       component: () => import('@/views/cadastro-professor/ProfessorCadastro.vue'),
       meta: {
-        pageTitle: 'Cadastrar professor',
+        pageTitle: 'Cadastrar',
         breadcrumb: [
           {
-            text: 'cadastrar professor',
+            text: 'Cadastrar professor',
             active: true,
           },
         ],
@@ -92,10 +92,10 @@ const router = new VueRouter({
       name: 'lista-professores',
       component: () => import('@/views/professores/ProfessoresLista.vue'),
       meta: {
-        pageTitle: 'Lista de professores',
+        pageTitle: 'Professores',
         breadcrumb: [
           {
-            text: 'lista de professores',
+            text: 'Lista de professores',
             active: true,
           },
         ],
@@ -107,10 +107,10 @@ const router = new VueRouter({
       name: 'editar-professor',
       component: () => import('@/views/professores/editar-professor/ProfessorEdit.vue'),
       meta: {
-        pageTitle: 'Lista de professores',
+        pageTitle: 'Editar',
         breadcrumb: [
           {
-            text: 'lista de professores',
+            text: 'Editar de professor',
             active: true,
           },
         ],
@@ -122,7 +122,7 @@ const router = new VueRouter({
       name: 'cadastrar-curso',
       component: () => import('@/views/curso/CadastroCurso.vue'),
       meta: {
-        pageTitle: 'Cursos',
+        pageTitle: 'Cadastrar',
         breadcrumb: [
           {
             text: 'Cadastrar curso',
@@ -155,7 +155,7 @@ const router = new VueRouter({
         pageTitle: 'Cursos',
         breadcrumb: [
           {
-            text: 'lista de cursos',
+            text: 'Lista de cursos',
             active: true,
           },
         ],
@@ -200,7 +200,7 @@ const router = new VueRouter({
         pageTitle: 'Turmas',
         breadcrumb: [
           {
-            text: 'Todas as turmas',
+            text: 'Editar turma',
             active: true,
           },
         ],
