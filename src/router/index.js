@@ -30,7 +30,7 @@ const router = new VueRouter({
    {
       path: '/cadastrar-alunos',
       name: 'cadastrar-alunos',
-      component: () => import('@/views/cadastro-alunos/FormWizard.vue'),
+      component: () => import('@/views/cadastro-alunos/CadastroAluno.vue'),
       meta: {
         pageTitle: 'Matricular aluno',
         breadcrumb: [
@@ -142,6 +142,51 @@ const router = new VueRouter({
         breadcrumb: [
           {
             text: 'lista de cursos',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/cadastrar-turma',
+      name: 'cadastrar-turma',
+      component: () => import('@/views/turmas/CadastroTurma.vue'),
+      meta: {
+        pageTitle: 'Turmas',
+        breadcrumb: [
+          {
+            text: 'Cadastrar turma',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/lista-turma',
+      name: 'lista-turma',
+      component: () => import('@/views/turmas/TurmaLista.vue'),
+      meta: {
+        pageTitle: 'Turmas',
+        breadcrumb: [
+          {
+            text: 'Todas as turmas',
+            active: true,
+          },
+        ],
+      },
+    },
+
+    {
+      path: '/editar-turma/:id',
+      name: 'editar-turma',
+      component: () => import('@/views/turmas/TurmaEditar.vue'),
+      meta: {
+        pageTitle: 'Turmas',
+        breadcrumb: [
+          {
+            text: 'Todas as turmas',
             active: true,
           },
         ],

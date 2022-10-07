@@ -6,7 +6,7 @@
       class="mb-0 d-flex"
     >
       <h1 class="mx-auto mt-2 mb-2">
-        Todos os alunos
+        Todos as turmas
       </h1>
 
       <div class="m-2">
@@ -15,7 +15,7 @@
         <b-row>
 
           <!-- Per Page -->
-          <b-col
+          <!-- <b-col
             cols="12"
             md="6"
             class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
@@ -29,26 +29,47 @@
               class="per-page-selector d-inline-block mx-50"
             />
             <label>registros</label>
-          </b-col>
+          </b-col> -->
 
           <!-- Search -->
           <b-col
             cols="12"
             md="6"
+            class=""
           >
             <div class="d-flex align-items-center justify-content-end">
-              <b-form-input
-                v-model="searchQuery"
-                class="d-inline-block mr-1"
-                placeholder="Pesquisando por..."
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-dropdown  text="Pesquisando por" variant="outline-primary">
+                    <b-dropdown-item id="nome" @click="event">Nome</b-dropdown-item>
+                    <b-dropdown-item id="turno" @click="event">Turno</b-dropdown-item>
+                    <b-dropdown-item id="turno" @click="get">Listar todos</b-dropdown-item>
+                  </b-dropdown>
+                </b-input-group-prepend>
+                <b-form-input
+                v-model="campoPesquisa"
+                class="d-inline-block"
+                placeholder="Pesquisando..."
                 @input="handleInput"
-              />
-              <b-button
-                variant="primary"
-                @click="pesquisarUsuarios"
-              >
-                <span class="text-nowrap">Pesquisar</span>
-              </b-button>
+                />
+                  <b-input-group-append>
+                    <b-button
+                      variant="outline-primary"
+                      @click="pesquisar"
+                    >
+                    <feather-icon icon="SearchIcon" />
+                    <!-- <span class="text-nowrap">Pesquisar</span> -->
+                  </b-button>
+                    <b-button
+                      variant="outline-info"
+                     :to="{name: 'cadastrar-turma' }"
+                     v-b-tooltip.hover
+                     title="Criar nova turma"
+                    >
+                    <feather-icon icon="PlusIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
             </div>
           </b-col>
         </b-row>
@@ -58,39 +79,65 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="alunos"
+        :items="turmas"
         responsive
         :fields="tableColumns"
         primary-key="id"
         :sort-by.sync="sortBy"
-        show-empty
-        empty-text="Nenhum aluno foi encontrado"
         :sort-desc.sync="isSortDirDesc"
+        show-empty
       >
+    <template #empty>
+        <div class="d-flex justify-content-center align-items-center">
+          <b-spinner
+            variant="primary"
+            label="Carregando..."
+          />
+          <h5 class="text-center ml-1" style="color:#7367f0;">
+            Turma não localizada
+          </h5>
+        </div>
+    </template>
 
-        <template #cell(user)="data">
-          <b-media vertical-align="center">
-            <template #aside>
-              <b-avatar
-                size="30"
-                :src="data.item.aluno_foto"
-                :text="avatarText(data.item.nome)"
-                :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
-              />
-            </template>
-            <b-link
-              :to="{ name: 'dados-aluno', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.nome }}
-            </b-link>
-            <!-- <small >@{{ data.item.perfil }}</small> -->
-          </b-media>
-        </template>
+      
+      <template #cell(turma)="data">
+        <b-link
+                :to="{ name: 'editar-turma', params: { id: data.item.id } }"
+                class="font-weight-bold d-block text-nowrap"
+              >
+                {{ data.item.nome }}
+        </b-link>
+      </template>
 
+      <template #cell(professor_id)="data">
+        {{data.item.professor.nome | truncate(12, '...')}}
+      </template>
+
+      <template #cell(data_inicio)="data">
+        {{ moment(data.item.data_inicio).format('DD/M/YYYY') }}
+      </template>
+
+      <template #cell(curso_id)="data">
+        {{ data.item.curso.nome | truncate(12, '...')}}
+      </template>
+
+      <template #cell(horario_entrada)="data">
+        {{ data.item.horario_entrada }}
+      </template>
+
+      <template #cell(status)="data">
+        <b-badge
+          pill
+          variant="success"
+        >
+          {{ data.item.status }}
+        </b-badge>
+      </template>
+
+      
         <!-- Column: Actions -->
-        <!-- <template #cell(actions)="data">
-          <b-button
+        <template #cell(actions)="data">
+          <!-- <b-button
             v-b-tooltip.hover
             variant="primary"
             class="btn-icon mr-1"
@@ -98,18 +145,18 @@
             title="Editar perfil"
           >
             <feather-icon icon="EditIcon" />
-          </b-button>
+          </b-button> -->
 
           <b-button
             v-b-tooltip.hover
             variant="danger"
             class="btn-icon "
-            title="Excluir usuário"
-            @click="() => deleteUser(data.item.id)"
+            title="Excluir turma"
+            @click="excluirTurma(data.item.id)"
           >
             <feather-icon icon="TrashIcon" />
           </b-button>
-        </template> -->
+        </template>
 
       </b-table>
       <div class="mx-2 mb-2">
@@ -178,22 +225,22 @@ import {
   BDropdownItem,
   BPagination,
   VBTooltip,
+  BInputGroup,
+  BInputGroupPrepend,
+  BInputGroupAppend,
+  BSpinner,
 
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
-import store from '@/store'
+// import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import { debounce } from 'lodash'
-import UsersListFilters from './AlunosFiltros.vue'
 import useUsersList from './useUsersList'
-import userStoreModule from './userStoreModule'
-import UserListAddNew from './AlunosListaNew.vue'
+
 
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
     BCard,
     BRow,
     BCol,
@@ -209,6 +256,10 @@ export default {
     BPagination,
     VBTooltip,
     vSelect,
+    BInputGroup,
+    BInputGroupPrepend,
+    BInputGroupAppend,
+    BSpinner,
   },
 
   directives: {
@@ -217,21 +268,22 @@ export default {
 
   data() {
     return {
-      alunos: [],
-      searchQuery: '',
+      turmas: [],
+      campoPesquisa: '',
+      campo: '',
 
     }
   },
 
   methods: {
-    deleteUser(id) {
+    excluirTurma(id) {
       this.$swal({
         title: 'Tem certeza?',
         text: 'Você não conseguirá desfazer isso.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sim, excluir',
-        cancelButtonText: 'Cancelar',
+        cancelButtonText: 'Não, Cancelar',
         customClass: {
           confirmButton: 'btn btn-primary',
           cancelButton: 'btn btn-outline-danger ml-1',
@@ -241,23 +293,23 @@ export default {
         .then(res => {
           if (res.isConfirmed) {
             this.$http
-              .delete(`/alunos/${id}`)
+              .delete(`/turmas/${id}`)
               .then(response => {
                 if (response.status == 200 || response.status == 204) {
                   this.$swal({
                     icon: 'success',
                     title: 'Excluído',
-                    text: 'Este aluno foi excluído com sucesso',
+                    text: 'Esta turma foi excluída com sucesso',
                     customClass: {
                       confirmButton: 'btn btn-success',
                     },
                   })
-                  this.$http.get('alunos')
-                    .then(response => this.alunos = response.data.data)
+                  this.$http.get('turmas')
+                    .then(response => this.turmas = response.data.data)
                 } else {
                   this.$swal({
                     title: 'Falha ao excluir!',
-                    text: 'Ops! parece que houve um erro ao excluir este aluno!',
+                    text: 'Ops! parece que houve um erro ao excluir esta turma!',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',
@@ -270,7 +322,7 @@ export default {
                 if (error.message) {
                   this.$swal({
                     title: 'Acesso negado!',
-                    text: 'Você não tem autorização para excluir um aluno.',
+                    text: 'Você não tem autorização para excluir uma turma.',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',
@@ -283,33 +335,59 @@ export default {
         })
     },
 
-    pesquisarUsuarios() {
-      this.$http.get(`users?search=${this.searchQuery}`)
-        .then(response => {
-          this.users = response.data.data
-        })
+    pesquisaNome(nome) {
+      this.$http.get(`turmas/pesquisar/nome/${nome}`)
+      .then(response => {
+        this.turmas = response.data
+      })
+    },
+    
+    pesquisaTurno(turno) {
+      this.$http.get(`turmas/pesquisar/turno/${turno}`)
+      .then(response => {
+        this.turmas = response.data
+      })
+    },
+    event(e) {
+     this.campo = e.target.id       
     },
 
+    pesquisar() {
+      if(this.campo == 'nome') {
+        this.pesquisaNome(this.campoPesquisa)
+      }
+      if(this.campo == 'turno') {
+        this.pesquisaTurno(this.campoPesquisa)
+      }
+    },
+
+
     handleInput: debounce(function () {
-      this.pesquisarUsuarios()
+      this.pesquisar()
     }, 1000),
+
+    get() {
+      this.$http.get('turmas/curso/professor')
+        .then(response => this.turmas = response.data.data)
+    },
   },
 
+
   created() {
-    this.$http.get('alunos')
-      .then(response => this.alunos = response.data.data)
+    this.$http.get('turmas/curso/professor')
+      .then(response => this.turmas = response.data.data)
   },
 
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    // const USER_APP_STORE_MODULE_NAME = 'app-user'
 
-    // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    // // Register module
+    // if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
 
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
-    })
+    // // UnRegister on leave
+    // onUnmounted(() => {
+    //   if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
+    // })
 
     const isAddNewUserSidebarActive = ref(false)
 

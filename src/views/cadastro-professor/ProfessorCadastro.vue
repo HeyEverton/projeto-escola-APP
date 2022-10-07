@@ -98,14 +98,16 @@
                   name="CPF"
                   rules="required"
                 >
-                  <b-form-input
-                    id="professor_cpf"
-                    v-model="professor_cpf"
-                    :state="errors.length > 0 ? false:null"
-                    type="text"
-                    maxlength="14"
-                    placeholder="Insira o CPF do professor"
-                  />
+                  <cleave
+                  v-model="professor_cpf"
+                  class="form-control"
+                  id="professor_cpf"
+                  :raw="false"
+                  :options="optionsCPF.customDelimiter"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Insira o CPF do professor"
+                  type="text"
+                  />            
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -121,14 +123,18 @@
                   name="CPF"
                   rules="required"
                 >
-                  <b-form-input
-                    id="professor_cpf"
-                    v-model="professor_rg"
-                    :state="errors.length > 0 ? false:null"
-                    type="text"
-                    maxlength="14"
-                    placeholder="Insira o RG do professor"
-                  />
+
+                <cleave
+                v-model="professor_rg"
+                class="form-control"
+                id="professor_rg"
+                :raw="false"
+                :options="optionsRG.customDelimiterRG"
+                :state="errors.length > 0 ? false:null"
+                placeholder="Insira o CPF do professor"
+                type="text"
+                maxlength="12"
+                />      
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -259,13 +265,15 @@
                   name="Telefone"
                   rules="required"
                 >
-                  <b-form-input
-                    id="tel_contato"
-                    v-model="tel_contato"
-                    type="number"
-                    :state="errors.length > 0 ? false:null"
-                    placeholder="Insira o telefone para contato do professor"
-                  />
+                <cleave
+                id="tel_contato"
+                v-model="tel_contato"
+                class="form-control"
+                :raw="false"
+                :options="optionsCPF.prefix"
+                placeholder="Insira o telefone de contato do professor"
+                type="text"
+                />
 
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -579,7 +587,7 @@ export default {
       formacao: '',
       nacionalidade: '',
 
-      tel_contato: '',
+      tel_contato: '+55',
       escolaridade: '',
 
       // ENDERECO
@@ -602,10 +610,26 @@ export default {
       // useInputImageRenderer,
       // InputImageRenderer,
       avatarText,
-      form: {
-        cardNumber: null,
-        date: null,
-        phone: null,
+      
+      optionsCPF: {    
+        customDelimiter: {
+          delimiters: ['.', '.', '-'],
+          blocks: [3, 3, 3, 2],
+          uppercase: true,
+        },      
+        prefix: {
+            
+            blocks: [3, 5, 4],
+            uppercase: true,
+          },  
+      },
+
+      optionsRG: {    
+        customDelimiterRG: {
+          delimiters: ['.', '.', '-'],
+          blocks: [2, 3, 3, 2],
+          uppercase: true,
+        },        
       },
 
       options: {

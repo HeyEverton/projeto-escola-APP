@@ -2,7 +2,7 @@
     <div>
         <b-card img-top :title="nome">
             <b-card-text class="blog-content-truncate">
-                <p>{{descricao}}</p>
+                <p>{{descricao | truncate(68,'...')}}</p>
             </b-card-text>
             
             <b-card-text class="text-danger d-flex justify-content-between">

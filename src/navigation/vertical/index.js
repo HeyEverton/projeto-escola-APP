@@ -67,11 +67,32 @@ export default [
       {
         title: 'Todos os cursos',
         route: 'lista-cursos',
-        icon: 'UsersIcon',
+        icon: 'BookIcon',
+      },
+    ]      
+  },
+
+  {
+    header: 'Área Turmas',
+  },
+
+
+  {
+    title: 'Turmas',
+    icon: 'FileTextIcon',
+    children: [
+      {
+        title: 'Cadastrar turma',
+        route: 'cadastrar-turma',
+        icon: 'FileIcon'
       },
 
-    ]
-      
+      {
+        title: 'Todos as turmas',
+        route: 'lista-turma',
+        icon: 'FileIcon',
+      },
+    ]      
   },
 
   

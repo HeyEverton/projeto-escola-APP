@@ -15,7 +15,7 @@
         <b-row>
 
           <!-- Per Page -->
-          <b-col
+          <!-- <b-col
             cols="12"
             md="6"
             class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
@@ -29,27 +29,53 @@
               class="per-page-selector d-inline-block mx-50"
             />
             <label>registros</label>
-          </b-col>
+          </b-col> -->
 
           <!-- Search -->
           <b-col
             cols="12"
             md="6"
           >
-            <div class="d-flex align-items-center justify-content-end">
+            
+
+          <div class="d-flex align-items-center justify-content-end">
+            <b-input-group>
+              <b-input-group-prepend>
+                <b-dropdown  text="Pesquisando por" variant="outline-primary">
+                  <b-dropdown-item id="nome" @click="event">Nome</b-dropdown-item>
+                  <b-dropdown-item id="turno" @click="event">Turno</b-dropdown-item>
+                  <b-dropdown-item id="turno" @click="get">Listar todos</b-dropdown-item>
+                </b-dropdown>
+              </b-input-group-prepend>
               <b-form-input
-                v-model="searchQuery"
-                class="d-inline-block mr-1"
-                placeholder="Pesquisando por..."
-                @input="handleInput"
+              v-model="campoPesquisa"
+              class="d-inline-block"
+              placeholder="Pesquisando..."
+              @input="handleInput"
               />
-              <b-button
-                variant="primary"
-                @click="pesquisarUsuarios"
-              >
-                <span class="text-nowrap">Pesquisar</span>
-              </b-button>
-            </div>
+                <b-input-group-append>
+                  <b-button
+                    variant="outline-primary"
+                    @click="pesquisar"
+                  >
+                  <feather-icon icon="SearchIcon" />
+                  <!-- <span class="text-nowrap">Pesquisar</span> -->
+                </b-button>
+                  <b-button
+                    variant="outline-info"
+                   :to="{name: 'cadastrar-professores' }"
+                   v-b-tooltip.hover
+                   title="Cadastrar novo professor"
+                  >
+                  <feather-icon icon="PlusIcon" />
+                </b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+
+
+
+
           </b-col>
         </b-row>
 
@@ -64,7 +90,6 @@
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
-        empty-text="Nenhum professor foi encontrado"
         :sort-desc.sync="isSortDirDesc"
       >
 
@@ -82,15 +107,37 @@
               :to="{ name: 'dados-professor', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.nome }}
+              {{ data.item.nome | truncate(12, '...')}}
             </b-link>
-            <!-- <small >@{{ data.item.perfil }}</small> -->
           </b-media>
         </template>
 
+
+        <template #cell(professor_cpf)="data">
+        {{ data.item.professor_cpf | truncate(14, '...')}}         
+        </template>
+
+        <template #cell(formacao)="data">
+        {{ data.item.formacao | truncate(17, '...')}}         
+        </template>
+
+        <template #empty>
+          <div class="d-flex justify-content-center align-items-center">
+            <b-spinner
+              variant="primary"
+              label="Carregando..."
+            />
+            <h5 class="text-center ml-1" style="color:#7367f0;">
+              Professor não localizado
+            </h5>
+          </div>
+      </template>
+
+
+
         <!-- Column: Actions -->
-        <!-- <template #cell(actions)="data">
-          <b-button
+        <template #cell(actions)="data">
+          <!-- <b-button
             v-b-tooltip.hover
             variant="primary"
             class="btn-icon mr-1"
@@ -98,18 +145,18 @@
             title="Editar perfil"
           >
             <feather-icon icon="EditIcon" />
-          </b-button>
+          </b-button> -->
 
           <b-button
             v-b-tooltip.hover
             variant="danger"
             class="btn-icon "
             title="Excluir usuário"
-            @click="() => deleteUser(data.item.id)"
+            @click="() => excluirProfessor(data.item.id)"
           >
             <feather-icon icon="TrashIcon" />
           </b-button>
-        </template> -->
+        </template>
 
       </b-table>
       <div class="mx-2 mb-2">
@@ -177,6 +224,10 @@ import {
   BDropdownItem,
   BPagination,
   VBTooltip,
+  BInputGroup,
+  BInputGroupPrepend,
+  BInputGroupAppend,
+  BSpinner,
 
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
@@ -206,6 +257,11 @@ export default {
     BPagination,
     VBTooltip,
     vSelect,
+    VBTooltip,
+    BInputGroup,
+    BInputGroupPrepend,
+    BInputGroupAppend,
+    BSpinner,
   },
 
   directives: {
@@ -221,7 +277,7 @@ export default {
   },
 
   methods: {
-    deleteUser(id) {
+    excluirProfessor(id) {
       this.$swal({
         title: 'Tem certeza?',
         text: 'Você não conseguirá desfazer isso.',
@@ -254,7 +310,7 @@ export default {
                 } else {
                   this.$swal({
                     title: 'Falha ao excluir!',
-                    text: 'Ops! parece que houve um erro ao excluir este aluno!',
+                    text: 'Ops! parece que houve um erro ao excluir este professor!',
                     icon: 'error',
                     customClass: {
                       confirmButton: 'btn btn-primary',

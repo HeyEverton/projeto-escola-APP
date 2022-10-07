@@ -55,6 +55,7 @@
                       ref="refInputEl"
                       type="file"
                       class="d-none"
+                      @change="catchEvent"
                     >
                     <span class="d-none d-sm-inline">Escolha a foto do aluno</span>
                     <feather-icon
@@ -89,6 +90,7 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
+
             <b-col md="12">
               <b-form-group
                 label="CPF"
@@ -99,12 +101,36 @@
                   name="CPF"
                   rules="required"
                 >
+                <cleave
+                  v-model="cpf_aluno"
+                  class="form-control"
+                  id="cpf_aluno"
+                  :raw="false"
+                  :options="optionsCPF.customDelimiter"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Insira o CPF do aluno"
+                  type="text"
+                  maxlength="14"
+                  /> 
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="12">
+              <b-form-group
+                label="E-mail"
+                label-for="email"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="E-mail"
+                  rules="required|email"
+                >
                   <b-form-input
-                    id="cpf_aluno"
-                    v-model="cpf_aluno"
-                    type="text"
-                    maxlength="14"
-                    placeholder="Insira o CPF do aluno"
+                    id="email"
+                    v-model="email"
+                    placeholder="Insira o e-mail do aluno"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -125,6 +151,7 @@
                     v-model="nacionalidade"
                     label="nome"
                     :options="nacionalidades"
+                    :reduce="nacionalidades => nacionalidades.code"
                     placeholder="Selecione a nacionalidade do aluno"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -142,14 +169,12 @@
                   name="Data de nascimento"
                   rules="required"
                 >
-                  <cleave
-                    id="date"
-                    v-model="data_nascimento"
-                    class="form-control"
-                    :raw="false"
-                    :options="options.date"
-                    placeholder="DD/MM/AA"
-                  />
+                <b-form-input
+                id="email"
+                v-model="data_nascimento"
+                type="date"
+                placeholder="Insira a data de nascimento do aluno"
+              />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -169,6 +194,7 @@
                     v-model="sexo"
                     label="nome"
                     :options="sexos"
+                    :reduce="sexos => sexos.code"
                     placeholder="Selecione o sexo do aluno"
                   />
 
@@ -201,15 +227,17 @@
                 <validation-provider
                   #default="{ errors }"
                   name="Telefone para contato"
-                  rules="required|integer"
+                  rules="required"
                 >
-
-                  <b-form-input
-                    id="tel_contato"
-                    v-model="telefone_contato"
-                    type="number"
-                    placeholder="Insira o telefone de contato do aluno"
-                  />
+                <cleave
+                id="tel_contato"
+                v-model="telefone_contato"
+                class="form-control"
+                :raw="false"
+                :options="options.prefix"
+                placeholder="Insira o telefone de contato do aluno"
+                type="text"
+                />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -229,6 +257,7 @@
                     v-model="escolaridade"
                     label="nome"
                     :options="escolaridades"
+                    :reduce="escolaridades => escolaridades.code"
                     placeholder="Selecione a escolaridade do aluno"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -260,7 +289,7 @@
               <small class="text-muted">Insira as informações de endereço do aluno.</small>
 
             </b-col>
-            <b-col md="12">
+            <b-col md="6">
               <b-form-group
                 label="CEP"
                 label-for="cep"
@@ -273,7 +302,7 @@
                   <b-form-input
                     id="cep"
                     v-model="cep"
-                    placeholder="Insira CEP do aluno"
+                    placeholder="Insira o CEP do aluno"
                     :state="errors.length > 0 ? false:null"
                     @input="handleInput"
                   />
@@ -345,6 +374,27 @@
             </b-col>
 
             <b-col md="6">
+              <b-form-group
+                label="Bairro"
+                label-for="bairro"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="CEP"
+                  rules="required"
+                >
+                  <b-form-input
+                    id="bairro"
+                    v-model="bairro"
+                    placeholder="Insira o Bairro do aluno"
+                    :state="errors.length > 0 ? false:null"
+                    @input="handleInput"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
               <validation-provider
                 #default="{ errors }"
                 name="Estado"
@@ -387,7 +437,7 @@
         </validation-observer>
       </tab-content>
 
-      <!-- address  -->
+      <!-- matricula  -->
       <tab-content
         title="Fazer matrícla"
         :before-change="validationFormAddress"
@@ -456,7 +506,7 @@
         </validation-observer>
       </tab-content>
 
-      <!-- social link -->
+      <!-- pagamento -->
       <tab-content
         title="Forma de pagamento"
         :before-change="validationFormSocial"
@@ -550,6 +600,11 @@
                     :options="vencimento.dateV"
                     placeholder="DD/MM"
                   />
+                  <b-form-input
+                  id="data_vencimento"
+                  v-model="data_vencimento"
+                  type="date"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -623,7 +678,7 @@ export default {
       aluno_foto: '',
       aluno_cpf: '',
       whatsapp: '',
-      telefone_contato: '',
+      telefone_contato: '+55',
       escolaridade: '',
 
       // ENDERECO
@@ -632,6 +687,7 @@ export default {
       cidade: '',
       estado: '',
       numero_residencia: '',
+      bairro: '',
       observacao: '',
 
       // MATRICULA
@@ -644,13 +700,6 @@ export default {
       data_vencimento: '',
       valor_total: '',
 
-      landMark: '',
-      pincode: '',
-      twitterUrl: '',
-      facebookUrl: '',
-      googleUrl: '',
-      linkedinUrl: '',
-      city: '',
       required,
       email,
       codeIcon,
@@ -667,8 +716,13 @@ export default {
         date: {
           date: true,
           delimiter: '/',
-          datePattern: ['DD', 'MM', 'YYYY'],
+          datePattern: ['DD', 'MM', 'YYYYY'],
         },
+        prefix: {
+            // prefix: '+63',
+            blocks: [3, 5, 4],
+            uppercase: true,
+          },
       },
 
       vencimento: {
@@ -677,6 +731,14 @@ export default {
           delimiter: '/',
           datePattern: ['DD', 'MM'],
         },
+      },
+
+      optionsCPF: {    
+        customDelimiter: {
+          delimiters: ['.', '.', '-'],
+          blocks: [3, 3, 3, 2],
+          uppercase: true,
+        },        
       },
 
       nacionalidades: [
@@ -731,15 +793,13 @@ export default {
   },
 
   created() {
-    this.$http.get('alunos')
-      .then(response => this.alunos = response.data.data)
     this.$http.get('turmas')
       .then(response => this.turmas = response.data.data)
   },
   methods: {
 
-    InputImageRenderer(event) {
-      console.log(event)
+    catchEvent(event) {
+      this.aluno_foto = event.target.files[0]
     },
     selectTurma() {
       // console.log(this.turmas[0].id)
@@ -773,6 +833,7 @@ export default {
           this.nome_rua = response.data.logradouro
           this.cidade = response.data.localidade
           this.estado = response.data.uf
+          this.bairro = response.data.bairro
         })
     },
 
@@ -787,16 +848,44 @@ export default {
         })
       })
     },
+
     validationFormInfo() {
-      return new Promise((resolve, reject) => {
-        this.$refs.infoRules.validate().then(success => {
-          if (success) {
-            resolve(true)
-          } else {
-            reject()
-          }
-        })
-      })
+      let payload = new FormData()
+      payload.append('aluno_foto', this.aluno_foto)
+      payload.append('nome', this.nome)
+      payload.append('cpf_aluno', this.cpf_aluno)
+      payload.append('email', this.email)
+      payload.append('sexo', this.sexo)
+      payload.append('nacionalidade', this.nacionalidade)
+      payload.append('tel_contato', this.telefone_contato)
+      payload.append('data_nasc', this.data_nascimento)
+      payload.append('whatsapp', this.whatsapp)
+      payload.append('escolaridade', this.escolaridade)
+      payload.append('nome_rua', this.nome_rua)
+      payload.append('cep', this.cep)
+      payload.append('numero_residencia', this.numero_residencia)
+      payload.append('bairro', this.bairro)
+      payload.append('cidade', this.cidade)
+      payload.append('estado', this.estado)
+
+      this.$http.post('alunos', payload)
+  
+          return new Promise((resolve, reject) => {
+            this.$refs.infoRules.validate().then(success => {
+              if (success) {
+                resolve(true)
+                this.$http.get('alunos')
+                  .then(response => {
+                    this.alunos = response.data.data
+                  })
+              
+              } else {
+                reject()
+              }
+            })
+          })
+        
+
     },
     validationFormAddress() {
       return new Promise((resolve, reject) => {

@@ -1,20 +1,20 @@
 <template>
   <b-row>
     <b-col cols="12">
-      <form-wizard-number />
+      <CadastroComponente />
     </b-col>
   </b-row>
 </template>
 
 <script>
 import { BRow, BCol } from 'bootstrap-vue'
-import FormWizardNumber from './FormWizardNumber.vue'
+import CadastroComponente from './CadastroComponente.vue'
 
 export default {
   components: {
     BRow,
     BCol,
-    FormWizardNumber,
+    CadastroComponente,
 
   },
 }
