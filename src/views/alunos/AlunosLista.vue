@@ -79,7 +79,7 @@
               />
             </template>
             <b-link
-              :to="{ name: 'dados-aluno', params: { id: data.item.id } }"
+              :to="{ name: 'editar-aluno', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.nome }}
