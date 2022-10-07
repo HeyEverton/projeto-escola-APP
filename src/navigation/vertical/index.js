@@ -5,8 +5,6 @@ export default [
     icon: 'HomeIcon',
   },
 
-
-    
   {
     header: 'Área Alunos',
   },
@@ -23,14 +21,14 @@ export default [
         title: 'Lista de alunos',
         route: 'lista-alunos',
         icon: 'UsersIcon',
-      }, 
-    ]
+      },
+    ],
   },
-  
+
   {
     header: 'Área Professores',
   },
-  
+
   {
     title: 'Professores',
     icon: 'UsersIcon',
@@ -38,7 +36,7 @@ export default [
       {
         title: 'Cadastrar professor',
         route: 'cadastrar-professores',
-        icon: 'UserPlusIcon'
+        icon: 'UserPlusIcon',
       },
       {
         title: 'Lista de professores',
@@ -46,10 +44,10 @@ export default [
         icon: 'UsersIcon',
       },
 
-    ]
-      
+    ],
+
   },
-  
+
   {
     header: 'Área Cursos',
   },
@@ -61,7 +59,7 @@ export default [
       {
         title: 'Cadastrar curso',
         route: 'cadastrar-curso',
-        icon: 'BookIcon'
+        icon: 'BookIcon',
       },
 
       {
@@ -69,13 +67,12 @@ export default [
         route: 'lista-cursos',
         icon: 'BookIcon',
       },
-    ]      
+    ],
   },
 
   {
     header: 'Área Turmas',
   },
-
 
   {
     title: 'Turmas',
@@ -84,7 +81,7 @@ export default [
       {
         title: 'Cadastrar turma',
         route: 'cadastrar-turma',
-        icon: 'FileIcon'
+        icon: 'FileIcon',
       },
 
       {
@@ -92,9 +89,7 @@ export default [
         route: 'lista-turma',
         icon: 'FileIcon',
       },
-    ]      
+    ],
   },
-
-  
 
 ]

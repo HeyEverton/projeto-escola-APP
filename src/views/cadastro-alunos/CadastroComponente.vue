@@ -101,17 +101,17 @@
                   name="CPF"
                   rules="required"
                 >
-                <cleave
-                  v-model="cpf_aluno"
-                  class="form-control"
-                  id="cpf_aluno"
-                  :raw="false"
-                  :options="optionsCPF.customDelimiter"
-                  :state="errors.length > 0 ? false:null"
-                  placeholder="Insira o CPF do aluno"
-                  type="text"
-                  maxlength="14"
-                  /> 
+                  <cleave
+                    id="cpf_aluno"
+                    v-model="cpf_aluno"
+                    class="form-control"
+                    :raw="false"
+                    :options="optionsCPF.customDelimiter"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o CPF do aluno"
+                    type="text"
+                    maxlength="14"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -169,12 +169,12 @@
                   name="Data de nascimento"
                   rules="required"
                 >
-                <b-form-input
-                id="email"
-                v-model="data_nascimento"
-                type="date"
-                placeholder="Insira a data de nascimento do aluno"
-              />
+                  <b-form-input
+                    id="email"
+                    v-model="data_nascimento"
+                    type="date"
+                    placeholder="Insira a data de nascimento do aluno"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -229,15 +229,15 @@
                   name="Telefone para contato"
                   rules="required"
                 >
-                <cleave
-                id="tel_contato"
-                v-model="telefone_contato"
-                class="form-control"
-                :raw="false"
-                :options="options.prefix"
-                placeholder="Insira o telefone de contato do aluno"
-                type="text"
-                />
+                  <cleave
+                    id="tel_contato"
+                    v-model="telefone_contato"
+                    class="form-control"
+                    :raw="false"
+                    :options="options.prefix"
+                    placeholder="Insira o telefone de contato do aluno"
+                    type="text"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -602,9 +602,9 @@
                     placeholder="DD/MM"
                   />
                   <b-form-input
-                  id="data_vencimento"
-                  v-model="data_vencimento"
-                  type="date"
+                    id="data_vencimento"
+                    v-model="data_vencimento"
+                    type="date"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -720,10 +720,10 @@ export default {
           datePattern: ['DD', 'MM', 'YYYYY'],
         },
         prefix: {
-            // prefix: '+63',
-            blocks: [3, 5, 4],
-            uppercase: true,
-          },
+          // prefix: '+63',
+          blocks: [3, 5, 4],
+          uppercase: true,
+        },
       },
 
       vencimento: {
@@ -734,12 +734,12 @@ export default {
         },
       },
 
-      optionsCPF: {    
+      optionsCPF: {
         customDelimiter: {
           delimiters: ['.', '.', '-'],
           blocks: [3, 3, 3, 2],
           uppercase: true,
-        },        
+        },
       },
 
       nacionalidades: [
@@ -851,7 +851,7 @@ export default {
     },
 
     validationFormInfo() {
-      let payload = new FormData()
+      const payload = new FormData()
       payload.append('aluno_foto', this.aluno_foto)
       payload.append('nome', this.nome)
       payload.append('cpf_aluno', this.cpf_aluno)
@@ -870,23 +870,20 @@ export default {
       payload.append('estado', this.estado)
 
       this.$http.post('alunos', payload)
-  
-          return new Promise((resolve, reject) => {
-            this.$refs.infoRules.validate().then(success => {
-              if (success) {
-                resolve(true)
-                this.$http.get('alunos')
-                  .then(response => {
-                    this.alunos = response.data.data
-                  })
-              
-              } else {
-                reject()
-              }
-            })
-          })
-        
 
+      return new Promise((resolve, reject) => {
+        this.$refs.infoRules.validate().then(success => {
+          if (success) {
+            resolve(true)
+            this.$http.get('alunos')
+              .then(response => {
+                this.alunos = response.data.data
+              })
+          } else {
+            reject()
+          }
+        })
+      })
     },
     validationFormAddress() {
       return new Promise((resolve, reject) => {

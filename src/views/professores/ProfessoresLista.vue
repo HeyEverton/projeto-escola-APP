@@ -36,45 +36,59 @@
             cols="12"
             md="6"
           >
-            
 
-          <div class="d-flex align-items-center justify-content-end">
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-dropdown  text="Pesquisando por" variant="outline-primary">
-                  <b-dropdown-item id="nome" @click="event">Nome</b-dropdown-item>
-                  <b-dropdown-item id="turno" @click="event">Turno</b-dropdown-item>
-                  <b-dropdown-item id="turno" @click="get">Listar todos</b-dropdown-item>
-                </b-dropdown>
-              </b-input-group-prepend>
-              <b-form-input
-              v-model="campoPesquisa"
-              class="d-inline-block"
-              placeholder="Pesquisando..."
-              @input="handleInput"
-              />
+            <div class="d-flex align-items-center justify-content-end">
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-dropdown
+                    text="Pesquisando por"
+                    variant="outline-primary"
+                  >
+                    <b-dropdown-item
+                      id="nome"
+                      @click="event"
+                    >
+                      Nome
+                    </b-dropdown-item>
+                    <b-dropdown-item
+                      id="turno"
+                      @click="event"
+                    >
+                      Turno
+                    </b-dropdown-item>
+                    <b-dropdown-item
+                      id="turno"
+                      @click="get"
+                    >
+                      Listar todos
+                    </b-dropdown-item>
+                  </b-dropdown>
+                </b-input-group-prepend>
+                <b-form-input
+                  v-model="campoPesquisa"
+                  class="d-inline-block"
+                  placeholder="Pesquisando..."
+                  @input="handleInput"
+                />
                 <b-input-group-append>
                   <b-button
                     variant="outline-primary"
                     @click="pesquisar"
                   >
-                  <feather-icon icon="SearchIcon" />
+                    <feather-icon icon="SearchIcon" />
                   <!-- <span class="text-nowrap">Pesquisar</span> -->
-                </b-button>
+                  </b-button>
                   <b-button
+                    v-b-tooltip.hover
                     variant="outline-info"
-                   :to="{name: 'cadastrar-professores' }"
-                   v-b-tooltip.hover
-                   title="Cadastrar novo professor"
+                    :to="{name: 'cadastrar-professores' }"
+                    title="Cadastrar novo professor"
                   >
-                  <feather-icon icon="PlusIcon" />
-                </b-button>
-              </b-input-group-append>
-            </b-input-group>
-          </div>
-
-
-
+                    <feather-icon icon="PlusIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </div>
 
           </b-col>
         </b-row>
@@ -104,21 +118,20 @@
               />
             </template>
             <b-link
-              :to="{ name: 'dados-professor', params: { id: data.item.id } }"
+              :to="{ name: 'editar-professor', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.nome | truncate(12, '...')}}
+              {{ data.item.nome | truncate(12, '...') }}
             </b-link>
           </b-media>
         </template>
 
-
         <template #cell(professor_cpf)="data">
-        {{ data.item.professor_cpf | truncate(14, '...')}}         
+          {{ data.item.professor_cpf | truncate(10, '...') }}
         </template>
 
         <template #cell(formacao)="data">
-        {{ data.item.formacao | truncate(17, '...')}}         
+          {{ data.item.formacao | truncate(12, '...') }}
         </template>
 
         <template #empty>
@@ -127,13 +140,14 @@
               variant="primary"
               label="Carregando..."
             />
-            <h5 class="text-center ml-1" style="color:#7367f0;">
+            <h5
+              class="text-center ml-1"
+              style="color:#7367f0;"
+            >
               Professor não localizado
             </h5>
           </div>
-      </template>
-
-
+        </template>
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
@@ -238,10 +252,9 @@ import { debounce } from 'lodash'
 import configProfessor from './configProfessor'
 import userStoreModule from './userStoreModule'
 
-
 export default {
   components: {
-  
+
     BCard,
     BRow,
     BCol,

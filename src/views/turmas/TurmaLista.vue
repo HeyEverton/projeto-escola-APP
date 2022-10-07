@@ -40,32 +40,50 @@
             <div class="d-flex align-items-center justify-content-end">
               <b-input-group>
                 <b-input-group-prepend>
-                  <b-dropdown  text="Pesquisando por" variant="outline-primary">
-                    <b-dropdown-item id="nome" @click="event">Nome</b-dropdown-item>
-                    <b-dropdown-item id="turno" @click="event">Turno</b-dropdown-item>
-                    <b-dropdown-item id="turno" @click="get">Listar todos</b-dropdown-item>
+                  <b-dropdown
+                    text="Pesquisando por"
+                    variant="outline-primary"
+                  >
+                    <b-dropdown-item
+                      id="nome"
+                      @click="event"
+                    >
+                      Nome
+                    </b-dropdown-item>
+                    <b-dropdown-item
+                      id="turno"
+                      @click="event"
+                    >
+                      Turno
+                    </b-dropdown-item>
+                    <b-dropdown-item
+                      id="turno"
+                      @click="get"
+                    >
+                      Listar todos
+                    </b-dropdown-item>
                   </b-dropdown>
                 </b-input-group-prepend>
                 <b-form-input
-                v-model="campoPesquisa"
-                class="d-inline-block"
-                placeholder="Pesquisando..."
-                @input="handleInput"
+                  v-model="campoPesquisa"
+                  class="d-inline-block"
+                  placeholder="Pesquisando..."
+                  @input="handleInput"
                 />
-                  <b-input-group-append>
-                    <b-button
-                      variant="outline-primary"
-                      @click="pesquisar"
-                    >
+                <b-input-group-append>
+                  <b-button
+                    variant="outline-primary"
+                    @click="pesquisar"
+                  >
                     <feather-icon icon="SearchIcon" />
                     <!-- <span class="text-nowrap">Pesquisar</span> -->
                   </b-button>
-                    <b-button
-                      variant="outline-info"
-                     :to="{name: 'cadastrar-turma' }"
-                     v-b-tooltip.hover
-                     title="Criar nova turma"
-                    >
+                  <b-button
+                    v-b-tooltip.hover
+                    variant="outline-info"
+                    :to="{name: 'cadastrar-turma' }"
+                    title="Criar nova turma"
+                  >
                     <feather-icon icon="PlusIcon" />
                   </b-button>
                 </b-input-group-append>
@@ -87,54 +105,55 @@
         :sort-desc.sync="isSortDirDesc"
         show-empty
       >
-    <template #empty>
-        <div class="d-flex justify-content-center align-items-center">
-          <b-spinner
-            variant="primary"
-            label="Carregando..."
-          />
-          <h5 class="text-center ml-1" style="color:#7367f0;">
-            Turma não localizada
-          </h5>
-        </div>
-    </template>
+        <template #empty>
+          <div class="d-flex justify-content-center align-items-center">
+            <b-spinner
+              variant="primary"
+              label="Carregando..."
+            />
+            <h5
+              class="text-center ml-1"
+              style="color:#7367f0;"
+            >
+              Turma não localizada
+            </h5>
+          </div>
+        </template>
 
-      
-      <template #cell(turma)="data">
-        <b-link
-                :to="{ name: 'editar-turma', params: { id: data.item.id } }"
-                class="font-weight-bold d-block text-nowrap"
-              >
-                {{ data.item.nome }}
-        </b-link>
-      </template>
+        <template #cell(turma)="data">
+          <b-link
+            :to="{ name: 'editar-turma', params: { id: data.item.id } }"
+            class="font-weight-bold d-block text-nowrap"
+          >
+            {{ data.item.nome }}
+          </b-link>
+        </template>
 
-      <template #cell(professor_id)="data">
-        {{data.item.professor.nome | truncate(12, '...')}}
-      </template>
+        <template #cell(professor_id)="data">
+          {{ data.item.professor.nome | truncate(12, '...') }}
+        </template>
 
-      <template #cell(data_inicio)="data">
-        {{ moment(data.item.data_inicio).format('DD/M/YYYY') }}
-      </template>
+        <template #cell(data_inicio)="data">
+          {{ moment(data.item.data_inicio).format('DD/M/YYYY') }}
+        </template>
 
-      <template #cell(curso_id)="data">
-        {{ data.item.curso.nome | truncate(12, '...')}}
-      </template>
+        <template #cell(curso_id)="data">
+          {{ data.item.curso.nome | truncate(12, '...') }}
+        </template>
 
-      <template #cell(horario_entrada)="data">
-        {{ data.item.horario_entrada }}
-      </template>
+        <template #cell(horario_entrada)="data">
+          {{ data.item.horario_entrada }}
+        </template>
 
-      <template #cell(status)="data">
-        <b-badge
-          pill
-          variant="success"
-        >
-          {{ data.item.status }}
-        </b-badge>
-      </template>
+        <template #cell(status)="data">
+          <b-badge
+            pill
+            variant="success"
+          >
+            {{ data.item.status }}
+          </b-badge>
+        </template>
 
-      
         <!-- Column: Actions -->
         <template #cell(actions)="data">
           <!-- <b-button
@@ -213,7 +232,7 @@
 import {
   BCard,
   BRow,
-  BCol, 
+  BCol,
   BFormInput,
   BButton,
   BTable,
@@ -237,7 +256,6 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import { debounce } from 'lodash'
 import useUsersList from './useUsersList'
-
 
 export default {
   components: {
@@ -337,30 +355,29 @@ export default {
 
     pesquisaNome(nome) {
       this.$http.get(`turmas/pesquisar/nome/${nome}`)
-      .then(response => {
-        this.turmas = response.data
-      })
+        .then(response => {
+          this.turmas = response.data
+        })
     },
-    
+
     pesquisaTurno(turno) {
       this.$http.get(`turmas/pesquisar/turno/${turno}`)
-      .then(response => {
-        this.turmas = response.data
-      })
+        .then(response => {
+          this.turmas = response.data
+        })
     },
     event(e) {
-     this.campo = e.target.id       
+      this.campo = e.target.id
     },
 
     pesquisar() {
-      if(this.campo == 'nome') {
+      if (this.campo == 'nome') {
         this.pesquisaNome(this.campoPesquisa)
       }
-      if(this.campo == 'turno') {
+      if (this.campo == 'turno') {
         this.pesquisaTurno(this.campoPesquisa)
       }
     },
-
 
     handleInput: debounce(function () {
       this.pesquisar()
@@ -371,7 +388,6 @@ export default {
         .then(response => this.turmas = response.data.data)
     },
   },
-
 
   created() {
     this.$http.get('turmas/curso/professor')

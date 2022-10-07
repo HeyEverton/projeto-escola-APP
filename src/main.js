@@ -14,16 +14,16 @@ import './global-components'
 import '@/libs/portal-vue'
 import '@/libs/toastification'
 
-//TRUNCATE TEXT
-var filter = function(text, length, clamp){
-  clamp = clamp || '...';
-  var node = document.createElement('div');
-  node.innerHTML = text;
-  var content = node.textContent;
-  return content.length > length ? content.slice(0, length) + clamp : content;
-};
+// TRUNCATE TEXT
+const filter = function (text, length, clamp) {
+  clamp = clamp || '...'
+  const node = document.createElement('div')
+  node.innerHTML = text
+  const content = node.textContent
+  return content.length > length ? content.slice(0, length) + clamp : content
+}
 
-Vue.filter('truncate', filter);
+Vue.filter('truncate', filter)
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)

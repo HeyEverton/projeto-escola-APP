@@ -48,11 +48,11 @@
     <!-- User Info: Input Fields -->
     <b-form>
       <validation-observer
-          ref="infoRules"
-          tag="form"
-        >   
+        ref="infoRules"
+        tag="form"
+      >
         <b-row>
-  
+
           <!-- Field: Full Name -->
           <b-col
             cols="12"
@@ -68,7 +68,7 @@
               />
             </b-form-group>
           </b-col>
-          
+
           <!-- Field: Full Name -->
           <b-col
             cols="12"
@@ -78,27 +78,27 @@
               label="CPF"
               label-for="full-name"
             >
-  
-            <validation-provider
-            #default="{ errors }"
-            name="Nacionalidade"
-            rules="required"
-          >
-          <cleave
-            v-model="userData.cpf_aluno"
-            class="form-control"
-            id="cpf_aluno"
-            :raw="false"
-            :options="optionsCPF.customDelimiter"
-            placeholder="Insira o CPF do aluno"
-            type="text"
-            maxlength="14"
-            /> 
-            <small class="text-danger">{{ errors[0] }}</small>      
-        </validation-provider>
+
+              <validation-provider
+                #default="{ errors }"
+                name="Nacionalidade"
+                rules="required"
+              >
+                <cleave
+                  id="cpf_aluno"
+                  v-model="userData.cpf_aluno"
+                  class="form-control"
+                  :raw="false"
+                  :options="optionsCPF.customDelimiter"
+                  placeholder="Insira o CPF do aluno"
+                  type="text"
+                  maxlength="14"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
             </b-form-group>
           </b-col>
-  
+
           <!-- Field: Email -->
           <b-col
             cols="12"
@@ -115,7 +115,7 @@
               />
             </b-form-group>
           </b-col>
-  
+
           <b-col md="12">
             <b-form-group
               label="Nacionalidade"
@@ -137,27 +137,27 @@
               </validation-provider>
             </b-form-group>
           </b-col>
-  
+
           <b-col md="6">
             <b-form-group
               label="Data de nascimento"
               label-for="data_nascimento"
-              >
+            >
               <validation-provider
                 #default="{ errors }"
                 name="Data de nascimento"
                 rules="required"
-                >
+              >
                 <b-form-input
-                id="email"
-                v-model="userData.data_nasc"
-                type="date"
-                placeholder="Insira a data de nascimento do aluno"
+                  id="email"
+                  v-model="userData.data_nasc"
+                  type="date"
+                  placeholder="Insira a data de nascimento do aluno"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-          </b-col> 
+          </b-col>
 
           <b-col md="6">
             <b-form-group
@@ -181,7 +181,7 @@
               </validation-provider>
             </b-form-group>
           </b-col>
-  
+
           <b-col md="6">
             <b-form-group
               label="Whatsapp"
@@ -207,15 +207,15 @@
                 name="Telefone para contato"
                 rules="required"
               >
-              <cleave
-              id="tel_contato"
-              v-model="userData.tel_contato"
-              class="form-control"
-              :raw="false"
-              :options="options.prefix"
-              placeholder="Insira o telefone de contato do aluno"
-              type="text"
-              />
+                <cleave
+                  id="tel_contato"
+                  v-model="userData.tel_contato"
+                  class="form-control"
+                  :raw="false"
+                  :options="options.prefix"
+                  placeholder="Insira o telefone de contato do aluno"
+                  type="text"
+                />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -243,25 +243,21 @@
             </b-form-group>
           </b-col>
           <b-col
-          md="12"
+            md="12"
           >
-          <b-form-group
-            label="Observação"
-            label-for="observacao"
+            <b-form-group
+              label="Observação"
+              label-for="observacao"
             >
-            <b-form-textarea
-              id="observacao"
-              v-model="userData.observacao"
-              rows="5"
-              placeholder="Tem alguma observação sobre o aluno?"
+              <b-form-textarea
+                id="observacao"
+                v-model="userData.observacao"
+                rows="5"
+                placeholder="Tem alguma observação sobre o aluno?"
               />
-          </b-form-group>
-        </b-col>  
-  
-  
-  
-  
-  
+            </b-form-group>
+          </b-col>
+
         </b-row>
       </validation-observer>
     </b-form>
@@ -338,9 +334,9 @@ import vSelect from 'vue-select'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { ref } from '@vue/composition-api'
 import router from '@/router'
-import useUsersList from './useUsersList'
 import Cleave from 'vue-cleave-component'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import useUsersList from './useUsersList'
 
 export default {
   components: {
@@ -375,21 +371,20 @@ export default {
       userData: { },
       // name: '',
 
-
-      optionsCPF: {    
+      optionsCPF: {
         customDelimiter: {
           delimiters: ['.', '.', '-'],
           blocks: [3, 3, 3, 2],
           uppercase: true,
-        },        
+        },
       },
 
       options: {
         prefix: {
-            // prefix: '+63',
-            blocks: [3, 5, 4],
-            uppercase: true,
-          },
+          // prefix: '+63',
+          blocks: [3, 5, 4],
+          uppercase: true,
+        },
       },
 
       nacionalidades: [
@@ -397,7 +392,6 @@ export default {
         { code: 'ES', nome: 'Estrangeiro' },
       ],
 
-      
       sexos: [
         { code: 'M', nome: 'Masculino' },
         { code: 'F', nome: 'Feminino' },
@@ -417,16 +411,16 @@ export default {
 
   created() {
     this.$http
-        .get(`alunos/${router.currentRoute.params.id}`)
-        .then(response => {
-          // console.log(response.data.data)
-          this.userData = response.data.data
-        })
-        .catch(error => {
-          if (error.response.status === 404) {
-            userData.value = undefined
-          }
-        })
+      .get(`alunos/${router.currentRoute.params.id}`)
+      .then(response => {
+        // console.log(response.data.data)
+        this.userData = response.data.data
+      })
+      .catch(error => {
+        if (error.response.status === 404) {
+          userData.value = undefined
+        }
+      })
     // this.$http
     //     .get(`aluno/matricula/${router.currentRoute.params.id}`)
     //     .then(response => {

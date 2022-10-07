@@ -166,7 +166,7 @@
 import {
   BCard,
   BRow,
-  BCol, 
+  BCol,
   BFormInput,
   BButton,
   BTable,

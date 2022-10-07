@@ -74,8 +74,8 @@ import router from '@/router'
 import store from '@/store'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import userStoreModule from './userStoreModule'
-import AlunoEditTabInformacao from '../editar-aluno/AlunoEditTabInformacao.vue'
-import AlunoEditTabEndereco from '../editar-aluno/AlunoEditTabEndereco.vue'
+import AlunoEditTabInformacao from './AlunoEditTabInformacao.vue'
+import AlunoEditTabEndereco from './AlunoEditTabEndereco.vue'
 // import PagamentosEdit from './PagamentosEdit.vue'
 
 export default {

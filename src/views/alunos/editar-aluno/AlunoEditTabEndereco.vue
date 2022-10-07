@@ -3,20 +3,20 @@
 
     <b-form>
       <validation-observer
-          ref="infoRules"
-          tag="form"
-        > 
+        ref="infoRules"
+        tag="form"
+      >
         <b-row>
 
           <b-col
-              cols="12"
-              class="mb-2"
-            >
-              <h5 class="mb-0">
-                Endereço
-              </h5>
+            cols="12"
+            class="mb-2"
+          >
+            <h5 class="mb-0">
+              Endereço
+            </h5>
 
-            </b-col>
+          </b-col>
           <!-- Field: ENDERECO -->
           <b-col
             cols="12"
@@ -29,10 +29,10 @@
               <b-form-input
                 id="full-name"
                 v-model="userData.nome_rua"
-                />
+              />
             </b-form-group>
           </b-col>
-          
+
           <!-- CEP -->
           <b-col md="6">
             <b-form-group
@@ -50,12 +50,12 @@
                   placeholder="Insira o CEP do aluno"
                   :state="errors.length > 0 ? false:null"
                   @input="handleInput"
-                  />
+                />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
           </b-col>
-  
+
           <!-- Field: Nº RESIDENCIA -->
           <b-col md="6">
             <validation-provider
@@ -87,9 +87,9 @@
               <b-form-group
                 label="Cidade"
                 label-for="cidade"
-                >
+              >
                 <b-form-input
-                id="cidade"
+                  id="cidade"
                   v-model="userData.cidade"
                   :state="errors.length > 0 ? false:null"
                   placeholder="Insira a cidade do aluno"
@@ -118,7 +118,7 @@
               </validation-provider>
             </b-form-group>
           </b-col>
-  
+
           <b-col md="6">
             <validation-provider
               #default="{ errors }"
@@ -142,32 +142,31 @@
             </validation-provider>
           </b-col>
 
-                
-  
         </b-row>
       </validation-observer>
     </b-form>
 
+    <b-row class="mt-2">
+      <b-col>
+        <b-button
+          variant="primary"
+          class="mb-1 mb-sm-0 mr-0 mr-sm-1"
+          :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+          @click="updateProfile"
+        >
 
-      
-  
-     
-     
-      
+          Salvar
+        </b-button>
+        <b-button
+          :to="{name: 'lista-alunos'}"
+          variant="outline-secondary"
+          :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+        >
+          Cancelar
+        </b-button>
+      </b-col>
+    </b-row>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-button variant="primary" class="mb-1 mb-sm-0 mr-0 mr-sm-1"
-            :block="$store.getters['app/currentBreakPoint'] === 'xs'" @click="updateProfile">
-
-            Salvar
-          </b-button>
-          <b-button :to="{name: 'lista-alunos'}" variant="outline-secondary" :block="$store.getters['app/currentBreakPoint'] === 'xs'">
-            Cancelar
-          </b-button>
-        </b-col>
-        </b-row>
-    
   </div>
 </template>
 
@@ -249,16 +248,16 @@ export default {
 
   created() {
     this.$http
-        .get(`alunos/${router.currentRoute.params.id}`)
-        .then(response => {
-          // console.log(response.data.data)
-          this.userData = response.data.data
-        })
-        .catch(error => {
-          if (error.response.status === 404) {
-            userData.value = undefined
-          }
-        })
+      .get(`alunos/${router.currentRoute.params.id}`)
+      .then(response => {
+        // console.log(response.data.data)
+        this.userData = response.data.data
+      })
+      .catch(error => {
+        if (error.response.status === 404) {
+          userData.value = undefined
+        }
+      })
     // this.$http.get(`aluno/matricula/${router.currentRoute.params.id}`)
     //   .then(response => {
     //     this.userData = response.data.data
@@ -289,8 +288,6 @@ export default {
         })
     },
 
-
-
     updateProfile() {
       let payload = ''
       payload = new FormData()
@@ -309,7 +306,7 @@ export default {
       payload.append('cep', this.userData.aluno.cep)
       payload.append('bairro', this.userData.aluno.bairro)
       payload.append('cidade', this.userData.aluno.cidade)
-      payload.append('estado', this.userData.aluno.estado)   
+      payload.append('estado', this.userData.aluno.estado)
       payload.append('_method', 'put')
       this.$http
         .post(`alunos/${router.currentRoute.params.id}`, payload)
@@ -341,7 +338,6 @@ export default {
             buttonsStyling: false,
           })
         })
-        
     },
   },
 }

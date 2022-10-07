@@ -1,136 +1,131 @@
-<template >
-    <b-card>
+<template>
+  <b-card>
 
-        <b-card-header class="pb-50 d-flex justify-content-start">
-          <h3>
-            Cadastrar turma
-          </h3>
-        </b-card-header>
-    
-        <b-card-body>
-          <validation-observer ref="form">
-    
-            <b-form
-              id="form"
-              @submit.prevent
-              class="mt-2"
-            >
-              <b-row>
-                <b-col md="12">
-                  <b-form-group
-                    label="Nome"
-                    label-for="nome"
-                   
-                  >    
-                    <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Nome"
-                    >    
-                     
-                      <b-form-input
-                        v-model="nome"
-                        :state="errors.length > 0 ? false : null"
-                        placeholder="Insira o nome da turma"
-                      />
-                      <small class="text-danger">{{ errors[0] }}</small>
-    
-                    </validation-provider>
-                  </b-form-group>
-                </b-col>
+    <b-card-header class="pb-50 d-flex justify-content-start">
+      <h3>
+        Cadastrar turma
+      </h3>
+    </b-card-header>
 
-                <b-col md="6">
-                  <b-form-group
-                    label="Selecione o curso"
-                    label-for="curso_id"
-                   
-                  >    
-                    <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Curso"
-                    >    
-                     
-                    <v-select
+    <b-card-body>
+      <validation-observer ref="form">
+
+        <b-form
+          id="form"
+          class="mt-2"
+          @submit.prevent
+        >
+          <b-row>
+            <b-col md="12">
+              <b-form-group
+                label="Nome"
+                label-for="nome"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Nome"
+                >
+
+                  <b-form-input
+                    v-model="nome"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira o nome da turma"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Selecione o curso"
+                label-for="curso_id"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Curso"
+                >
+
+                  <v-select
                     v-model="curso_id"
                     :options="cursos"
                     :reduce="cursos => cursos.id"
                     label="nome"
                   />
-                      <small class="text-danger">{{ errors[0] }}</small>
-    
-                    </validation-provider>
-                  </b-form-group>
-                </b-col>
+                  <small class="text-danger">{{ errors[0] }}</small>
 
-                <b-col md="6">
-                  <b-form-group
-                    label="Selecione o turno"
-                    label-for="turno"
-                   
-                  >    
-                    <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Turno"
-                    >    
-                     
-                    <v-select
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Selecione o turno"
+                label-for="turno"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Turno"
+                >
+
+                  <v-select
                     v-model="turno"
                     :options="turnos"
                     :reduce="turnos => turnos.code"
                     label="nome"
                   />
-                      <small class="text-danger">{{ errors[0] }}</small>
-    
-                    </validation-provider>
-                  </b-form-group>
-                </b-col>
-    
-                <b-col md="6">
-                  <b-form-group
-                    label="Data de início"
-                    label-for="data_inicio"
-                   
-                  >       
-                  <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Data de início"
-                    > 
-                    <b-form-input
-                      id="data_inicio"
-                      v-model="data_inicio"
-                      type="date"
-                      :state="errors.length > 0 ? false : null"
-                      placeholder="Insira a data de início "
-                    />
-                    <!-- <cleave
+                  <small class="text-danger">{{ errors[0] }}</small>
+
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Data de início"
+                label-for="data_inicio"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Data de início"
+                >
+                  <b-form-input
+                    id="data_inicio"
+                    v-model="data_inicio"
+                    type="date"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira a data de início "
+                  />
+                  <!-- <cleave
                     id="date"
                     v-model="data_inicio"
                     class="form-control"
                     :raw="false"
-                    
+
                     placeholder="DD/MM/AA"
                     type="date"
                   /> -->
-                    <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>            
-                  </b-form-group>
-                </b-col>
-    
-                <b-col md="6">
-                  <b-form-group
-                    label="Data de término"
-                    label-for="data_termino"
-                   
-                  >       
-                  <validation-provider
-                      #default="{ errors }"
-                      rules=""
-                      name="Data de término"
-                    > 
-                    <cleave
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Data de término"
+                label-for="data_termino"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules=""
+                  name="Data de término"
+                >
+                  <cleave
                     id="date"
                     v-model="data_termino"
                     class="form-control"
@@ -138,209 +133,205 @@
                     placeholder="DD/MM/AA"
                     type="date"
                   />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>            
-                  </b-form-group>
-                </b-col>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
 
-                <b-col md="6">
-                  <b-form-group
-                    label="Quantidade máxima de alunos"
-                    label-for="qt_maxA"
-                   
-                  >       
-                  <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Quantidade máx alunos"
-                    > 
-                    <b-form-input
-                      id="qt_maxA"
-                      v-model="qt_maxA"
-                      type="number"
-                      :state="errors.length > 0 ? false : null"
-                      placeholder="Insira a quantidade máxima de alunos"
-                    />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>            
-                  </b-form-group>
-                </b-col>
-
-                <b-col md="6">
-                  <b-form-group
-                    label="Quantidade atual de alunos"
-                    label-for="qt_maxA"
-                   
-                  >       
-                  <validation-provider
-                      #default="{ errors }"
-                      rules="required"
-                      name="Quantidade máx alunos"
-                    > 
-                    <b-form-input
-                      id="qt_atualA"
-                      v-model="qt_atualA"
-                      type="number"
-                      :state="errors.length > 0 ? false : null"
-                      placeholder="Insira a quantidade atual de alunos"
-                    />
-                    <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>            
-                  </b-form-group>
-                </b-col>
-
-                <b-col md="12">
-                    <b-form-group
-                      label="Selecione o professor"
-                      label-for="professor_id"                     
-                    >    
-                      <validation-provider
-                        #default="{ errors }"
-                        rules="required"
-                        name="Professor"
-                      >    
-                       
-                      <v-select
-                      v-model="professor_id"
-                      :options="professores"
-                      :reduce="professores => professores.id"
-                      label="nome"
-                    />
-                        <small class="text-danger">{{ errors[0] }}</small>
-                      </validation-provider>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col md="6">
-                    <b-form-group
-                      label="Horário de entrada"
-                      label-for="horario_entrada"
-                     
-                    >       
-                    <validation-provider
-                        #default="{ errors }"
-                        rules="required"
-                        name="Horário de entrada"
-                      > 
-                      <b-form-input
-                        id="horario_entrada"
-                        v-model="horario_entrada"
-                        type="text"
-                        :state="errors.length > 0 ? false : null"
-                        placeholder="Insira o horário de entrada da turma"
-                      />
-                      <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>            
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col md="6">
-                    <b-form-group
-                      label="Horário de saída"
-                      label-for="horario_saida"
-                     
-                    >       
-                    <validation-provider
-                        #default="{ errors }"
-                        rules="required"
-                        name="Horário de saída"
-                      > 
-                      <b-form-input
-                        id="horario_saida"
-                        v-model="horario_saida"
-                        type="text"
-                        :state="errors.length > 0 ? false : null"
-                        placeholder="Insira o horário de saída da turma"
-                      />
-                      <small class="text-danger">{{ errors[0] }}</small>
-                  </validation-provider>            
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col md="12">
-                    <b-form-group
-                      label="Selecione a modalidade"
-                      label-for="modalidade"                     
-                    >    
-                      <validation-provider
-                        #default="{ errors }"
-                        rules="required"
-                        name="Modalidade"
-                      >    
-                       
-                      <v-select
-                      v-model="modalidade"
-                      :options="modalidades"
-                      :reduce="modalidades => modalidades.code"
-                      label="nome"
-                    />
-                        <small class="text-danger">{{ errors[0] }}</small>
-                      </validation-provider>
-                    </b-form-group>
-                  </b-col>
-    
-                <!-- submit and reset -->
-                <b-col
-                  cols="12"
-                  class="d-flex  mt-2"
+            <b-col md="6">
+              <b-form-group
+                label="Quantidade máxima de alunos"
+                label-for="qt_maxA"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Quantidade máx alunos"
                 >
-                  <b-button                   
-                    size="md"
-                    type="submit"
-                    variant="primary"
-                    class="mr-1"
-                    @click="cadastrarTurma"
-                  >
-                    Enviar
-                    <feather-icon
-                      size="18"
-                      icon="SendIcon"
-                      class="d-inline d-sm-none"
-                    />
-    
-                  </b-button>
-                  <b-button
-                    
-                    size="md"
-                    type="reset"
-                    variant="outline-danger"
-                    @click="resetFormEditora()"
-                  >
-                    Cancelar
-                    <feather-icon
-                      size="18"
-                      icon="XIcon"
-                      class="d-inline d-sm-none"
-                    />
-    
-                  </b-button>
-                </b-col>
-              </b-row>
-            </b-form>
-          </validation-observer>
-        </b-card-body>
-      </b-card>
+                  <b-form-input
+                    id="qt_maxA"
+                    v-model="qt_maxA"
+                    type="number"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira a quantidade máxima de alunos"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Quantidade atual de alunos"
+                label-for="qt_maxA"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Quantidade máx alunos"
+                >
+                  <b-form-input
+                    id="qt_atualA"
+                    v-model="qt_atualA"
+                    type="number"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira a quantidade atual de alunos"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="12">
+              <b-form-group
+                label="Selecione o professor"
+                label-for="professor_id"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Professor"
+                >
+
+                  <v-select
+                    v-model="professor_id"
+                    :options="professores"
+                    :reduce="professores => professores.id"
+                    label="nome"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Horário de entrada"
+                label-for="horario_entrada"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Horário de entrada"
+                >
+                  <b-form-input
+                    id="horario_entrada"
+                    v-model="horario_entrada"
+                    type="text"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira o horário de entrada da turma"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Horário de saída"
+                label-for="horario_saida"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Horário de saída"
+                >
+                  <b-form-input
+                    id="horario_saida"
+                    v-model="horario_saida"
+                    type="text"
+                    :state="errors.length > 0 ? false : null"
+                    placeholder="Insira o horário de saída da turma"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="12">
+              <b-form-group
+                label="Selecione a modalidade"
+                label-for="modalidade"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  rules="required"
+                  name="Modalidade"
+                >
+
+                  <v-select
+                    v-model="modalidade"
+                    :options="modalidades"
+                    :reduce="modalidades => modalidades.code"
+                    label="nome"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <!-- submit and reset -->
+            <b-col
+              cols="12"
+              class="d-flex  mt-2"
+            >
+              <b-button
+                size="md"
+                type="submit"
+                variant="primary"
+                class="mr-1"
+                @click="cadastrarTurma"
+              >
+                Enviar
+                <feather-icon
+                  size="18"
+                  icon="SendIcon"
+                  class="d-inline d-sm-none"
+                />
+
+              </b-button>
+              <b-button
+
+                size="md"
+                type="reset"
+                variant="outline-danger"
+                @click="resetFormEditora()"
+              >
+                Cancelar
+                <feather-icon
+                  size="18"
+                  icon="XIcon"
+                  class="d-inline d-sm-none"
+                />
+
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-form>
+      </validation-observer>
+    </b-card-body>
+  </b-card>
 </template>
 <script>
-    import {
-    BRow,
-    BCol,
-    BFormGroup,
-    BFormInput,
-    BForm,
-    BButton,
-    BCard,
-    BCardBody,
-    BCardHeader,
-    BFormTextarea,
-    } from 'bootstrap-vue'
-    import Cleave from 'vue-cleave-component'
-    import { ValidationProvider, ValidationObserver, } from 'vee-validate'
-    import { required } from '@validations'
-    import vSelect from 'vue-select'
+import {
+  BRow,
+  BCol,
+  BFormGroup,
+  BFormInput,
+  BForm,
+  BButton,
+  BCard,
+  BCardBody,
+  BCardHeader,
+  BFormTextarea,
+} from 'bootstrap-vue'
+import Cleave from 'vue-cleave-component'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { required } from '@validations'
+import vSelect from 'vue-select'
 
 export default {
-    components: {
+  components: {
     BRow,
     BCol,
     BFormGroup,
@@ -359,7 +350,7 @@ export default {
 
   data() {
     return {
-      nome:'',
+      nome: '',
       curso_id: '',
       professor_id: '',
       turno: '',
@@ -371,7 +362,7 @@ export default {
       horario_saida: '',
       modalidade: '',
       status: 'A',
-      //V-SELECT_PROFESSRO_CURSO
+      // V-SELECT_PROFESSRO_CURSO
       cursos: [],
       professores: [],
 
@@ -383,66 +374,65 @@ export default {
         },
       },
 
-      //V-SELECT_TURMA
+      // V-SELECT_TURMA
       turnos: [
-        { code: 'M', nome: 'Manhã'},
-        { code: 'T', nome: 'Tarde'},
-        { code: 'N', nome: 'Noite'},
+        { code: 'M', nome: 'Manhã' },
+        { code: 'T', nome: 'Tarde' },
+        { code: 'N', nome: 'Noite' },
       ],
       modalidades: [
-        {code: 1, nome:'Online'},
-        {code: 2, nome:'Presencial'},
+        { code: 1, nome: 'Online' },
+        { code: 2, nome: 'Presencial' },
       ],
       required,
     }
   },
 
-  created () {
+  created() {
     this.$http.get('cursos')
-    .then(response => {
+      .then(response => {
         this.cursos = response.data.data
-    })
+      })
     this.$http.get('professores')
-    .then(response => {
+      .then(response => {
         this.professores = response.data.data
-    })
+      })
   },
-  
+
   methods: {
     cadastrarTurma() {
-        this.$refs.form.validate().then(success => {
-            if (success) {
-                const payload = {
-                    nome: this.nome,
-                    curso_id: this.curso_id,
-                    professor_id: this.professor_id,
-                    data_inicio: this.data_inicio,
-                    data_termino: this.data_termino,
-                    turno: this.turno,
-                    qt_max_alunos: this.qt_maxA,
-                    qt_atual_alunos: this.qt_atualA,
-                    horario_entrada: this.horario_entrada,
-                    horario_saida: this.horario_saida,
-                    modalidade: this.modalidade,
-                    status: this.status,
-                }
+      this.$refs.form.validate().then(success => {
+        if (success) {
+          const payload = {
+            nome: this.nome,
+            curso_id: this.curso_id,
+            professor_id: this.professor_id,
+            data_inicio: this.data_inicio,
+            data_termino: this.data_termino,
+            turno: this.turno,
+            qt_max_alunos: this.qt_maxA,
+            qt_atual_alunos: this.qt_atualA,
+            horario_entrada: this.horario_entrada,
+            horario_saida: this.horario_saida,
+            modalidade: this.modalidade,
+            status: this.status,
+          }
 
-                this.$http.post('turmas', payload)
-                .then(response => {
-                    this.$swal({
-                    icon: 'success',
-                    title: 'Criado',
-                    text: 'A turma foi criada com sucesso',
-                    customClass: {
-                      confirmButton: 'btn btn-success',
-                    },
-                  })
-                  this.$router.replace('/lista-turma')
-                })
-            }
-        })
-        
-    }
+          this.$http.post('turmas', payload)
+            .then(response => {
+              this.$swal({
+                icon: 'success',
+                title: 'Criado',
+                text: 'A turma foi criada com sucesso',
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                },
+              })
+              this.$router.replace('/lista-turma')
+            })
+        }
+      })
+    },
   },
 
 }

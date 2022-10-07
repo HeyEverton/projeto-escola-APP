@@ -47,26 +47,26 @@
                 </template>
                 <div class="d-flex flex-wrap">
                   <b-button
-                  class="mt-4"
-                  variant="primary"
-                  @click="$refs.refInputEl.click()"
+                    class="mt-4"
+                    variant="primary"
+                    @click="$refs.refInputEl.click()"
                   >
-                  <input
-                  ref="refInputEl"
-                  type="file"
-                  class="d-none"
-                  @change="InputImageRenderer"
-                  >
-                  <span class="d-none d-sm-inline">Escolha a foto do professor</span>
-                  <feather-icon
-                  icon="EditIcon"
-                  class="d-inline d-sm-none"
-                  />
-                </b-button>
-              </div>
-            </b-media>
-            
-          </b-col>
+                    <input
+                      ref="refInputEl"
+                      type="file"
+                      class="d-none"
+                      @change="InputImageRenderer"
+                    >
+                    <span class="d-none d-sm-inline">Escolha a foto do professor</span>
+                    <feather-icon
+                      icon="EditIcon"
+                      class="d-inline d-sm-none"
+                    />
+                  </b-button>
+                </div>
+              </b-media>
+
+            </b-col>
 
             <b-col md="12">
               <b-form-group
@@ -99,15 +99,15 @@
                   rules="required"
                 >
                   <cleave
-                  v-model="professor_cpf"
-                  class="form-control"
-                  id="professor_cpf"
-                  :raw="false"
-                  :options="optionsCPF.customDelimiter"
-                  :state="errors.length > 0 ? false:null"
-                  placeholder="Insira o CPF do professor"
-                  type="text"
-                  />            
+                    id="professor_cpf"
+                    v-model="professor_cpf"
+                    class="form-control"
+                    :raw="false"
+                    :options="optionsCPF.customDelimiter"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o CPF do professor"
+                    type="text"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -124,17 +124,17 @@
                   rules="required"
                 >
 
-                <cleave
-                v-model="professor_rg"
-                class="form-control"
-                id="professor_rg"
-                :raw="false"
-                :options="optionsRG.customDelimiterRG"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Insira o CPF do professor"
-                type="text"
-                maxlength="12"
-                />      
+                  <cleave
+                    id="professor_rg"
+                    v-model="professor_rg"
+                    class="form-control"
+                    :raw="false"
+                    :options="optionsRG.customDelimiterRG"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="Insira o CPF do professor"
+                    type="text"
+                    maxlength="12"
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -265,15 +265,15 @@
                   name="Telefone"
                   rules="required"
                 >
-                <cleave
-                id="tel_contato"
-                v-model="tel_contato"
-                class="form-control"
-                :raw="false"
-                :options="optionsCPF.prefix"
-                placeholder="Insira o telefone de contato do professor"
-                type="text"
-                />
+                  <cleave
+                    id="tel_contato"
+                    v-model="tel_contato"
+                    class="form-control"
+                    :raw="false"
+                    :options="optionsCPF.prefix"
+                    placeholder="Insira o telefone de contato do professor"
+                    type="text"
+                  />
 
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -610,26 +610,26 @@ export default {
       // useInputImageRenderer,
       // InputImageRenderer,
       avatarText,
-      
-      optionsCPF: {    
+
+      optionsCPF: {
         customDelimiter: {
           delimiters: ['.', '.', '-'],
           blocks: [3, 3, 3, 2],
           uppercase: true,
-        },      
+        },
         prefix: {
-            
-            blocks: [3, 5, 4],
-            uppercase: true,
-          },  
+
+          blocks: [3, 5, 4],
+          uppercase: true,
+        },
       },
 
-      optionsRG: {    
+      optionsRG: {
         customDelimiterRG: {
           delimiters: ['.', '.', '-'],
           blocks: [2, 3, 3, 2],
           uppercase: true,
-        },        
+        },
       },
 
       options: {
@@ -748,9 +748,9 @@ export default {
       payload.append('numero_conta', this.numero_conta)
 
       this.$http.post('professores', payload)
-      .then(response => {
-        console.log(response)
-      })
+        .then(response => {
+          console.log(response)
+        })
 
       // this.$toast({
       //   component: ToastificationContent,

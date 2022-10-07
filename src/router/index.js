@@ -27,7 +27,7 @@ const router = new VueRouter({
       },
     },
 
-   {
+    {
       path: '/cadastrar-alunos',
       name: 'cadastrar-alunos',
       component: () => import('@/views/cadastro-alunos/CadastroAluno.vue'),
@@ -72,7 +72,6 @@ const router = new VueRouter({
       },
     },
 
-
     {
       path: '/cadastrar-professores',
       name: 'cadastrar-professores',
@@ -104,9 +103,9 @@ const router = new VueRouter({
     },
 
     {
-      path: '/dados-professor/:id',
-      name: 'dados-professor',
-      component: () => import('@/views/professores/DadosProfessor.vue'),
+      path: '/editar-professor/:id',
+      name: 'editar-professor',
+      component: () => import('@/views/professores/editar-professor/ProfessorEdit.vue'),
       meta: {
         pageTitle: 'Lista de professores',
         breadcrumb: [
