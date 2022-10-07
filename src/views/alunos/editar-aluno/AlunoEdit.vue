@@ -55,6 +55,18 @@
         <AlunoEditTabEndereco class="mt-2 pt-75" />
       </b-tab>
 
+      <b-tab>
+        <template #title>
+          <feather-icon
+            icon="BookIcon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">Matrícula</span>
+        </template>
+        <PagamentosTabView class="mt-2 pt-75" />
+      </b-tab>
+
     </b-tabs>
   </component>
 </template>
@@ -76,7 +88,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import userStoreModule from './userStoreModule'
 import AlunoEditTabInformacao from './AlunoEditTabInformacao.vue'
 import AlunoEditTabEndereco from './AlunoEditTabEndereco.vue'
-// import PagamentosEdit from './PagamentosEdit.vue'
+import PagamentosTabView from './PagamentosTabView.vue'
 
 export default {
   components: {
@@ -88,7 +100,7 @@ export default {
 
     AlunoEditTabInformacao,
     AlunoEditTabEndereco,
-    // PagamentosEdit,
+    PagamentosTabView,
   },
 
   setup() {

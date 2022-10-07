@@ -1,51 +1,40 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        v-for="socialField in socialInputs"
-        :key="socialField.dataField"
-        cols="12"
-        md="6"
-        lg="4"
-      >
-        <b-form-group
-          :label="socialField.label"
-          :label-for="socialField.dataField"
-        >
-          <b-input-group class="input-group-merge">
-            <b-input-group-prepend is-text>
-              <feather-icon
-                size="16"
-                icon="TwitterIcon"
-              />
-            </b-input-group-prepend>
-            <b-form-input
-              id="FacebookIcon"
-              v-model="userDataSocial[socialField.dataField]"
-              type="url"
-            />
-          </b-input-group>
-        </b-form-group>
-      </b-col>
+  <div>
+    <b-table
+      small
+      :fields="colunas"
+      :items="parcelas"
+      
+      bordered
+      responsive
+    >
+      <!-- A virtual column -->
+      <template #cell(index)="data">
+        {{ data.index + 1 }}
+      </template>
 
-      <b-col class="mt-2">
-        <b-button
-          variant="primary"
-          class="mb-1 mb-sm-0 mr-0 mr-sm-1"
-          :block="$store.getters['app/currentBreakPoint'] === 'xs'"
-        >
-          Save Changes
-        </b-button>
-        <b-button
-          variant="outline-secondary"
-          :block="$store.getters['app/currentBreakPoint'] === 'xs'"
-        >
-          Reset
-        </b-button>
-      </b-col>
-    </b-row>
-  </b-form>
+      <!-- A custom formatted column -->
+      <template #cell(parcelas)="data">
+        {{ data.item.num_parcela }}
+      </template>
+
+      <!-- A custom formatted column -->
+      <template #cell(data_vencimento)="data">
+        {{moment(data.item.data_vencimento).format('DD/MM')}}
+      </template>
+
+      <template #cell(matricula)="data">
+        {{ data.item.matricula.id}}
+      </template>
+
+      <template #cell(valor_curso)="data">
+        {{ data.item.matricula.valor_curso}} R$
+      </template>
+
+    </b-table>
+  </div>
 </template>
+
 
 <script>
 import {
@@ -57,6 +46,9 @@ import {
   BButton,
   BInputGroup,
   BInputGroupPrepend,
+  BTable,
+  BProgress,
+  BBadge
 
 } from 'bootstrap-vue'
 
@@ -72,6 +64,9 @@ export default {
     BButton,
     BInputGroup,
     BInputGroupPrepend,
+    BTable,
+    BProgress,
+    BBadge,
 
   },
   setup() {
@@ -130,18 +125,27 @@ export default {
 
   data() {
     return {
-      userData: {},
+      // userData: {},
+      parcelas: [],
+      pagamentos: [],
+
+      colunas: [
+      {key: 'parcelas', label: 'Parcela'},
+      {key: 'valor_parcela', label: 'Valor'},
+      {key: 'data_vencimento', label: 'Data de vencimento'},
+      {key: 'matricula', label: 'Nº da matrícula'},
+      {key: 'valor_curso', label: 'Valor do curso'},
+      ],
     }
   },
 
   created() {
-    this.$http.get(`perfis/${router.currentRoute.params.id}`)
-      .then(response => { this.userData = response.data.data })
-      // .catch(error => {
-    // if (error.response.status === 404) {
-    //   userData.value = undefined
-    // }
-      // })
+    this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
+      .then(response => {
+        console.log(response)
+         this.parcelas = response.data.data
+         })
+      
   },
 }
 </script>
