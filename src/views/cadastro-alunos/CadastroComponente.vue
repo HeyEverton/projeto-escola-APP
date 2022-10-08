@@ -39,7 +39,7 @@
                 <template #aside>
                   <b-avatar
                     ref="previewEl"
-                    :src="aluno_foto"
+                    :img-src="aluno_foto"
                     :text="avatarText(nome)"
                     size="90px"
                     rounded
@@ -130,6 +130,7 @@
                   <b-form-input
                     id="email"
                     v-model="email"
+                    :state="errors.length > 0 ? false:null"
                     placeholder="Insira o e-mail do aluno"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -172,6 +173,7 @@
                   <b-form-input
                     id="email"
                     v-model="data_nascimento"
+                    :state="errors.length > 0 ? false:null"
                     type="date"
                     placeholder="Insira a data de nascimento do aluno"
                   />
@@ -538,7 +540,7 @@
                   rules="required"
                 >
                   <b-form-input
-                    id="twitter"
+                    id="valor_curso"
                     v-model="valor_curso"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o valor do curso"
@@ -554,7 +556,7 @@
                 label-for="desconto"
               >
                 <b-form-input
-                  id="facebook"
+                  id="desconto_curso"
                   v-model="desconto_curso"
                   placeholder="O curso tem desconto?"
                 />
@@ -593,23 +595,57 @@
                   name="Data de vencimento"
                   rules="required"
                 >
-                  <cleave
-                    id="data_vencimento"
-                    v-model="data_vencimento"
-                    class="form-control"
-                    :raw="false"
-                    :options="vencimento.dateV"
-                    placeholder="DD/MM"
-                  />
                   <b-form-input
                     id="data_vencimento"
                     v-model="data_vencimento"
+                    :state="errors.length > 0 ? false:null"
                     type="date"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Forma de pagamento"
+                label-for="nacionalidade"
+              >
+                <validation-provider
+                  #default="{ errors }"
+                  name="Forma de pagamento"
+                  rules="required"
+                >
+                  <v-select
+                    v-model="forma_pagamento"
+                    label="nome"
+                    :options="pagamentos"
+                    :reduce="pagamentos => pagamentos.code"
+                    placeholder="Selecione a forma de pagamento"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+
+            <b-col md="6">
+              <b-form-group
+                label="Quantas parcelas"
+                label-for="qtd_parcelas"
+              >
+                  <v-select
+                    v-model="qtd_parcelas"
+                    label="nome"
+                    :options="parcelas"
+                    placeholder="Selecione a quantas parcelas terá"
+                  />
+              </b-form-group>
+            </b-col>
+
+
+
+
+
           </b-row>
         </validation-observer>
       </tab-content>
@@ -694,12 +730,15 @@ export default {
       // MATRICULA
       turmas: [],
       alunos: [],
+
       aluno_id: '',
       turma_id: '',
       valor_curso: '',
       desconto_curso: '',
       data_vencimento: '',
       valor_total: '',
+      forma_pagamento: '',
+      qtd_parcelas: '',
 
       required,
       email,
@@ -790,6 +829,21 @@ export default {
         { code: 'TO', estado: 'Tocantins' },
         { code: 'DF', estado: 'Distrito Federal' },
       ],
+
+      pagamentos: [
+        {code: 'C', nome: 'Crédito'},
+        {code: 'D', nome: 'Débito'},
+        {code: 'B', nome: 'Boleto'},
+        {code: 'P', nome: 'Pix'},
+      ],
+      parcelas: [
+        '1',
+        '3',
+        '4',
+        '6',
+        '8',
+        '12',
+      ],
     }
   },
 
@@ -814,13 +868,46 @@ export default {
     },
 
     formSubmitted() {
-      this.$toast({
-        component: ToastificationContent,
-        props: {
-          title: 'Form Submitted',
-          icon: 'EditIcon',
-          variant: 'success',
-        },
+      const payload = {
+        aluno_id: this.aluno_id,
+        turma_id: this.turma_id,
+        valor_curso: this.valor_curso,
+        desconto_curso: this.desconto_curso,
+        data_vencimento: this.data_vencimento,
+        forma_pagamento: this.forma_pagamento,
+        qtd_parcelas: this.qtd_parcelas,
+      }
+      this.$http.post('matriculas', payload)
+      .then(response => {
+        if(response.status == 200) {
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Matriculado',
+              text: 'O aluno foi matriculado com sucesso',
+              icon: 'UserPlusIcon',
+              variant: 'success',
+            },
+          })
+          this.$router.replace('/lista-alunos')
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        console.log('==================================================================')
+        if(error.message == 'Request failed with status code 422') {
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Ops! Algo deu errado',
+              text: 'Parece que algo deu errado, tente novamente em instantes.',
+              icon: 'AlertOctagonIcon',
+              variant: 'danger',
+            },
+          })
+        }
+        console.log('==================================================================')
+        console.log(error.message?.data)
       })
     },
 
@@ -850,13 +937,14 @@ export default {
       })
     },
 
-    validationFormInfo() {
+  async validationFormInfo() {
       const payload = new FormData()
       payload.append('aluno_foto', this.aluno_foto)
       payload.append('nome', this.nome)
       payload.append('cpf_aluno', this.cpf_aluno)
       payload.append('email', this.email)
       payload.append('sexo', this.sexo)
+      payload.append('observacao', this.observacao)
       payload.append('nacionalidade', this.nacionalidade)
       payload.append('tel_contato', this.telefone_contato)
       payload.append('data_nasc', this.data_nascimento)
@@ -869,7 +957,7 @@ export default {
       payload.append('cidade', this.cidade)
       payload.append('estado', this.estado)
 
-      this.$http.post('alunos', payload)
+      await this.$http.post('alunos', payload)
 
       return new Promise((resolve, reject) => {
         this.$refs.infoRules.validate().then(success => {
