@@ -88,6 +88,7 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
+
             <b-col md="6">
               <b-form-group
                 label="CPF"
@@ -96,7 +97,7 @@
                 <validation-provider
                   #default="{ errors }"
                   name="CPF"
-                  rules="required"
+                  rules="required|min:11"
                 >
                   <cleave
                     id="professor_cpf"
@@ -107,6 +108,7 @@
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o CPF do professor"
                     type="text"
+                    
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -326,7 +328,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="4">
+            <b-col md="6">
               <b-form-group
                 label="Nome da rua"
                 label-for="nome-da-rua"
@@ -346,7 +348,7 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col md="2">
+            <b-col md="6">
               <validation-provider
                 #default="{ errors }"
                 name="Número da residência"
@@ -387,7 +389,7 @@
               </validation-provider>
             </b-col>
 
-            <b-col md="4">
+            <b-col md="6">
               <validation-provider
                 #default="{ errors }"
                 name="Cidade"
@@ -408,7 +410,7 @@
               </validation-provider>
             </b-col>
 
-            <b-col md="2">
+            <b-col md="6">
               <validation-provider
                 #default="{ errors }"
                 name="Estado"
@@ -763,7 +765,9 @@ export default {
     },
 
     handleInput: debounce(function () {
-      this.pesquisaCEP()
+      if(this.cep.length == 8) {
+        this.pesquisaCEP()
+      }
     }, 1500),
 
     pesquisaCEP() {
