@@ -84,6 +84,7 @@
                   <b-form-input
                     id="nome"
                     v-model="nome"
+                    :state="errors.length > 0 ? false:null"
                     placeholder="Insira o nome do aluno"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
@@ -636,11 +637,22 @@
                   <v-select
                     v-model="qtd_parcelas"
                     label="nome"
+                    ref="parcela"
                     :options="parcelas"
                     placeholder="Selecione a quantas parcelas terá"
+                    @input="catchEventParcela"
                   />
               </b-form-group>
+              <b-button
+              variant="warning"
+              class="mb-1 mb-sm-0 mr-0 mr-sm-1"
+              :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+              @click="gerarParcelas"
+              >
+              Gerar parcelas
+            </b-button>
             </b-col>
+
 
 
 
@@ -739,6 +751,12 @@ export default {
       valor_total: '',
       forma_pagamento: '',
       qtd_parcelas: '',
+
+      num_parcela: '',
+      n_parcela: '',
+      valor_parcela: '',
+
+
 
       required,
       email,
@@ -860,11 +878,30 @@ export default {
       // console.log(this.turmas[0].id)
       this.$http.get(`turma/curso/${this.turmas[0].id}`)
         .then(response => {
-          // console.log(response.data.data.curso)
           this.valor_curso = response.data.data.curso.preco
           // this.desconto_curso = response.data.data.curso.desconto
           this.desconto = response.data.data.curso.preco
         })
+    },
+
+    catchEventParcela(value) {
+      // console.log(value)
+      this.n_parcela =  value
+    },
+
+    gerarParcelas() {
+      const payload = {
+        num_parcela: 1,
+        valor_parcela: this.valor_curso/this.n_parcela,
+        data_vencimento: this.data_vencimento+30,
+      }
+      
+      console.log(payload)       
+    
+      // this.$http.post('parcelas', payload)
+      // .then(response => {
+      //   console.log(response)
+      // })
     },
 
     formSubmitted() {
@@ -893,8 +930,6 @@ export default {
         }
       })
       .catch(error => {
-        console.log(error)
-        console.log('==================================================================')
         if(error.message == 'Request failed with status code 422') {
           this.$toast({
             component: ToastificationContent,
@@ -906,13 +941,14 @@ export default {
             },
           })
         }
-        console.log('==================================================================')
-        console.log(error.message?.data)
+        
       })
     },
 
     handleInput: debounce(function () {
-      this.pesquisaCEP()
+      if(this.cep.length == 8 ) {
+        this.pesquisaCEP()
+      }
     }, 1500),
 
     pesquisaCEP() {

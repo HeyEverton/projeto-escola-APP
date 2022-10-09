@@ -726,7 +726,6 @@ export default {
     },
 
     cadastrarProfessor() {
-      alert('chegou')
       let payload = ''
       payload = new FormData()
       payload.append('nome', this.nome)
