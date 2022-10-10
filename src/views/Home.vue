@@ -1,30 +1,118 @@
 <template>
   <div>
-    <b-card title="Kick start your project 🚀">
-      <b-card-text>All the best for your new project.</b-card-text>
-      <b-card-text>Please make sure to read our <b-link
-        href="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/"
-        target="_blank"
-      >
-        Template Documentation
-      </b-link> to understand where to go from here and how to use our template.</b-card-text>
-    </b-card>
+    <h2 class="mx-auto mb-2">Hoje nós temos</h2>
+    <b-row class="match-height">
+        <b-col  
+          lg="3"
+          sm="6"
+        
+        >
+         <b-link :to="{name: 'lista-alunos'}">
+          <statistic-card-with-area-chart
+          v-if="contagemAlunos"
+          icon="UsersIcon"
+          :statistic="kFormatter(contagemAlunos.contagem_alunos)"
+          statistic-title="Alunos matriculados"
+          :chart-data="contagemAlunos.contagem_alunos"
+        />
+         </b-link>
+        </b-col>
 
-    <b-card title="Want to integrate JWT? 🔒">
-      <b-card-text>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</b-card-text>
-      <b-card-text>Please read our  JWT Documentation to get more out of JWT authentication.</b-card-text>
-    </b-card>
+        <b-col
+          lg="3"
+          sm="6"
+        
+        >          
+        <b-link :to="{name: 'lista-professores'}" class="text-primary">
+          <statistic-card-with-area-chart
+            v-if="contagemProfessores"
+            color="warning"
+            icon="UsersIcon"
+            :statistic="contagemProfessores.contagem_professores"
+            statistic-title="Professores Dando Aulas"
+            :chart-data="contagemProfessores.contagem_professores"
+          />
+        </b-link>
+        </b-col>
+
+        <b-col
+          lg="3"
+          sm="6"
+        >          
+        <b-link :to="{name: 'lista-cursos'}" class="text-primary">
+          <statistic-card-with-area-chart
+            v-if="contagemCursos"
+            color="info"
+            icon="BookOpenIcon"
+            :statistic="contagemCursos.contagem_cursos"
+            statistic-title="Cursos em nosso sistema"
+            :chart-data="teste.id"
+          />
+        </b-link>
+        </b-col>
+        
+        
+      </b-row>
   </div>
 </template>
 
 <script>
-import { BCard, BCardText, BLink } from 'bootstrap-vue'
+import { 
+    BCard,
+    BCardText,
+    BLink,
+    BRow,
+    BCol,
+
+  } from 'bootstrap-vue'
+
+import StatisticCardWithAreaChart from '@core/components/statistics-cards/StatisticCardWithAreaChart.vue'  
+import { kFormatter } from '@core/utils/filter'
 
 export default {
   components: {
     BCard,
     BCardText,
     BLink,
+    StatisticCardWithAreaChart,
+    BRow,
+    BCol,
+
+  },
+
+  data() {
+    return {
+      contagemAlunos: {},
+      contagemProfessores: {},
+      contagemCursos: {},
+      teste: [],
+    }
+  },
+
+  created () {
+    this.$http.get('todos-alunos')
+    .then(response => {
+      this.contagemAlunos = response.data
+    })
+
+    this.$http.get('todos-professores')
+    .then(response => {
+      this.contagemProfessores = response.data
+    })
+
+    this.$http.get('todos-cursos')
+    .then(response => {
+      this.contagemCursos = response.data
+    })
+    this.$http.get('todos-cursos/hoje')
+    .then(response => {
+      // console.log(response.data)
+      this.teste = response.data
+    })
+  },
+
+  methods: {
+    kFormatter      
   },
 }
 </script>

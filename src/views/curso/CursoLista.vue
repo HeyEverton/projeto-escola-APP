@@ -22,17 +22,10 @@
               </b-dropdown-item>
 
               <b-dropdown-item
-                id="cpf"
+                id="preco"
                 @click="event"
               >
-                CPF
-              </b-dropdown-item>
-
-              <b-dropdown-item
-                id="email"
-                @click="event"
-              >
-                E-mail
+                Preço
               </b-dropdown-item>
 
               <b-dropdown-divider />
@@ -180,16 +173,24 @@ export default {
       if(this.campo == 'nome') {
         this.pesquisarNome(this.campoPesquisa)
       }
-      if(this.campo == 'cpf') {
-        this.pesquisarCpf(this.campoPesquisa)
+      if(this.campo == 'preco') {
+        this.pesquisarPreco(this.campoPesquisa)
       }
-      if(this.campo == 'email') { 
-        this.pesquisarEmail(this.campoPesquisa)
-      }
+
     },
 
     pesquisarNome(nome) {
       this.$http.get(`cursos/pesquisar/nome/${nome}`)
+        .then(response => {
+          this.cursos = response.data.data
+        })
+        .then(()=> {
+          this.campoPesquisa = ''
+        })
+    },
+
+    pesquisarPreco(preco) {
+      this.$http.get(`cursos/pesquisar/preco/${preco}`)
         .then(response => {
           this.cursos = response.data.data
         })
