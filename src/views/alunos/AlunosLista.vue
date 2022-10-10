@@ -13,46 +13,78 @@
 
         <!-- Table Top -->
         <b-row>
-
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Por pág.</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label>registros</label>
-          </b-col>
-
           <!-- Search -->
           <b-col
             cols="12"
             md="6"
           >
+
             <div class="d-flex align-items-center justify-content-end">
-              <b-form-input
-                v-model="searchQuery"
-                class="d-inline-block mr-1"
-                placeholder="Pesquisando por..."
-                @input="handleInput"
-              />
-              <b-button
-                variant="primary"
-                @click="pesquisarUsuarios"
-              >
-                <span class="text-nowrap">Pesquisar</span>
-              </b-button>
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-dropdown
+                    text="Pesquisando por"
+                    variant="outline-primary"
+                  >
+                    <b-dropdown-item
+                      id="nome"
+                      @click="event"
+                    >
+                      Nome
+                    </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="cpf"
+                      @click="event"
+                    >
+                      CPF
+                    </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="email"
+                      @click="event"
+                    >
+                      E-mail
+                    </b-dropdown-item>
+
+                    <b-dropdown-divider />
+
+                    <b-dropdown-item
+                      id="turno"
+                      @click="get"
+                    >
+                      Listar todos
+                    </b-dropdown-item>
+                  </b-dropdown>
+                </b-input-group-prepend>
+                <b-form-input
+                  v-model="campoPesquisa"
+                  class="d-inline-block"
+                  placeholder="Pesquisando..."
+                  @input="handleInput"
+                />
+                <b-input-group-append>
+                  <b-button
+                    variant="outline-primary"
+                    @click="pesquisar"
+                  >
+                    <feather-icon icon="SearchIcon" />
+                  <!-- <span class="text-nowrap">Pesquisar</span> -->
+                  </b-button>
+                  <b-button
+                    v-b-tooltip.hover
+                    variant="outline-info"
+                    :to="{name: 'cadastrar-alunos' }"
+                    title="Cadastrar novo aluno"
+                  >
+                    <feather-icon icon="PlusIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
             </div>
+
           </b-col>
         </b-row>
-
       </div>
 
       <b-table
@@ -89,8 +121,8 @@
         </template>
 
         <!-- Column: Actions -->
-        <!-- <template #cell(actions)="data">
-          <b-button
+        <template #cell(actions)="data">
+          <!-- <b-button
             v-b-tooltip.hover
             variant="primary"
             class="btn-icon mr-1"
@@ -98,18 +130,18 @@
             title="Editar perfil"
           >
             <feather-icon icon="EditIcon" />
-          </b-button>
+          </b-button> -->
 
           <b-button
             v-b-tooltip.hover
             variant="danger"
             class="btn-icon "
             title="Excluir usuário"
-            @click="() => deleteUser(data.item.id)"
+            @click="() => excluirAluno(data.item.id)"
           >
             <feather-icon icon="TrashIcon" />
           </b-button>
-        </template> -->
+        </template>
 
       </b-table>
       <div class="mx-2 mb-2">
@@ -176,8 +208,13 @@ import {
   BBadge,
   BDropdown,
   BDropdownItem,
+  BDropdownDivider,
   BPagination,
   VBTooltip,
+  BInputGroup,
+  BInputGroupPrepend,
+  BInputGroupAppend,
+  BSpinner,
 
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
@@ -206,9 +243,15 @@ export default {
     BBadge,
     BDropdown,
     BDropdownItem,
+    BDropdownDivider,
     BPagination,
     VBTooltip,
     vSelect,
+    BInputGroup,
+    BInputGroupPrepend,
+    BInputGroupAppend,
+    BSpinner,
+
   },
 
   directives: {
@@ -218,13 +261,14 @@ export default {
   data() {
     return {
       alunos: [],
-      searchQuery: '',
+      campoPesquisa: '',
+      campo: '',
 
     }
   },
 
   methods: {
-    deleteUser(id) {
+    excluirAluno(id) {
       this.$swal({
         title: 'Tem certeza?',
         text: 'Você não conseguirá desfazer isso.',
@@ -283,15 +327,64 @@ export default {
         })
     },
 
-    pesquisarUsuarios() {
-      this.$http.get(`users?search=${this.searchQuery}`)
+    event(e) {
+      this.campo = e.target.id
+    },
+    pesquisar() {
+      if(this.campo == 'nome') {
+        this.pesquisarNome(this.campoPesquisa)
+      }
+      if(this.campo == 'cpf') {
+        this.pesquisarCpf(this.campoPesquisa)
+      }
+      if(this.campo == 'email') { 
+        this.pesquisarEmail(this.campoPesquisa)
+      }
+    },
+
+    pesquisarNome(nome) {
+      this.$http.get(`alunos/pesquisar/nome/${nome}`)
         .then(response => {
-          this.users = response.data.data
+          this.alunos = response.data.data
+        })
+        .then(()=> {
+          this.campoPesquisa = ''
+        })
+    },
+
+    pesquisarCpf(cpf) {
+      this.$http.get(`alunos/pesquisar/cpf/${cpf}`)
+        .then(response => {
+          this.alunos = response.data.data
+        })
+        .then(()=> {
+          this.campoPesquisa = ''
+        })
+        
+    },
+
+    pesquisarEmail(email) {
+      this.$http.get(`alunos/pesquisar/email/${email}`)
+        .then(response => {
+          this.alunos = response.data.data
+        })
+        .then(()=> {
+          this.campoPesquisa = ''
+        })
+    },
+
+    get() {
+      this.$http.get('alunos')
+        .then(response => 
+          this.alunos = response.data.data
+        )
+        .finally(()=> {
+          this.campoPesquisa = ''
         })
     },
 
     handleInput: debounce(function () {
-      this.pesquisarUsuarios()
+      this.pesquisar()
     }, 1000),
   },
 

@@ -443,7 +443,7 @@
 
       <!-- matricula  -->
       <tab-content
-        title="Fazer matrícla"
+        title="Matrícula"
         :before-change="validationFormAddress"
       >
         <validation-observer
@@ -512,7 +512,7 @@
 
       <!-- pagamento -->
       <tab-content
-        title="Forma de pagamento"
+        title="Pagamento"
         :before-change="validationFormSocial"
       >
         <validation-observer
@@ -661,6 +661,68 @@
           </b-row>
         </validation-observer>
       </tab-content>
+
+      <tab-content
+        title="Impressão"
+        :before-change="validationFormCongrats"
+      >
+        <validation-observer
+          ref="impressaoRules"
+          tag="form"
+        >
+          <b-row>
+            <b-col
+              cols="12"
+              class="mb-2"
+            >
+              <h5 class="mb-0 text-success">
+                Sucesso!
+              </h5>
+              <small class="text-muted">A matrícula foi feita com sucesso, escolha como você quer receber o comprovante.</small>
+            </b-col>
+
+            <b-col md="6">
+             <h6>
+              <b-link @click="viaEmail">
+              Enviar via e-mail
+              </b-link> 
+            </h6>
+            </b-col>
+
+            <b-col md="6">
+             <h6>
+              <b-link @click="imprimir">
+              Imprimir
+              </b-link> 
+            </h6>
+            </b-col>
+
+            <b-col md="6">
+             <h6>
+              <b-link @click="viaSMS">
+              Via SMS
+              </b-link> 
+            </h6>
+            </b-col>
+
+            <b-col md="6">
+             <h6>
+              <b-link @click="viaWhatsapp">
+              Via Whatsapp
+              </b-link> 
+            </h6>
+            </b-col>
+
+           
+
+
+
+
+
+
+          </b-row>
+        </validation-observer>
+      </tab-content>
     </form-wizard>
 
   </div>
@@ -688,6 +750,7 @@ import {
   BMedia,
   BAvatar,
   BFormTextarea,
+  BLink
 
 } from 'bootstrap-vue'
 
@@ -714,6 +777,7 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
     BFormTextarea,
+    BLink,
     // Endereco,
   },
   data() {
@@ -951,6 +1015,22 @@ export default {
       }
     }, 1500),
 
+    viaEmail() {
+      alert('via email')
+    },
+
+    imprimir() {
+      window.print()
+    },
+
+    viaWhatsapp() {
+      alert('via whatsapp')
+    },
+
+    viaSMS() {
+      alert('via SMS')
+    },
+
     pesquisaCEP() {
       axios.get(`https://viacep.com.br/ws/${this.cep}/json/`)
         .then(response => {
@@ -1009,6 +1089,7 @@ export default {
         })
       })
     },
+
     validationFormAddress() {
       return new Promise((resolve, reject) => {
         this.$refs.addressRules.validate().then(success => {
@@ -1020,9 +1101,22 @@ export default {
         })
       })
     },
+
     validationFormSocial() {
       return new Promise((resolve, reject) => {
         this.$refs.socialRules.validate().then(success => {
+          if (success) {
+            resolve(true)
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+
+    validationFormCongrats() {
+      return new Promise((resolve, reject) => {
+        this.$refs.impressaoRules.validate().then(success => {
           if (success) {
             resolve(true)
           } else {

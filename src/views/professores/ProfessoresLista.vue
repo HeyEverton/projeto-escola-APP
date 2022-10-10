@@ -13,24 +13,6 @@
 
         <!-- Table Top -->
         <b-row>
-
-          <!-- Per Page -->
-          <!-- <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Por pág.</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label>registros</label>
-          </b-col> -->
-
           <!-- Search -->
           <b-col
             cols="12"
@@ -65,6 +47,8 @@
                       E-mail
                     </b-dropdown-item>
 
+                    <b-dropdown-divider />
+                    
                     <b-dropdown-item
                       id="turno"
                       @click="get"
@@ -240,7 +224,8 @@
 import {
   BCard,
   BRow,
-  BCol, BFormInput,
+  BCol, 
+  BFormInput,
   BButton,
   BTable,
   BMedia,
@@ -249,6 +234,7 @@ import {
   BBadge,
   BDropdown,
   BDropdownItem,
+  BDropdownDivider,
   BPagination,
   VBTooltip,
   BInputGroup,
@@ -280,6 +266,7 @@ export default {
     BBadge,
     BDropdown,
     BDropdownItem,
+    BDropdownDivider,
     BPagination,
     VBTooltip,
     vSelect,
