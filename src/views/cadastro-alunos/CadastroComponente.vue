@@ -12,7 +12,7 @@
       @on-complete="formSubmitted"
     >
 
-      <!--tab informacoes pessiais -->
+      <!--tab informacoes pessoais -->
       <tab-content
         title="Dados do aluno"
         :before-change="validationForm"
@@ -441,7 +441,7 @@
         </validation-observer>
       </tab-content>
 
-      <!-- matricula  -->
+      <!-- tab matricula  -->
       <tab-content
         title="Matrícula"
         :before-change="validationFormAddress"
@@ -653,6 +653,30 @@
             </b-button>
             </b-col>
 
+            <b-col md="12" class="mt-2 mb-2">
+              <b-table
+              small
+              :fields="colunas"
+              :items="Tableparcelas"
+              bordered
+              responsive
+              show-empty
+              empty-text="Nenhuma parcela foi feita."
+            >
+            <template #cell(data_vencimento)="data">
+              {{moment(data.item.data_vencimento).format('DD/MM/YYYY')}}
+            </template>
+
+            <template #cell(valor_parcela)="data">
+              {{data.item.valor_parcela}}
+            </template>
+
+            <template #cell(num_parcela)="data">
+              {{data.item.num_parcela}}
+            </template>
+          </b-table>
+            </b-col>
+
 
 
 
@@ -750,7 +774,8 @@ import {
   BMedia,
   BAvatar,
   BFormTextarea,
-  BLink
+  BLink,
+  BTable,
 
 } from 'bootstrap-vue'
 
@@ -778,6 +803,7 @@ export default {
     ToastificationContent,
     BFormTextarea,
     BLink,
+    BTable,
     // Endereco,
   },
   data() {
@@ -819,6 +845,12 @@ export default {
       num_parcela: '',
       n_parcela: '',
       valor_parcela: '',
+      colunas: [
+        {key: 'num_parcela', label: 'Nº da parcela'},
+        {key: 'valor_parcela', label: 'Valor da parcela'},
+        {key: 'data_vencimento', label: 'Data de vencimento'},
+      ],
+      Tableparcelas: [],
 
 
 
@@ -956,57 +988,30 @@ export default {
     gerarParcelas() {
       const payload = {
         num_parcela: 1,
-        valor_parcela: this.valor_curso/this.n_parcela,
-        data_vencimento: this.data_vencimento+30,
+        valor_curso: this.valor_curso,
+        data_vencimento: this.data_vencimento,
+        qtd_parcelas: this.n_parcela
       }
       
-      console.log(payload)       
+      // console.log(payload)       
     
-      // this.$http.post('parcelas', payload)
-      // .then(response => {
-      //   console.log(response)
+      this.$http.post('parcelas', payload)
+      .then(response => {
+        this.Tableparcelas = response.data
+      })
+      // .then(()=> {
+      //   let id = localStorage.getItem('aluno_id')
+      //   this.$http.get(`parcelas/aluno/${id}`)
+      //   .then(response => {
+      //     this.Tableparcelas = response.data
+      //   })
       // })
+
     },
 
     formSubmitted() {
-      const payload = {
-        aluno_id: this.aluno_id,
-        turma_id: this.turma_id,
-        valor_curso: this.valor_curso,
-        desconto_curso: this.desconto_curso,
-        data_vencimento: this.data_vencimento,
-        forma_pagamento: this.forma_pagamento,
-        qtd_parcelas: this.qtd_parcelas,
-      }
-      this.$http.post('matriculas', payload)
-      .then(response => {
-        if(response.status == 200) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Matriculado',
-              text: 'O aluno foi matriculado com sucesso',
-              icon: 'UserPlusIcon',
-              variant: 'success',
-            },
-          })
-          this.$router.replace('/lista-alunos')
-        }
-      })
-      .catch(error => {
-        if(error.message == 'Request failed with status code 422') {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Ops! Algo deu errado',
-              text: 'Parece que algo deu errado, tente novamente em instantes.',
-              icon: 'AlertOctagonIcon',
-              variant: 'danger',
-            },
-          })
-        }
-        
-      })
+           
+     
     },
 
     handleInput: debounce(function () {
@@ -1074,6 +1079,11 @@ export default {
       payload.append('estado', this.estado)
 
       await this.$http.post('alunos', payload)
+      .then((response) => {
+        // console.log(response.data.data)
+        localStorage.setItem('aluno_id', response.data.data.id)
+
+      })
 
       return new Promise((resolve, reject) => {
         this.$refs.infoRules.validate().then(success => {
@@ -1094,18 +1104,84 @@ export default {
       return new Promise((resolve, reject) => {
         this.$refs.addressRules.validate().then(success => {
           if (success) {
-            resolve(true)
+          resolve(true)
           } else {
             reject()
           }
-        })
-      })
+            })
+          })
     },
 
     validationFormSocial() {
       return new Promise((resolve, reject) => {
         this.$refs.socialRules.validate().then(success => {
           if (success) {
+            const payload = {
+              aluno_id: this.aluno_id,
+              turma_id: this.turma_id,
+              valor_curso: this.valor_curso,
+              desconto_curso: this.desconto_curso,
+              data_vencimento: this.data_vencimento,
+              forma_pagamento: this.forma_pagamento,
+              qtd_parcelas: this.qtd_parcelas,
+            }
+             this.$http.post('matriculas', payload)
+            .then(response => {
+              console.log(response.data)
+              if(response.status == 200) {
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Matriculado',
+                    text: 'O aluno foi matriculado com sucesso',
+                    icon: 'UserPlusIcon',
+                    variant: 'success',
+                  },
+                })
+                localStorage.setItem('matricula_id', response.data.id),
+                this.$router.replace('/lista-alunos')
+              } else {
+                this.$toast({
+                    component: ToastificationContent,
+                    props: {
+                      title: 'Ops! Algo deu errado',
+                      text: 'Não foi possível fazer a matrícula deste aluno.',
+                      icon: 'AlertOctagonIcon',
+                      variant: 'danger',
+                    },
+                  })
+              }
+              })
+              .then(()=> {
+                const payloadParcela = {
+                  data_vencimento: this.data_vencimento,
+                  qtd_parcelas: this.qtd_parcelas,
+                  valor_curso: this.valor_curso,
+                  aluno_id: this.aluno_id,
+                  matricula_id: localStorage.getItem('matricula_id'),
+                }
+                this.$http.post('parcelas/matricular', payloadParcela)
+                .then(response => {
+                  console.log(response)
+                })
+                .then(()=> {
+                  localStorage.removeItem('aluno_id')
+                  localStorage.removeItem('matricula_id')
+                })                
+              })
+              .catch(error => {
+                if(error.message == 'Request failed with status code 422') {
+                  this.$toast({
+                    component: ToastificationContent,
+                    props: {
+                      title: 'Ops! Algo deu errado',
+                      text: 'Parece que algo deu errado, tente novamente em instantes.',
+                      icon: 'AlertOctagonIcon',
+                      variant: 'danger',
+                    },
+                  })
+                }
+              })      
             resolve(true)
           } else {
             reject()
