@@ -202,6 +202,16 @@ export default {
     }
   },
 
+  created() {
+    this.$http.get(`professores/${router.currentRoute.params.id}`)
+      .then(response => { this.userData = response.data.data })
+      .catch(error => {
+        if (error.response.status === 404) {
+          userData.value = undefined
+        }
+      })
+  },
+
   methods: {
     updateProfessor() {
       let payload = ''
@@ -254,16 +264,6 @@ export default {
           })
         })
     },
-  },
-
-  created() {
-    this.$http.get(`professores/${router.currentRoute.params.id}`)
-      .then(response => { this.userData = response.data.data })
-      .catch(error => {
-          if (error.response.status === 404) {
-            userData.value = undefined
-          }
-      })
   },
 }
 </script>

@@ -3,7 +3,7 @@
 
     <b-card-header class="pb-50 d-flex justify-content-start">
       <h3>
-        Cadastrar curso
+        Editar curso
       </h3>
     </b-card-header>
 
@@ -83,7 +83,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="12">
+            <b-col md="6">
               <b-form-group
                 label="Status"
                 label-for="status"
@@ -128,7 +128,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="6">
+            <!-- <b-col md="6">
               <b-form-group
                 label="Aplicar desconto"
                 label-for="preco"
@@ -148,7 +148,7 @@
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-            </b-col>
+            </b-col> -->
 
             <!-- submit and reset -->
             <b-col
@@ -156,11 +156,12 @@
               class="d-flex  mt-2"
             >
               <b-button
-                size="md"
+                
                 type="submit"
                 variant="primary"
                 class="mr-1"
                 @click="editarCurso"
+                :block="$store.getters['app/currentBreakPoint'] === 'xs'"
               >
                 Salvar
                 <feather-icon
@@ -171,11 +172,10 @@
 
               </b-button>
               <b-button
-
-                size="md"
-                type="reset"
-                variant="outline-danger"
-                @click="resetFormEditora()"
+                
+                variant="outline-secondary"
+                :to="{name: 'lista-cursos'}"     
+                :block="$store.getters['app/currentBreakPoint'] === 'xs'"           
               >
                 Cancelar
                 <feather-icon
