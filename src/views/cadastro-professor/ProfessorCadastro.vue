@@ -108,7 +108,6 @@
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o CPF do professor"
                     type="text"
-                    
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -750,21 +749,24 @@ export default {
 
       this.$http.post('professores', payload)
         .then(response => {
-          console.log(response)
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Sucesso!',
+              text: 'Cadastro efetuado com sucesso! redirecionando para lista de professores',
+              icon: 'EditIcon',
+              variant: 'success',
+            },
+          })          
+        })
+        .then(()=> {
+          this.$router.replace('/lista-professores')
         })
 
-      // this.$toast({
-      //   component: ToastificationContent,
-      //   props: {
-      //     title: 'Form Submitted',
-      //     icon: 'EditIcon',
-      //     variant: 'success',
-      //   },
-      // })
     },
 
     handleInput: debounce(function () {
-      if(this.cep.length == 8) {
+      if (this.cep.length == 8) {
         this.pesquisaCEP()
       }
     }, 1500),

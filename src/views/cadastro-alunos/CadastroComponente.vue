@@ -634,53 +634,51 @@
                 label="Quantas parcelas"
                 label-for="qtd_parcelas"
               >
-                  <v-select
-                    v-model="qtd_parcelas"
-                    label="nome"
-                    ref="parcela"
-                    :options="parcelas"
-                    placeholder="Selecione a quantas parcelas terá"
-                    @input="catchEventParcela"
-                  />
+                <v-select
+                  ref="parcela"
+                  v-model="qtd_parcelas"
+                  label="nome"
+                  :options="parcelas"
+                  placeholder="Selecione a quantas parcelas terá"
+                  @input="catchEventParcela"
+                />
               </b-form-group>
               <b-button
-              variant="warning"
-              class="mb-1 mb-sm-0 mr-0 mr-sm-1"
-              :block="$store.getters['app/currentBreakPoint'] === 'xs'"
-              @click="gerarParcelas"
+                variant="warning"
+                class="mb-1 mb-sm-0 mr-0 mr-sm-1"
+                :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                @click="gerarParcelas"
               >
-              Gerar parcelas
-            </b-button>
+                Gerar parcelas
+              </b-button>
             </b-col>
 
-            <b-col md="12" class="mt-2 mb-2">
-              <b-table
-              small
-              :fields="colunas"
-              :items="Tableparcelas"
-              bordered
-              responsive
-              show-empty
-              empty-text="Nenhuma parcela foi feita."
+            <b-col
+              md="12"
+              class="mt-2 mb-2"
             >
-            <template #cell(data_vencimento)="data">
-              {{moment(data.item.data_vencimento).format('DD/MM/YYYY')}}
-            </template>
+              <b-table
+                small
+                :fields="colunas"
+                :items="Tableparcelas"
+                bordered
+                responsive
+                show-empty
+                empty-text="Nenhuma parcela foi feita."
+              >
+                <template #cell(data_vencimento)="data">
+                  {{ moment(data.item.data_vencimento).format('DD/MM/YYYY') }}
+                </template>
 
-            <template #cell(valor_parcela)="data">
-              {{data.item.valor_parcela}}
-            </template>
+                <template #cell(valor_parcela)="data">
+                  {{ data.item.valor_parcela }} R$
+                </template>
 
-            <template #cell(num_parcela)="data">
-              {{data.item.num_parcela}}
-            </template>
-          </b-table>
+                <template #cell(num_parcela)="data">
+                  {{ data.item.num_parcela }}
+                </template>
+              </b-table>
             </b-col>
-
-
-
-
-
 
           </b-row>
         </validation-observer>
@@ -706,43 +704,36 @@
             </b-col>
 
             <b-col md="6">
-             <h6>
-              <b-link @click="viaEmail">
-              Enviar via e-mail
-              </b-link> 
-            </h6>
+              <h6>
+                <b-link @click="viaEmail">
+                  Enviar via e-mail
+                </b-link>
+              </h6>
             </b-col>
 
             <b-col md="6">
-             <h6>
-              <b-link @click="imprimir">
-              Imprimir
-              </b-link> 
-            </h6>
+              <h6>
+                <b-link @click="imprimir">
+                  Imprimir
+                </b-link>
+              </h6>
             </b-col>
 
             <b-col md="6">
-             <h6>
-              <b-link @click="viaSMS">
-              Via SMS
-              </b-link> 
-            </h6>
+              <h6>
+                <b-link @click="viaSMS">
+                  Via SMS
+                </b-link>
+              </h6>
             </b-col>
 
             <b-col md="6">
-             <h6>
-              <b-link @click="viaWhatsapp">
-              Via Whatsapp
-              </b-link> 
-            </h6>
+              <h6>
+                <b-link @click="viaWhatsapp">
+                  Via Whatsapp
+                </b-link>
+              </h6>
             </b-col>
-
-           
-
-
-
-
-
 
           </b-row>
         </validation-observer>
@@ -846,13 +837,11 @@ export default {
       n_parcela: '',
       valor_parcela: '',
       colunas: [
-        {key: 'num_parcela', label: 'Nº da parcela'},
-        {key: 'valor_parcela', label: 'Valor da parcela'},
-        {key: 'data_vencimento', label: 'Data de vencimento'},
+        { key: 'num_parcela', label: 'Nº da parcela' },
+        { key: 'valor_parcela', label: 'Valor da parcela' },
+        { key: 'data_vencimento', label: 'Data de vencimento' },
       ],
       Tableparcelas: [],
-
-
 
       required,
       email,
@@ -945,10 +934,10 @@ export default {
       ],
 
       pagamentos: [
-        {code: 'C', nome: 'Crédito'},
-        {code: 'D', nome: 'Débito'},
-        {code: 'B', nome: 'Boleto'},
-        {code: 'P', nome: 'Pix'},
+        { code: 'C', nome: 'Crédito' },
+        { code: 'D', nome: 'Débito' },
+        { code: 'B', nome: 'Boleto' },
+        { code: 'P', nome: 'Pix' },
       ],
       parcelas: [
         '1',
@@ -982,7 +971,7 @@ export default {
 
     catchEventParcela(value) {
       // console.log(value)
-      this.n_parcela =  value
+      this.n_parcela = value
     },
 
     gerarParcelas() {
@@ -990,15 +979,15 @@ export default {
         num_parcela: 1,
         valor_curso: this.valor_curso,
         data_vencimento: this.data_vencimento,
-        qtd_parcelas: this.n_parcela
+        qtd_parcelas: this.n_parcela,
       }
-      
-      // console.log(payload)       
-    
+
+      // console.log(payload)
+
       this.$http.post('parcelas', payload)
-      .then(response => {
-        this.Tableparcelas = response.data
-      })
+        .then(response => {
+          this.Tableparcelas = response.data
+        })
       // .then(()=> {
       //   let id = localStorage.getItem('aluno_id')
       //   this.$http.get(`parcelas/aluno/${id}`)
@@ -1006,16 +995,14 @@ export default {
       //     this.Tableparcelas = response.data
       //   })
       // })
-
     },
 
     formSubmitted() {
-           
-     
+
     },
 
     handleInput: debounce(function () {
-      if(this.cep.length == 8 ) {
+      if (this.cep.length == 8) {
         this.pesquisaCEP()
       }
     }, 1500),
@@ -1058,7 +1045,7 @@ export default {
       })
     },
 
-  async validationFormInfo() {
+    async validationFormInfo() {
       const payload = new FormData()
       payload.append('aluno_foto', this.aluno_foto)
       payload.append('nome', this.nome)
@@ -1079,11 +1066,10 @@ export default {
       payload.append('estado', this.estado)
 
       await this.$http.post('alunos', payload)
-      .then((response) => {
+        .then(response => {
         // console.log(response.data.data)
-        localStorage.setItem('aluno_id', response.data.data.id)
-
-      })
+          localStorage.setItem('aluno_id', response.data.data.id)
+        })
 
       return new Promise((resolve, reject) => {
         this.$refs.infoRules.validate().then(success => {
@@ -1104,12 +1090,12 @@ export default {
       return new Promise((resolve, reject) => {
         this.$refs.addressRules.validate().then(success => {
           if (success) {
-          resolve(true)
+            resolve(true)
           } else {
             reject()
           }
-            })
-          })
+        })
+      })
     },
 
     validationFormSocial() {
@@ -1125,23 +1111,23 @@ export default {
               forma_pagamento: this.forma_pagamento,
               qtd_parcelas: this.qtd_parcelas,
             }
-             this.$http.post('matriculas', payload)
-            .then(response => {
-              console.log(response.data)
-              if(response.status == 200) {
-                this.$toast({
-                  component: ToastificationContent,
-                  props: {
-                    title: 'Matriculado',
-                    text: 'O aluno foi matriculado com sucesso',
-                    icon: 'UserPlusIcon',
-                    variant: 'success',
-                  },
-                })
-                localStorage.setItem('matricula_id', response.data.id),
-                this.$router.replace('/lista-alunos')
-              } else {
-                this.$toast({
+            this.$http.post('matriculas', payload)
+              .then(response => {
+                console.log(response.data)
+                if (response.status == 200) {
+                  this.$toast({
+                    component: ToastificationContent,
+                    props: {
+                      title: 'Matriculado',
+                      text: 'O aluno foi matriculado com sucesso',
+                      icon: 'UserPlusIcon',
+                      variant: 'success',
+                    },
+                  })
+                  localStorage.setItem('matricula_id', response.data.id),
+                  this.$router.replace('/lista-alunos')
+                } else {
+                  this.$toast({
                     component: ToastificationContent,
                     props: {
                       title: 'Ops! Algo deu errado',
@@ -1150,9 +1136,9 @@ export default {
                       variant: 'danger',
                     },
                   })
-              }
+                }
               })
-              .then(()=> {
+              .then(() => {
                 const payloadParcela = {
                   data_vencimento: this.data_vencimento,
                   qtd_parcelas: this.qtd_parcelas,
@@ -1161,16 +1147,16 @@ export default {
                   matricula_id: localStorage.getItem('matricula_id'),
                 }
                 this.$http.post('parcelas/matricular', payloadParcela)
-                .then(response => {
-                  console.log(response)
-                })
-                .then(()=> {
-                  localStorage.removeItem('aluno_id')
-                  localStorage.removeItem('matricula_id')
-                })                
+                  .then(response => {
+                    
+                  })
+                  .then(() => {
+                    localStorage.removeItem('aluno_id')
+                    localStorage.removeItem('matricula_id')
+                  })
               })
               .catch(error => {
-                if(error.message == 'Request failed with status code 422') {
+                if (error.message == 'Request failed with status code 422') {
                   this.$toast({
                     component: ToastificationContent,
                     props: {
@@ -1181,7 +1167,7 @@ export default {
                     },
                   })
                 }
-              })      
+              })
             resolve(true)
           } else {
             reject()
