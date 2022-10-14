@@ -246,10 +246,10 @@ export default {
       this.$refs.loginForm.validate()
         .then(success => {
           if (success) {
-            useJwt.login({
-              email: this.userEmail,
-              password: this.password,
-            })
+              useJwt.login({
+                email: this.userEmail,
+                password: this.password,
+              })
               .then(response => {
                 const token = `${response.data.access_token}`
                 useJwt.setToken(token)
@@ -286,6 +286,7 @@ export default {
                     },
                   })
                 }
+                // console.log(e)
               })
           }
         })

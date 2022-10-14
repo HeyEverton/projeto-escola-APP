@@ -227,6 +227,7 @@ export default {
               })
               this.userEmail = ''
               this.newPassword = ''
+              this.$router.replace('/login')
             })
         }
       })
