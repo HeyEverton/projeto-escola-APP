@@ -113,16 +113,17 @@
                 name="RG"
                 rules="required"
               >
-                <cleave
-                  id="professor_rg"
-                  v-model="userData.professor_rg"
-                  class="form-control"
-                  :raw="false"
-                  :options="optionsCPF.customDelimiter"
-                  placeholder="Insira o RG do professor"
-                  type="text"
-                  maxlength="14"
-                />
+              <cleave
+                id="professor_rg"
+                v-model="userData.professor_rg"
+                class="form-control"
+                :raw="false"
+                :options="optionsRG.customDelimiterRG"
+                :state="errors.length > 0 ? false:null"
+                placeholder="Insira o CPF do professor"
+                type="text"
+                maxlength="12"
+              />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -342,7 +343,6 @@ import Cleave from 'vue-cleave-component'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import useUsersList from './useUsersList'
 
-
 export default {
   components: {
     BButton,
@@ -380,6 +380,14 @@ export default {
         customDelimiter: {
           delimiters: ['.', '.', '-'],
           blocks: [3, 3, 3, 2],
+          uppercase: true,
+        },
+      },
+      
+      optionsRG: {
+        customDelimiterRG: {
+          delimiters: ['.', '.', '-'],
+          blocks: [2, 3, 3, 2],
           uppercase: true,
         },
       },
@@ -503,9 +511,8 @@ export default {
               buttonsStyling: false,
             })
           }
-          if(error.message == 'EmailHasBeenTaken') {
+          if (error.message == 'EmailHasBeenTaken') {
             alert('email já existe')
-
           }
         })
     },

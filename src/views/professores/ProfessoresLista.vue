@@ -48,7 +48,7 @@
                     </b-dropdown-item>
 
                     <b-dropdown-divider />
-                    
+
                     <b-dropdown-item
                       id="turno"
                       @click="get"
@@ -224,7 +224,7 @@
 import {
   BCard,
   BRow,
-  BCol, 
+  BCol,
   BFormInput,
   BButton,
   BTable,
@@ -350,21 +350,17 @@ export default {
         })
     },
 
-
-
- 
-
     event(e) {
       this.campo = e.target.id
     },
     pesquisar() {
-      if(this.campo == 'nome') {
+      if (this.campo == 'nome') {
         this.pesquisarNome(this.campoPesquisa)
       }
-      if(this.campo == 'cpf') {
+      if (this.campo == 'cpf') {
         this.pesquisarCpf(this.campoPesquisa)
       }
-      if(this.campo == 'email') { 
+      if (this.campo == 'email') {
         this.pesquisarEmail(this.campoPesquisa)
       }
     },
@@ -392,10 +388,8 @@ export default {
 
     get() {
       this.$http.get('professores')
-        .then(response => 
-          this.professores = response.data.data
-        )
-        .finally(()=> {
+        .then(response => this.professores = response.data.data)
+        .finally(() => {
           this.campoPesquisa = ''
         })
     },

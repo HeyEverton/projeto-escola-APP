@@ -331,13 +331,13 @@ export default {
       this.campo = e.target.id
     },
     pesquisar() {
-      if(this.campo == 'nome') {
+      if (this.campo == 'nome') {
         this.pesquisarNome(this.campoPesquisa)
       }
-      if(this.campo == 'cpf') {
+      if (this.campo == 'cpf') {
         this.pesquisarCpf(this.campoPesquisa)
       }
-      if(this.campo == 'email') { 
+      if (this.campo == 'email') {
         this.pesquisarEmail(this.campoPesquisa)
       }
     },
@@ -347,7 +347,7 @@ export default {
         .then(response => {
           this.alunos = response.data.data
         })
-        .then(()=> {
+        .then(() => {
           this.campoPesquisa = ''
         })
     },
@@ -357,10 +357,9 @@ export default {
         .then(response => {
           this.alunos = response.data.data
         })
-        .then(()=> {
+        .then(() => {
           this.campoPesquisa = ''
         })
-        
     },
 
     pesquisarEmail(email) {
@@ -368,17 +367,15 @@ export default {
         .then(response => {
           this.alunos = response.data.data
         })
-        .then(()=> {
+        .then(() => {
           this.campoPesquisa = ''
         })
     },
 
     get() {
       this.$http.get('alunos')
-        .then(response => 
-          this.alunos = response.data.data
-        )
-        .finally(()=> {
+        .then(response => this.alunos = response.data.data)
+        .finally(() => {
           this.campoPesquisa = ''
         })
     },

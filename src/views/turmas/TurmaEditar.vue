@@ -308,8 +308,8 @@
 
                 size="md"
                 type="reset"
-                variant="outline-danger"
-                @click="goBack"
+                variant="outline-secondary"
+                :to="{name: 'lista-turma' }"
               >
                 Cancelar
                 <feather-icon
@@ -467,10 +467,6 @@ export default {
           this.$router.replace('/lista-turma')
         }
       })
-    },
-
-    goBack() {
-      this.$router.replace('/lista-turma')
     },
   },
 

@@ -50,12 +50,16 @@
                     >
                       Nome
                     </b-dropdown-item>
+
                     <b-dropdown-item
                       id="turno"
                       @click="event"
                     >
                       Turno
                     </b-dropdown-item>
+
+                    <b-dropdown-divider />
+
                     <b-dropdown-item
                       id="turno"
                       @click="get"
@@ -242,6 +246,7 @@ import {
   BBadge,
   BDropdown,
   BDropdownItem,
+  BDropdownDivider,
   BPagination,
   VBTooltip,
   BInputGroup,
@@ -271,6 +276,7 @@ export default {
     BBadge,
     BDropdown,
     BDropdownItem,
+    BDropdownDivider,
     BPagination,
     VBTooltip,
     vSelect,
@@ -391,7 +397,7 @@ export default {
 
   created() {
     this.$http.get('turmas/curso/professor')
-      .then(response => this.turmas = response.data.data)
+      .then(response =>  this.turmas = response.data.data)
   },
 
   setup() {

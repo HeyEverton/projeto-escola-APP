@@ -45,40 +45,42 @@
           />
         </template>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-alunos'}">
           <feather-icon
             size="16"
-            icon="UserIcon"
+            icon="UsersIcon"
             class="mr-50"
           />
-          <span>Profile</span>
+          <span>Alunos</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-cursos'}">
           <feather-icon
             size="16"
-            icon="MailIcon"
+            icon="BookOpenIcon"
             class="mr-50"
           />
-          <span>Inbox</span>
+          <span>Cursos</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-turma'}">
           <feather-icon
             size="16"
-            icon="CheckSquareIcon"
+            icon="BookIcon"
             class="mr-50"
           />
-          <span>Task</span>
+          <span>Turmas</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+
+
+        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-professores'}">
           <feather-icon
             size="16"
-            icon="MessageSquareIcon"
+            icon="UsersIcon"
             class="mr-50"
           />
-          <span>Chat</span>
+          <span>Professores</span>
         </b-dropdown-item>
 
         <b-dropdown-divider />
@@ -92,7 +94,7 @@
             icon="LogOutIcon"
             class="mr-50"
           />
-          <span>Logout</span>
+          <span>Sair</span>
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>

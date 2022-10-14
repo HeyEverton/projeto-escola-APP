@@ -21,7 +21,7 @@ export default function useUsersList() {
     { key: 'professor_rg', label: 'RG', sortable: true },
     { key: 'email', label: 'E-mail', sortable: true },
     { key: 'formacao', label: 'Formação', sortable: true },
-    { key: 'sexo', label: 'Sexo', sortable: true,  },
+    { key: 'sexo', label: 'Sexo', sortable: true },
     { key: 'numero_conta', label: 'Nº conta', sortable: true },
 
     { key: 'actions', label: 'Ações' },
