@@ -2,96 +2,112 @@
   <div>
 
     <b-col
-    cols="12"
-    class="mb-2"
+      cols="12"
+      class="mb-2"
     >
-    <h5 class="mb-2">
-      Suas parcelas
-    </h5>
+      <h5 class="mb-2">
+        Suas parcelas
+      </h5>
 
-    <b-sidebar
+      <b-sidebar
         id="sidebar-right"
         bg-variant="white"
         right
         backdrop
         shadow
       >
-        <sidebar-content />
-    </b-sidebar>
+        <sidebar-pagamento :parcela="parcela" @informar-pagamento="informarPagamento"/>
 
-    
-    <b-table
-      small
-      :fields="colunas"
-      :items="parcelas"
-      bordered
-      responsive
-    >
+      </b-sidebar>
 
-      <!-- A custom formatted column -->
-      <template #cell(parcelas)="data">
-        {{ data.item.num_parcela }}
-      </template>
+      <b-sidebar
+        id="sidebar-detalhes"
+        bg-variant="white"
+        right
+        backdrop
+        shadow
+      >
+        <sidebar-detalhes />
+      </b-sidebar>
 
-      <!-- A custom formatted column -->
-      <template #cell(data_vencimento)="data">
-        {{moment(data.item.data_vencimento).format('DD/MM')}}
-      </template>
+      <b-table
+        small
+        :fields="fields"
+        :items="mensalidades"
+        bordered
+        responsive
+        show-empty
+        empty-text="Este aluno não possui nenhuma mensalidade"
+      >
 
-      <template #cell(matricula)="data">
-        {{ data.item.matricula.id}}
-      </template>
+        
+        <template #cell(parcelas)="data">
+          {{ data.item.num_parcela }}
+        </template>
 
-      <template #cell(valor_curso)="data">
-        {{ data.item.matricula.valor_curso}} R$
-      </template>
-      
-      <!-- <template #cell(status)="data">
-        {{ data.item.matricula.valor_curso}} R$
-      </template> -->
-      
-      <template #cell(status)="data">
-        <b-badge
-        pill
-          variant="success"
+       
+        <template #cell(data_vencimento)="data">
+          {{ moment(data.item.data_vencimento).format('DD/MM/YYYY') }}
+        </template>
+
+        <template #cell(matricula)="data">
+         {{ data.item.matricula.id}}
+        </template>
+
+        <template #cell(data_pagamento)="data" >
+          <span v-if="data.item.data_pagamento" class="text-primary">{{ moment(data.item.data_pagamento).format('DD/MM/YYYY') }} </span>
+        </template>
+
+        <template #cell(valor_parcela)="data">
+          <span class="text-primary">R$</span> {{ data.item.valor_parcela }} 
+        </template>
+
+        <template #cell(status)="data">
+          <b-badge
+            pill
+            :variant="status(data.item.status)"
           >
-          Pago
-          <!-- {{data.item.pagamento.status}} -->
-        </b-badge>
-      </template>
-      
-      <template #cell(actions)="data">
+          {{data.item.status}}
+          <!-- {{status}} -->
+          </b-badge>
+        </template>
+        <template #cell(actions)="data">
 
-        <b-button
-        v-b-tooltip.hover
-        
-        variant="info"
-        class="btn-icon mr-1"
-        title="Ver detalhes"
-        >
-        <feather-icon icon="SearchIcon" />
-      </b-button>
+          <b-button
+            v-b-tooltip.hover
+            v-b-toggle.sidebar-detalhes
+            variant="info"
+            class="btn-icon mr-1"
+            title="Ver detalhes"
+            >
+            <feather-icon icon="SearchIcon" />
+          </b-button>
 
-      <b-button
-        v-b-tooltip.hover
-        v-b-toggle.sidebar-right
-        variant="primary"
-        class="btn-icon "
-        title="Informar pagamento"
-        >
-        <feather-icon icon="DollarSignIcon" />
-      </b-button>
-        
-      </template>
+          <b-button
+            v-b-tooltip.hover
+            v-b-toggle.sidebar-right
+            variant="primary"
+            class="btn-icon "
+            title="Informar pagamento"
+            @click="toggle(data.item.id)"
+            v-if="data.item.status == 1"
+          >
+          
+            <feather-icon icon="DollarSignIcon" />
+          </b-button>
 
-    </b-table>
-  </b-col>
+          <span v-else class="text-success">
+            <feather-icon icon="CheckSquareIcon" size="35" />
+          </span>
+
+        </template>
+
+      </b-table>
+    </b-col>
   </div>
 </template>
 
-
 <script>
-
 
 import {
   BRow,
@@ -105,15 +121,18 @@ import {
   BTable,
   BProgress,
   BBadge,
-  BSidebar, 
+  BSidebar,
   VBToggle,
   VBTooltip,
 
 } from 'bootstrap-vue'
 
 import router from '@/router'
-import SidebarContent from './SidebarContent.vue'
 import Ripple from 'vue-ripple-directive'
+import SidebarPagamento from './SidebarPagamento.vue'
+import SidebarDetalhes from './SidebarDetalhes.vue'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { kFormatter } from '@core/utils/filter'
 
 export default {
   components: {
@@ -128,18 +147,15 @@ export default {
     BTable,
     BProgress,
     BBadge,
-    SidebarContent,
-    BSidebar, 
-
-
-
+    SidebarPagamento,
+    BSidebar,
+    SidebarDetalhes
   },
 
   directives: {
-      'b-toggle': VBToggle,
-      'b-tooltip': VBTooltip,
-      
-    },
+    'b-toggle': VBToggle,
+    'b-tooltip': VBTooltip,
+  },
 
   setup() {
     const userDataSocial = {
@@ -150,9 +166,11 @@ export default {
       codepen: '',
       slack: '',
     }
-    // const userDataRedes = {
-    //   twitter: 'userData[0].twitter_empresa'
-    // }
+
+    // const transformData = computed(() =>{
+    //   return 
+
+    // })
 
     // ? dataField is field name of `userDataSocial` object
     const socialInputs = [
@@ -191,42 +209,96 @@ export default {
     return {
       userDataSocial,
       socialInputs,
-      // userDataRedes,
     }
   },
 
   data() {
     return {
       // userData: {},
-      parcelas: [],
+      mensalidades: [],
       pagamentos: [],
+      parcela_id: '',
+      matricula_id: '',
+      payload: {},
 
       colunas: [
-        {key: 'parcelas', label: 'Parcela'},
-        {key: 'valor_parcela', label: 'Valor'},
-        {key: 'data_vencimento', label: 'Data de vencimento'},
-        {key: 'matricula', label: 'Nº da matrícula'},
-        {key: 'valor_curso', label: 'Valor do curso'},
-        {key: 'status', label: 'Status do pagamento'},
-        {key: 'actions', label: 'Ações'},
+        {key: 'id', thClass:'d-none', tdClass:'d-none'},
+        { key: 'parcelas', label: 'Parcela' },
+        { key: 'valor_parcela', label: 'Valor' },
+        { key: 'matricula', label: 'Nº da matrícula' },
+        { key: 'data_vencimento', label: 'Data de vencimento' },
+        { key: 'valor_curso', label: 'Valor do curso' },
+        { key: 'status', label: 'Status' },
+        { key: 'actions', label: 'Ações' },
+      ],
+      fields: [
+        {key: 'id', thClass:'d-none', tdClass:'d-none'},
+        { key: 'parcelas', label: 'Parcela' },
+        { key: 'valor_parcela', label: 'Valor' },
+        { key: 'matricula', label: 'Nº da matrícula' },
+        { key: 'data_vencimento', label: 'Data de vencimento' },
+        { key: 'data_pagamento', label: 'Data de pagamento' },
+        { key: 'status', label: 'Status' },
+        { key: 'actions', label: 'Ações' },
       ],
     }
+  },
+
+  // computed: {
+  //   status() {
+  //     let parcelas = this.mensalidades
+  //     parcelas.forEach(parcela => {
+  //       if (parcela.status == 1) {
+  //         return 'Em aberto'
+  //       }
+  //     });
+  //   }
+  // },
+
+  props: {
+    parcela: {
+      type: Object,
+      default: () => ({})
+    },
+  },
+
+  methods: {
+    kFormatter,
+    status(status) {
+      if( status === 1) return 'light-info' 
+      if( status === 2) return 'light-warning'
+      if( status === 3) return 'light-success'
+      if( status === 4) return 'light-danger'
+    },
+
+    toggle(parcela_id) {
+      this.parcela_id = parcela_id;   
+    },
+
+    informarPagamento(payload) { 
+      let id = this.parcela_id
+      this.$http.post(`pagamento/${id}`, payload)
+      .then(response => {
+        this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Sucesso!',
+              text: 'O pagamento desta parcela foi informado com sucesso.',
+              icon: 'CheckIcon',
+              variant: 'success',
+            },
+          })
+        console.log(response)
+      })
+    },
   },
 
   created() {
     this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
       .then(response => {
-        console.log('============DADOS========================')
-        this.parcelas = response.data.data
-        // console.log(this.parcelas)
+        this.mensalidades = response.data.data
       })
-      // this.$http.get(`pagamentos/alunos/${router.currentRoute.params.id}`)
-      // .then(response => {
-      //      console.log('============PAGAMENTOS========================')
-      //     this.parcelas = response.data
-      //     console.log(this.parcelas)
-      //    })
-      
+
   },
 }
 </script>
