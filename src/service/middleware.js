@@ -34,7 +34,6 @@ export default {
   redirectIfAuthenticated(to, from, next) {
     const token = localStorage.getItem('access_token')
     let n
-
     if (token) {
       n = { name: 'home' }
     }

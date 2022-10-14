@@ -30,6 +30,7 @@ const router = new VueRouter({
     {
       path: '/cadastrar-alunos',
       name: 'cadastrar-alunos',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/cadastro-alunos/CadastroAluno.vue'),
       meta: {
         pageTitle: 'Matricular',
@@ -45,6 +46,7 @@ const router = new VueRouter({
     {
       path: '/lista-alunos',
       name: 'lista-alunos',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/alunos/AlunosLista.vue'),
       meta: {
         pageTitle: 'Alunos',
@@ -60,6 +62,7 @@ const router = new VueRouter({
     {
       path: '/editar-aluno/:id',
       name: 'editar-aluno',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/alunos/editar-aluno/AlunoEdit.vue'),
       meta: {
         pageTitle: 'Editar',
@@ -75,6 +78,7 @@ const router = new VueRouter({
     {
       path: '/cadastrar-professores',
       name: 'cadastrar-professores',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/cadastro-professor/ProfessorCadastro.vue'),
       meta: {
         pageTitle: 'Cadastrar',
@@ -90,6 +94,7 @@ const router = new VueRouter({
     {
       path: '/lista-professores',
       name: 'lista-professores',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/professores/ProfessoresLista.vue'),
       meta: {
         pageTitle: 'Professores',
@@ -105,6 +110,7 @@ const router = new VueRouter({
     {
       path: '/editar-professor/:id',
       name: 'editar-professor',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/professores/editar-professor/ProfessorEdit.vue'),
       meta: {
         pageTitle: 'Editar',
@@ -120,6 +126,7 @@ const router = new VueRouter({
     {
       path: '/cadastrar-curso',
       name: 'cadastrar-curso',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/curso/CadastroCurso.vue'),
       meta: {
         pageTitle: 'Cadastrar',
@@ -135,6 +142,7 @@ const router = new VueRouter({
     {
       path: '/editar-curso/:id',
       name: 'editar-curso',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/curso/EditarCurso.vue'),
       meta: {
         pageTitle: 'Curso',
@@ -150,6 +158,7 @@ const router = new VueRouter({
     {
       path: '/lista-cursos',
       name: 'lista-cursos',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/curso/CursoLista.vue'),
       meta: {
         pageTitle: 'Cursos',
@@ -165,6 +174,7 @@ const router = new VueRouter({
     {
       path: '/cadastrar-turma',
       name: 'cadastrar-turma',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/turmas/CadastroTurma.vue'),
       meta: {
         pageTitle: 'Turmas',
@@ -180,6 +190,7 @@ const router = new VueRouter({
     {
       path: '/lista-turma',
       name: 'lista-turma',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/turmas/TurmaLista.vue'),
       meta: {
         pageTitle: 'Turmas',
@@ -195,6 +206,7 @@ const router = new VueRouter({
     {
       path: '/editar-turma/:id',
       name: 'editar-turma',
+      beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/turmas/TurmaEditar.vue'),
       meta: {
         pageTitle: 'Turmas',
@@ -210,6 +222,7 @@ const router = new VueRouter({
     {
       path: '/login',
       name: 'login',
+      beforeEnter: Guard.redirectIfAuthenticated,
       component: () => import('@/views/auth/Login.vue'),
       meta: {
         layout: 'full',
