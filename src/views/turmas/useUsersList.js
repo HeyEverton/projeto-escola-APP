@@ -24,7 +24,7 @@ export default function useUsersList() {
     { key: 'horario_entrada', label: 'Horário entrada' },
     { key: 'horario_saida', label: 'Horário saída' },
     { key: 'qt_max_alunos', label: 'Qt.máx. alunos' },
-    { key: 'status', label: 'Status' },
+    { key: 'status', label: 'Status', },
     { key: 'actions', label: 'Ações' },
   ]
   const perPage = ref(10)
