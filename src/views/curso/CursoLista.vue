@@ -1,11 +1,13 @@
-<template>  
+<template>
   <div>
 
-  <b-row>
     <b-col
       cols="12"
       md="6"
     >
+      <h1 class="mx-auto mt-2 mb-2">
+        Todos os cursos
+      </h1>
 
       <div class="d-flex align-items-center justify-content-end mb-3 mt-2">
         <b-input-group>
@@ -50,7 +52,7 @@
               @click="pesquisar"
             >
               <feather-icon icon="SearchIcon" />
-            <!-- <span class="text-nowrap">Pesquisar</span> -->
+              <!-- <span class="text-nowrap">Pesquisar</span> -->
             </b-button>
             <b-button
               v-b-tooltip.hover
@@ -65,8 +67,6 @@
       </div>
 
     </b-col>
-  </b-row> 
-
 
     <div class="d-flex flex-wrap">
       <b-col
@@ -112,8 +112,8 @@ import {
 } from 'bootstrap-vue'
 
 import Ripple from 'vue-ripple-directive'
-import CursoComponente from './CursoComponente.vue'
 import { debounce } from 'lodash'
+import CursoComponente from './CursoComponente.vue'
 
 export default {
   components: {
@@ -169,14 +169,17 @@ export default {
     event(e) {
       this.campo = e.target.id
     },
+
     pesquisar() {
-      if(this.campo == 'nome') {
+      if (this.campo == 'nome') {
         this.pesquisarNome(this.campoPesquisa)
       }
-      if(this.campo == 'preco') {
+      if (this.campo == 'preco') {
         this.pesquisarPreco(this.campoPesquisa)
       }
-
+      if(this.campoPesquisa == '') {
+        this.get()
+      }
     },
 
     pesquisarNome(nome) {
@@ -184,7 +187,7 @@ export default {
         .then(response => {
           this.cursos = response.data.data
         })
-        .then(()=> {
+        .then(() => {
           this.campoPesquisa = ''
         })
     },
@@ -194,17 +197,15 @@ export default {
         .then(response => {
           this.cursos = response.data.data
         })
-        .then(()=> {
+        .then(() => {
           this.campoPesquisa = ''
         })
     },
 
     get() {
       this.$http.get('cursos')
-        .then(response => 
-          this.cursos = response.data.data
-        )
-        .finally(()=> {
+        .then(response => this.cursos = response.data.data)
+        .finally(() => {
           this.campoPesquisa = ''
         })
     },

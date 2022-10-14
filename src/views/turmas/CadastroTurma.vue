@@ -294,8 +294,8 @@
 
                 size="md"
                 type="reset"
-                variant="outline-danger"
-                @click="resetFormEditora()"
+                variant="outline-secondary"
+                :to="{name: 'lista-turma'}"
               >
                 Cancelar
                 <feather-icon

@@ -112,8 +112,6 @@
               class="d-flex  mt-2"
             >
               <b-button
-                size="md"
-                type="submit"
                 variant="primary"
                 class="mr-1"
                 @click="cadastrarCurso"
@@ -127,11 +125,9 @@
 
               </b-button>
               <b-button
-
-                size="md"
                 type="reset"
-                variant="outline-danger"
-                @click="resetFormEditora()"
+                variant="outline-secondary"
+                :to="{name: 'lista-cursos'}"
               >
                 Cancelar
                 <feather-icon

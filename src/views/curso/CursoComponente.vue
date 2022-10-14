@@ -2,10 +2,11 @@
   <div>
     <b-card
       img-top
-      :title="nome"
+      :title="nome | truncate(17,'...')"
+      style="width: 300px;"
     >
-      <b-card-text class="blog-content-truncate">
-        <p>{{ descricao | truncate(68,'...') }}</p>
+      <b-card-text class="blog-content-truncate" >
+        <p>{{ descricao | truncate(30,'...') }}</p>
       </b-card-text>
 
       <b-card-text class="text-danger d-flex justify-content-between">
@@ -18,28 +19,18 @@
         Criado em {{ moment(created_at).format('Do MMM YYYY') }}
       </b-card-text>
       <b-row class="match-height d-flex justify-content-between">
-        <!-- <b-col md="12" lg="6" sm="12">
-                    <b-button v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                     variant="primary" class="mt-1" v-b-modal.modal-center>
-                        Ver mais
-                    </b-button>
-
-                </b-col> -->
-
         <b-col
           md="6"
           lg="4"
           sm="4"
-        >
+         >
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="outline-primary"
             class=" btn-icon mt-1 mb-1"
+            :to="{name: 'editar-curso', params: { id:id } }"
           >
-            <router-link :to="{name: 'editar-curso', params: { id:id } }">
-              <feather-icon icon="EditIcon" />
-            </router-link>
-
+            <feather-icon icon="EditIcon" />
           </b-button>
         </b-col>
 
