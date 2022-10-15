@@ -6,7 +6,7 @@
       class="mb-2"
     >
       <h5 class="mb-2">
-        Suas parcelas
+        Suas mensalidades
       </h5>
 
       <b-sidebar
@@ -27,7 +27,123 @@
         backdrop
         shadow
       >
-        <sidebar-detalhes />
+       <!-- <sidebar-detalhes :parcela="parcela" /> -->
+      <div class="text-center">
+        <b-card-text class="mt-2 h4 color-inherit text-reset">
+          Detalhes do pagamento
+        </b-card-text>
+      </div>
+  
+        <b-form class="d-flex px-1 mt-3">  
+          <b-row>
+
+            <b-col md="12">
+              <b-form-group
+                label="Aluno"
+                label-for="aluno"
+              >
+                  <b-form-input
+                    id="aluno"
+                    v-model="alunoNome"
+                    readonly                   
+                    placeholder="Insira o nome do aluno"
+                  />
+              </b-form-group>
+            </b-col>
+
+            <b-col md="12">
+              <b-form-group
+                label="Quem recebeu o pagamento"
+                label-for="recebeu"
+              >
+                  <b-form-input
+                    id="aluno"
+                    v-model="recebeu"
+                    readonly                   
+                    placeholder="Insira o nome do aluno"
+                  />
+              </b-form-group>
+            </b-col>
+  
+            <b-col md="12">
+              <b-form-group
+                label="Valor pago"
+                label-for="valor_pago"
+              >
+                  <b-input-group
+                    append="R$"
+                    readonly
+                  >
+                    <b-form-input placeholder="Insira o valor pago pelo aluno" 
+                    readonly
+                    v-model="userData.valor_pago" />
+                  </b-input-group>       
+              </b-form-group>
+            </b-col>
+  
+            <b-col md="12">
+              <b-form-group
+                label="Data de pagamento"
+                label-for="data_pagamento"
+              >
+                  <b-form-input
+                    id="data_pagamento"
+                    v-model="userData.data_pagamento"
+                    placeholder="Insira o e-mail do aluno"
+                    type="date"
+                    readonly
+
+                  />
+              </b-form-group>
+            </b-col>
+  
+            <b-col md="12">
+              <b-form-group
+                label="Status"
+                label-for="status"
+              >
+                <v-select
+                  v-model="pagStatus"
+                  label="nome"
+                  :options="statusPagamento"
+                  :reduce="statusPagamento => statusPagamento.code"
+                  placeholder="Selecione o status de pagamento"
+                  disbled
+
+                />
+              </b-form-group>
+            </b-col>
+  
+            <b-col
+              md="12"
+            >
+              <b-form-group
+                label="Observação"
+                label-for="observacao"
+              >
+                <b-form-textarea
+                  id="observacao"
+                  v-model="userData.observacao"
+                  rows="4"
+                  placeholder="Tem alguma observação sobre?"
+                  readonly
+                />
+              </b-form-group>
+
+              <div class="d-flex justify-content-between mt-2">  
+                <b-button
+                  variant="danger"
+                  class="mb-1 mb-sm-0 mr-0"
+                  :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                >
+                  Voltar
+                </b-button>  
+              </div>
+            </b-col>
+  
+          </b-row>
+        </b-form>
+       
       </b-sidebar>
 
       <b-table
@@ -44,7 +160,6 @@
         <template #cell(parcelas)="data">
           {{ data.item.num_parcela }}
         </template>
-
        
         <template #cell(data_vencimento)="data">
           {{ moment(data.item.data_vencimento).format('DD/MM/YYYY') }}
@@ -76,9 +191,10 @@
           <b-button
             v-b-tooltip.hover
             v-b-toggle.sidebar-detalhes
-            variant="info"
+            variant="outline-info"
             class="btn-icon mr-1"
             title="Ver detalhes"
+            @click="toggle(data.item.id)"
             >
             <feather-icon icon="SearchIcon" />
           </b-button>
@@ -86,17 +202,17 @@
           <b-button
             v-b-tooltip.hover
             v-b-toggle.sidebar-right
-            variant="primary"
-            class="btn-icon "
+            variant="outline-primary"
+            class="btn-icon"
             title="Informar pagamento"
             @click="toggle(data.item.id)"
-            v-if="data.item.status == 'Em aberto'"
+            v-if="data.item.status == 'Em aberto' || data.item.status == 'Atrasado'"
           >
           
             <feather-icon icon="DollarSignIcon"  />
           </b-button>
 
-          <span v-else class="text-success" >
+          <span v-else class="text-success">
             <feather-icon icon="CheckSquareIcon" size="35"  v-b-tooltip.hover title="Mensalidade paga" />
           </span>
 
@@ -124,9 +240,17 @@ import {
   BSidebar,
   VBToggle,
   VBTooltip,
+  BListGroup,
+  BListGroupItem,
+  BCardText,
+  BFormInvalidFeedback,
+  BFormTextarea,
+  BInputGroupAppend,
+
 
 } from 'bootstrap-vue'
 
+import vSelect from 'vue-select'
 import router from '@/router'
 import Ripple from 'vue-ripple-directive'
 import SidebarPagamento from './SidebarPagamento.vue'
@@ -149,8 +273,17 @@ export default {
     BBadge,
     SidebarPagamento,
     BSidebar,
-    SidebarDetalhes
+    SidebarDetalhes,
+    BListGroup,
+    BListGroupItem,
+    BCardText,
+    BFormInvalidFeedback,
+    BFormTextarea,
+    BInputGroupAppend,
+    vSelect,
   },
+     
+
 
   directives: {
     'b-toggle': VBToggle,
@@ -212,9 +345,14 @@ export default {
     }
   },
 
+  disabled: {
+	type: Boolean,
+	default: true
+  },
+
   data() {
     return {
-      // userData: {},
+      userData: {},
       mensalidades: [],
       pagamentos: [],
       parcela_id: '',
@@ -223,7 +361,7 @@ export default {
 
       colunas: [
         {key: 'id', thClass:'d-none', tdClass:'d-none'},
-        { key: 'parcelas', label: 'Parcela' },
+        { key: 'parcelas', label: 'Nº Parcela' },
         { key: 'valor_parcela', label: 'Valor' },
         { key: 'matricula', label: 'Nº da matrícula' },
         { key: 'data_vencimento', label: 'Data de vencimento' },
@@ -241,13 +379,21 @@ export default {
         { key: 'status', label: 'Status' },
         { key: 'actions', label: 'Ações' },
       ],
+      
+      statusPagamento: [
+        { code: 1, nome: 'Em aberto' },
+        { code: 2, nome: 'Pago com atraso' },
+        { code: 3, nome: 'Pago' },
+        { code: 4, nome: 'Atrasado' },
+      ],
+      pagStatus: '',
+      alunoNome: '',
+      recebeu: '',
     }
   },
 
   computed: {
     changeStatus(status) {
-      // console.log(status.mensalidades)
-      // let parcelas = this.mensalidades
       status.mensalidades.forEach(parcela => {
         if (parcela.status === 1) {
          parcela.status = 'Em aberto'
@@ -264,7 +410,7 @@ export default {
         
         if (parcela.status === 4) {
           parcela.status = 'Atrasado'
-         return 
+          return 
         }
       });
     }
@@ -288,6 +434,14 @@ export default {
 
     toggle(parcela_id) {
       this.parcela_id = parcela_id;   
+      let id = this.parcela_id
+      this.$http.get(`parcelas/${id}`)
+      .then(response => {
+        this.userData = response.data
+        this.pagStatus = response.data.status
+        this.alunoNome = response.data.aluno.nome
+        this.recebeu = response.data.usuario.name
+      })
     },
 
     informarPagamento(payload) { 
@@ -313,7 +467,6 @@ export default {
       .then(response => {
         this.mensalidades = response.data.data
       })
-
   },
 }
 </script>
