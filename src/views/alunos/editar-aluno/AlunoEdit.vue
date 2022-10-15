@@ -58,11 +58,11 @@
       <b-tab>
         <template #title>
           <feather-icon
-            icon="BookIcon"
+            icon="DollarSignIcon"
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Matrícula</span>
+          <span class="d-none d-sm-inline">Mensalidades</span>
         </template>
         <PagamentosTabView class="mt-2 pt-75" />
       </b-tab>

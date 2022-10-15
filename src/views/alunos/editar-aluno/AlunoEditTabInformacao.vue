@@ -24,7 +24,7 @@
             ref="refInputEl"
             type="file"
             class="d-none"
-            @input="inputImageRenderer"
+            @input="catchEvent"
           >
           <span class="d-none d-sm-inline">Escolher foto</span>
           <feather-icon
@@ -434,7 +434,7 @@ export default {
     //     })
   },
   methods: {
-    inputImageRenderer(event) {
+    catchEvent(event) {
       this.profile_photo_path = event.target.files[0]
     },
 
