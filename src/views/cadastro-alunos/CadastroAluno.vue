@@ -15,7 +15,6 @@ export default {
     BRow,
     BCol,
     CadastroComponente,
-
   },
 }
 </script>

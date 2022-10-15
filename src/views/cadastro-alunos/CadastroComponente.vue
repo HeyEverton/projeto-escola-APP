@@ -308,6 +308,7 @@
                     placeholder="Insira o CEP do aluno"
                     :state="errors.length > 0 ? false:null"
                     @input="handleInput"
+                    type="number"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -351,6 +352,7 @@
                     v-model="numero_residencia"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o número da residência do aluno"
+                    type="number"
                   />
                 </b-form-group>
               </validation-provider>
@@ -1067,23 +1069,36 @@ export default {
 
       await this.$http.post('alunos', payload)
         .then(response => {
-        // console.log(response.data.data)
+          if(response.status == 200 || response.status == 201) {
+            return new Promise((resolve, reject) => {
+              this.$refs.infoRules.validate().then(success => {
+                if (success) {
+                  resolve(true)
+                  this.$http.get('alunos')
+                  .then(response => {
+                  this.alunos = response.data.data
+                })
+                } else {
+                  reject()
+                }
+              })
+            })
+          }
           localStorage.setItem('aluno_id', response.data.data.id)
         })
-
-      return new Promise((resolve, reject) => {
-        this.$refs.infoRules.validate().then(success => {
-          if (success) {
-            resolve(true)
-            this.$http.get('alunos')
-              .then(response => {
-                this.alunos = response.data.data
-              })
-          } else {
-            reject()
-          }
+        .catch((e)=> {
+          this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Erro!',
+            text: 'Preencha todos os campos antes de continuar.',
+            icon: 'AlertOctagonIcon',
+            variant: 'danger',
+          },
         })
-      })
+        })
+
+      
     },
 
     validationFormAddress() {
@@ -1113,19 +1128,17 @@ export default {
             }
             this.$http.post('matriculas', payload)
               .then(response => {
-                console.log(response.data)
                 if (response.status == 200) {
                   this.$toast({
                     component: ToastificationContent,
                     props: {
                       title: 'Matriculado',
-                      text: 'O aluno foi matriculado com sucesso',
+                      text: 'O aluno foi matriculado com sucesso!',
                       icon: 'UserPlusIcon',
                       variant: 'success',
                     },
                   })
-                  localStorage.setItem('matricula_id', response.data.id),
-                  this.$router.replace('/lista-alunos')
+                  localStorage.setItem('matricula_id', response.data.id)
                 } else {
                   this.$toast({
                     component: ToastificationContent,
