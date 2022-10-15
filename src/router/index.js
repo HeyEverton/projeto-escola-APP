@@ -267,7 +267,7 @@ const router = new VueRouter({
     {
       path: '/nao-autenticado',
       name: 'nao-autenticado',
-      component: () => import('@/views/error/NotAuthorized.vue'),
+      component: () => import('@/views/error/NaoAutenticado.vue'),
       meta: {
         layout: 'full',
       },
