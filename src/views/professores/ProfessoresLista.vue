@@ -30,22 +30,26 @@
                       id="nome"
                       @click="event"
                     >
-                      Nome
-                    </b-dropdown-item>
-
-                    <b-dropdown-item
-                      id="cpf"
-                      @click="event"
-                    >
-                      CPF
-                    </b-dropdown-item>
-
-                    <b-dropdown-item
-                      id="email"
-                      @click="event"
-                    >
-                      E-mail
-                    </b-dropdown-item>
+                    <feather-icon icon="UserIcon"/>
+                    
+                    Nome
+                  </b-dropdown-item>
+                  
+                  <b-dropdown-item
+                  id="cpf"
+                  @click="event"
+                  >
+                  <feather-icon icon="FileTextIcon"/>
+                  CPF
+                </b-dropdown-item>
+                
+                <b-dropdown-item
+                id="email"
+                @click="event"
+                >
+                <feather-icon icon="MailIcon"/>
+                E-mail
+                </b-dropdown-item>
 
                     <b-dropdown-divider />
 
