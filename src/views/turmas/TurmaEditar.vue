@@ -159,7 +159,7 @@
                 <validation-provider
                   #default="{ errors }"
                   rules="required"
-                  name="Quantidade máx alunos"
+                  name="Quantidade atual alunos"
                 >
                   <b-form-input
                     id="qt_atualA"

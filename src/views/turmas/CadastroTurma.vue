@@ -132,6 +132,7 @@
                     :raw="false"
                     placeholder="DD/MM/AA"
                     type="date"
+                    readonly
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -168,14 +169,14 @@
                 <validation-provider
                   #default="{ errors }"
                   rules="required"
-                  name="Quantidade máx alunos"
+                  name="Quantidade atual alunos"
                 >
                   <b-form-input
                     id="qt_atualA"
                     v-model="qt_atualA"
                     type="number"
                     :state="errors.length > 0 ? false : null"
-                    placeholder="Insira a quantidade atual de alunos"
+                    placeholder="Insira a quantidade atual de alunos"                    
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -258,7 +259,6 @@
                   rules="required"
                   name="Modalidade"
                 >
-
                   <v-select
                     v-model="modalidade"
                     :options="modalidades"
@@ -270,7 +270,6 @@
               </b-form-group>
             </b-col>
 
-            <!-- submit and reset -->
             <b-col
               cols="12"
               class="d-flex  mt-2"

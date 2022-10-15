@@ -20,6 +20,7 @@
                 id="nome"
                 @click="event"
               >
+              <feather-icon icon="FileTextIcon"/>
                 Nome
               </b-dropdown-item>
 
@@ -27,6 +28,7 @@
                 id="preco"
                 @click="event"
               >
+              <feather-icon icon="DollarSignIcon"/>
                 Preço
               </b-dropdown-item>
 

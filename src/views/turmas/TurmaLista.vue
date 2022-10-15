@@ -48,13 +48,15 @@
                       id="nome"
                       @click="event"
                     >
-                      Nome
-                    </b-dropdown-item>
-
-                    <b-dropdown-item
-                      id="turno"
-                      @click="event"
-                    >
+                    <feather-icon icon="FileTextIcon"/>
+                   &nbsp; Nome
+                  </b-dropdown-item>
+                  
+                  <b-dropdown-item
+                  id="turno"
+                  @click="event"
+                  >
+                  <feather-icon icon="ClockIcon"/>
                       Turno
                     </b-dropdown-item>
 
@@ -152,9 +154,10 @@
         <template #cell(status)="data">
           <b-badge
             pill
-            variant="success"
+            :variant="status(data.item.status)"
           >
-            {{ data.item.status }}
+            {{ data.item.status}}
+            {{changeStatus}}
           </b-badge>
         </template>
 
@@ -261,6 +264,7 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import { debounce } from 'lodash'
 import useUsersList from './useUsersList'
+import { kFormatter } from '@core/utils/filter'
 
 export default {
   components: {
@@ -299,7 +303,33 @@ export default {
     }
   },
 
+  computed: {
+    changeStatus(status) {
+      status.turmas.forEach(turmas => {
+        if (turmas.status === 'A') {
+         turmas.status = 'Em aberto'
+         return 
+        }
+        if (turmas.status === 'AN') {
+          turmas.status = 'Em andamento'
+          return 
+        }
+        if (turmas.status === 'F') {
+          turmas.status = 'Fechada'
+          return 
+        }
+      });
+    }
+  },
+
   methods: {
+    kFormatter,
+    status(status) {
+      if( status === 'Em aberto') return 'light-info' 
+      if( status === 'Em andamento') return 'light-primary'
+      if( status === 'Fechada') return 'light-danger'
+    },
+
     excluirTurma(id) {
       this.$swal({
         title: 'Tem certeza?',
