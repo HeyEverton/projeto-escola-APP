@@ -32,7 +32,7 @@
             color="warning"
             icon="UsersIcon"
             :statistic="contagemProfessores.contagem_professores"
-            statistic-title="Professores Dando Aulas"
+            statistic-title="Professores Cadastrados"
             :chart-data="contagemProfessores.contagem_professores"
           />
         </b-link>
@@ -51,7 +51,7 @@
             color="info"
             icon="BookOpenIcon"
             :statistic="contagemCursos.contagem_cursos"
-            statistic-title="Cursos em nosso sistema"
+            statistic-title="Cursos no nosso sistema"
             :chart-data="teste.id"
           />
         </b-link>
