@@ -89,7 +89,17 @@ export default [
         route: 'lista-turma',
         icon: 'FileIcon',
       },
+
     ],
+  },
+  {
+    header: 'Configurações',
+  },
+  {
+    title: 'Configurações',
+    route: null,
+    icon: 'SettingsIcon',
+    disabled: true,
   },
 
 ]

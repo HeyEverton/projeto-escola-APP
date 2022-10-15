@@ -33,7 +33,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/cadastro-alunos/CadastroAluno.vue'),
       meta: {
-        pageTitle: 'Matricular',
+        pageTitle: 'Alunos',
         breadcrumb: [
           {
             text: 'Matricular aluno',
@@ -65,7 +65,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/alunos/editar-aluno/AlunoEdit.vue'),
       meta: {
-        pageTitle: 'Editar',
+        pageTitle: 'Alunos',
         breadcrumb: [
           {
             text: 'Editar de aluno',
@@ -81,7 +81,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/cadastro-professor/ProfessorCadastro.vue'),
       meta: {
-        pageTitle: 'Cadastrar',
+        pageTitle: 'Professores',
         breadcrumb: [
           {
             text: 'Cadastrar professor',
@@ -113,7 +113,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/professores/editar-professor/ProfessorEdit.vue'),
       meta: {
-        pageTitle: 'Editar',
+        pageTitle: 'Professores',
         breadcrumb: [
           {
             text: 'Editar de professor',
@@ -129,7 +129,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/curso/CadastroCurso.vue'),
       meta: {
-        pageTitle: 'Cadastrar',
+        pageTitle: 'Cursos',
         breadcrumb: [
           {
             text: 'Cadastrar curso',
@@ -145,7 +145,7 @@ const router = new VueRouter({
       beforeEnter: Guard.redirectIfNotAuthenticated,
       component: () => import('@/views/curso/EditarCurso.vue'),
       meta: {
-        pageTitle: 'Curso',
+        pageTitle: 'Cursos',
         breadcrumb: [
           {
             text: 'Editar curso',
@@ -263,6 +263,16 @@ const router = new VueRouter({
         layout: 'full',
       },
     },
+
+    {
+      path: '/nao-autenticado',
+      name: 'nao-autenticado',
+      component: () => import('@/views/error/NotAuthorized.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+
     {
       path: '*',
       redirect: 'error-404',
