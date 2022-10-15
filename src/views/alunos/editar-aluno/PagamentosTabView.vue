@@ -68,7 +68,7 @@
             :variant="status(data.item.status)"
           >
           {{data.item.status}}
-          <!-- {{status}} -->
+          {{changeStatus}}
           </b-badge>
         </template>
         <template #cell(actions)="data">
@@ -90,14 +90,14 @@
             class="btn-icon "
             title="Informar pagamento"
             @click="toggle(data.item.id)"
-            v-if="data.item.status == 1"
+            v-if="data.item.status == 'Em aberto'"
           >
           
-            <feather-icon icon="DollarSignIcon" />
+            <feather-icon icon="DollarSignIcon"  />
           </b-button>
 
-          <span v-else class="text-success">
-            <feather-icon icon="CheckSquareIcon" size="35" />
+          <span v-else class="text-success" >
+            <feather-icon icon="CheckSquareIcon" size="35"  v-b-tooltip.hover title="Mensalidade paga" />
           </span>
 
         </template>
@@ -244,16 +244,31 @@ export default {
     }
   },
 
-  // computed: {
-  //   status() {
-  //     let parcelas = this.mensalidades
-  //     parcelas.forEach(parcela => {
-  //       if (parcela.status == 1) {
-  //         return 'Em aberto'
-  //       }
-  //     });
-  //   }
-  // },
+  computed: {
+    changeStatus(status) {
+      // console.log(status.mensalidades)
+      // let parcelas = this.mensalidades
+      status.mensalidades.forEach(parcela => {
+        if (parcela.status === 1) {
+         parcela.status = 'Em aberto'
+         return 
+        }
+        if (parcela.status === 2) {
+          parcela.status = 'Pago com atraso'
+          return 
+        }
+        if (parcela.status === 3) {
+          parcela.status = 'Pago'
+          return 
+        }
+        
+        if (parcela.status === 4) {
+          parcela.status = 'Atrasado'
+         return 
+        }
+      });
+    }
+  },
 
   props: {
     parcela: {
@@ -265,10 +280,10 @@ export default {
   methods: {
     kFormatter,
     status(status) {
-      if( status === 1) return 'light-info' 
-      if( status === 2) return 'light-warning'
-      if( status === 3) return 'light-success'
-      if( status === 4) return 'light-danger'
+      if( status === 'Em aberto') return 'light-info' 
+      if( status === 'Pago com atraso') return 'light-warning'
+      if( status === 'Pago') return 'light-success'
+      if( status === 'Atrasado') return 'light-danger'
     },
 
     toggle(parcela_id) {
