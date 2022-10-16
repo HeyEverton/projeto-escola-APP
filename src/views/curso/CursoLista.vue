@@ -70,7 +70,7 @@
 
     </b-col>
 
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap" >
       <b-col
         v-for="cursoItem in cursos"
         :key="cursoItem.id"
@@ -90,6 +90,24 @@
         />
       </b-col>
     </div>
+    
+    <div v-if="cursos.length == 0" class="d-flex flex-wrap ml-1">
+      <b-alert
+      variant="warning"
+      show
+    >
+      <h4 class="alert-heading">
+        Ops! 
+      </h4>
+      <div class="alert-body">
+        <span>Nenhum curso foi encontrado.</span> <b-link class="text-primary" :to="{name: 'cadastrar-curso'}">Cadastre um curso!</b-link>
+      </div>
+    </b-alert>
+    </div>
+
+
+
+
   </div>
 </template>
 <script>
@@ -111,6 +129,7 @@ import {
   BInputGroup,
   BInputGroupPrepend,
   BInputGroupAppend,
+  BLink,
 } from 'bootstrap-vue'
 
 import Ripple from 'vue-ripple-directive'
@@ -137,6 +156,7 @@ export default {
     BInputGroup,
     BInputGroupPrepend,
     BInputGroupAppend,
+    BLink,    
   },
 
   directives: {

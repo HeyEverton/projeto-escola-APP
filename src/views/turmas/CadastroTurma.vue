@@ -290,7 +290,6 @@
 
               </b-button>
               <b-button
-
                 size="md"
                 type="reset"
                 variant="outline-secondary"
@@ -302,7 +301,6 @@
                   icon="XIcon"
                   class="d-inline d-sm-none"
                 />
-
               </b-button>
             </b-col>
           </b-row>
@@ -421,7 +419,7 @@ export default {
             .then(response => {
               this.$swal({
                 icon: 'success',
-                title: 'Criado',
+                title: 'Criada',
                 text: 'A turma foi criada com sucesso',
                 customClass: {
                   confirmButton: 'btn btn-success',

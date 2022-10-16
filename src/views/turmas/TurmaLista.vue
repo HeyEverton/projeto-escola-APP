@@ -110,21 +110,8 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="isSortDirDesc"
         show-empty
+        empty-text="Nenhuma turma foi encontrada"
       >
-        <template #empty>
-          <div class="d-flex justify-content-center align-items-center">
-            <b-spinner
-              variant="primary"
-              label="Carregando..."
-            />
-            <h5
-              class="text-center ml-1"
-              style="color:#7367f0;"
-            >
-              Turma não localizada
-            </h5>
-          </div>
-        </template>
 
         <template #cell(turma)="data">
           <b-link
@@ -136,7 +123,7 @@
         </template>
 
         <template #cell(professor_id)="data">
-          {{ data.item.professor.nome | truncate(12, '...') }}
+          {{ data.item.professor.nome | truncate(9, '...') }}
         </template>
 
         <template #cell(data_inicio)="data">
@@ -148,7 +135,15 @@
         </template>
 
         <template #cell(horario_entrada)="data">
-          {{ data.item.horario_entrada }}
+          <span class="text-primary">{{ data.item.horario_entrada }}</span>
+        </template>
+
+        <template #cell(horario_saida)="data">
+          <span class="text-primary">{{ data.item.horario_saida }}</span>
+        </template>
+
+        <template #cell(qt_atual_alunos)="data">
+          <span class="text-primary">{{ data.item.qt_atual_alunos }}</span>
         </template>
 
         <template #cell(status)="data">
@@ -319,6 +314,22 @@ export default {
           return 
         }
       });
+
+      status.turmas.forEach(turmas => {
+        if (turmas.turno === 'M') {
+         turmas.turno = 'Manhã'
+         return 
+        }
+        if (turmas.turno === 'T') {
+          turmas.turno = 'Tarde'
+          return 
+        }
+        if (turmas.turno === 'N') {
+          turmas.turno = 'Noite'
+          return 
+        }
+      });
+
     }
   },
 

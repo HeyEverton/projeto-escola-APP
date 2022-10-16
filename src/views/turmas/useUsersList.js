@@ -15,16 +15,16 @@ export default function useUsersList() {
   // Table Handlers
   const tableColumns = [
     { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
-    // { key: 'nome', label: 'Nome', sortable: true },
     { key: 'turma', label: 'Nome' },
     { key: 'turno', label: 'Turno' },
-    // { key: 'data_inicio', label: 'Data de início' },
-    { key: 'professor_id', label: 'Professor' },
-    { key: 'curso_id', label: 'Curso' },
+    { key: 'status', label: 'Status', },
+    
+    // { key: 'professor_id', label: 'Professor' },
+    // { key: 'curso_id', label: 'Curso' },
     { key: 'horario_entrada', label: 'Horário entrada' },
     { key: 'horario_saida', label: 'Horário saída' },
+    { key: 'qt_atual_alunos', label: 'Qt.atual. alunos' },
     { key: 'qt_max_alunos', label: 'Qt.máx. alunos' },
-    { key: 'status', label: 'Status', },
     { key: 'actions', label: 'Ações' },
   ]
   const perPage = ref(10)
