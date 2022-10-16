@@ -136,7 +136,7 @@ export default {
               title: 'Ops! Algo deu errado.',
               icon: 'AlertCircleIcon',
               variant: 'danger',
-              text: 'Os dados deste usuário não foram econtrados!',
+              text: 'Os dados deste professor não foram econtrados!',
             },
           })
           this.$router.replace('/lista-usuarios')

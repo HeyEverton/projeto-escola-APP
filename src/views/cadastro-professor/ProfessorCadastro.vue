@@ -39,7 +39,7 @@
                 <template #aside>
                   <b-avatar
                     ref="previewEl"
-                    :src="professor_foto"
+                    :img-src="professor_foto"
                     :text="avatarText(nome)"
                     size="90px"
                     rounded
@@ -588,7 +588,7 @@ export default {
       formacao: '',
       nacionalidade: '',
 
-      tel_contato: '+55',
+      tel_contato: '',
       escolaridade: '',
 
       // ENDERECO
@@ -619,7 +619,7 @@ export default {
           uppercase: true,
         },
         prefix: {
-
+          prefix: '+55',
           blocks: [3, 5, 4],
           uppercase: true,
         },
@@ -721,7 +721,6 @@ export default {
 
     InputImageRenderer(event) {
       this.professor_foto = event.target.files[0]
-      console.log(event.target.files[0])
     },
 
     cadastrarProfessor() {

@@ -101,6 +101,7 @@
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
+        empty-text="Nenhum professor foi encontrado"
         :sort-desc.sync="isSortDirDesc"
       >
 
@@ -131,23 +132,8 @@
           {{ data.item.formacao | truncate(12, '...') }}
         </template>
 
-        <template #cell(numero_conta)="data">
-          {{ data.item.numero_conta | truncate(6, '...') }}
-        </template>
-
-        <template #empty>
-          <div class="d-flex justify-content-center align-items-center">
-            <b-spinner
-              variant="primary"
-              label="Carregando..."
-            />
-            <h5
-              class="text-center ml-1"
-              style="color:#7367f0;"
-            >
-              Professor não localizado
-            </h5>
-          </div>
+        <template #cell(tel_contato)="data">
+          {{ data.item.tel_contato | truncate(7, '...') }}
         </template>
 
         <!-- Column: Actions -->

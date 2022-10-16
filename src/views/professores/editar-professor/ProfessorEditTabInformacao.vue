@@ -341,7 +341,8 @@ import { ref } from '@vue/composition-api'
 import router from '@/router'
 import Cleave from 'vue-cleave-component'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import useUsersList from './useUsersList'
+import {required, email} from '@validations'
+
 
 export default {
   components: {
@@ -374,7 +375,8 @@ export default {
   data() {
     return {
       userData: { },
-      // name: '',
+      required,
+      email,
 
       optionsCPF: {
         customDelimiter: {
@@ -503,7 +505,7 @@ export default {
           if (error.message) {
             this.$swal({
               title: 'Acesso negado!',
-              text: 'Você não tem autorização para editar os dados deste usuário!',
+              text: 'Você não tem autorização para editar os dados deste professor!',
               icon: 'error',
               customClass: {
                 confirmButton: 'btn btn-primary',
@@ -519,7 +521,7 @@ export default {
   },
 
   setup(props) {
-    const { resolveUserRoleVariant } = useUsersList()
+    // const { resolveUserRoleVariant } = useUsersList()
 
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
@@ -587,7 +589,7 @@ export default {
     })
 
     return {
-      resolveUserRoleVariant,
+      // resolveUserRoleVariant,
       avatarText,
       roleOptions,
       statusOptions,

@@ -93,7 +93,7 @@ export default [
     ],
   },
   {
-    header: 'Configurações',
+    header: 'Configurações Gerais',
   },
   {
     title: 'Configurações',

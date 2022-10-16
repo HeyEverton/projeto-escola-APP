@@ -330,7 +330,7 @@ export default {
         .catch(error => {
           this.$swal({
             title: 'Falha ao editar!',
-            text: 'Ops! parece que houve um erro ao editar seus dados!',
+            text: 'Ops! parece que houve um erro ao editar os dados!',
             icon: 'error',
             customClass: {
               confirmButton: 'btn btn-primary',
