@@ -5,7 +5,7 @@
       :title="null"
       :subtitle="null"
       shape="square"
-      finish-button-text="Enviar"
+      finish-button-text="Finalizar"
       back-button-text="Anterior"
       next-button-text="Próximo"
       class="mb-3"
@@ -211,12 +211,24 @@
                 label="Whatsapp"
                 label-for="whatsapp"
               >
-                <b-form-input
+                <!-- <b-form-input
                   id="whatsapp"
                   v-model="whatsapp"
                   type="number"
+                  maxlength="9"
                   placeholder="Insira o whatsapp do aluno"
-                />
+                /> -->
+
+                <cleave
+                  id="tel_contato"
+                  v-model="whatsapp"
+                  class="form-control"
+                  :raw="false"
+                  :options="options.whatsapp"
+                  placeholder="Insira o whatsapp do aluno"
+                  type="text"
+                  maxlength="10"
+                  />
 
               </b-form-group>
             </b-col>
@@ -810,7 +822,7 @@ export default {
       aluno_foto: '',
       aluno_cpf: '',
       whatsapp: '',
-      telefone_contato: '+55',
+      telefone_contato: '',
       escolaridade: '',
 
       // ENDERECO
@@ -864,8 +876,13 @@ export default {
           datePattern: ['DD', 'MM', 'YYYYY'],
         },
         prefix: {
-          // prefix: '+63',
+          prefix: '+55',
           blocks: [3, 5, 4],
+          uppercase: true,
+        },
+        whatsapp: {
+          prefix: '9',
+          blocks: [1, 8],
           uppercase: true,
         },
       },
@@ -943,7 +960,7 @@ export default {
       ],
       parcelas: [
         '1',
-        '3',
+        '2',
         '4',
         '6',
         '8',
@@ -1066,39 +1083,49 @@ export default {
       payload.append('bairro', this.bairro)
       payload.append('cidade', this.cidade)
       payload.append('estado', this.estado)
-
       await this.$http.post('alunos', payload)
-        .then(response => {
-          if(response.status == 200 || response.status == 201) {
-            return new Promise((resolve, reject) => {
-              this.$refs.infoRules.validate().then(success => {
-                if (success) {
-                  resolve(true)
-                  this.$http.get('alunos')
+          .then(response => {
+            localStorage.setItem('aluno_id', response.data.data.id)
+          }) 
+          .then(()=> {
+              this.$http.get('alunos')
                   .then(response => {
                   this.alunos = response.data.data
                 })
-                } else {
-                  reject()
-                }
-              })
             })
-          }
-          localStorage.setItem('aluno_id', response.data.data.id)
-        })
-        .catch((e)=> {
-          this.$toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Erro!',
-            text: 'Preencha todos os campos antes de continuar.',
-            icon: 'AlertOctagonIcon',
-            variant: 'danger',
-          },
-        })
-        })
-
-      
+            return new Promise((resolve, reject) => {
+                  this.$refs.infoRules.validate().then(success => {
+                    if (success) {
+                      resolve(true)
+                    } else {
+                      reject()
+                    }
+                  })
+                })            
+            .catch((e)=> {
+              if (e.message == 'Request failed with status code 403') {
+                this.$swal({
+                  title: 'Acesso negado!',
+                  text: 'Você não tem autorização para matricular um novo aluno',
+                  icon: 'error',
+                  customClass: {
+                    confirmButton: 'btn btn-primary',
+                  },
+                  buttonsStyling: false,
+                })
+              }
+              if (e.message == 'Request failed with status code 422') {
+                this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Erro!',
+                  text: 'Preencha todos os campos antes de continuar.',
+                  icon: 'AlertOctagonIcon',
+                  variant: 'danger',
+                },
+              })
+              }
+            })     
     },
 
     validationFormAddress() {
