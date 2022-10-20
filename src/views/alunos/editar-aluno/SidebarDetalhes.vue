@@ -1,8 +1,5 @@
 <template>
-  <div>
-    
-
-  </div>
+  <div />
 </template>
 
 <script>
@@ -24,7 +21,6 @@ import {
   BInputGroupAppend,
 
 } from 'bootstrap-vue'
-
 
 import vSelect from 'vue-select'
 import router from '@/router'
@@ -83,7 +79,6 @@ export default {
   //     })
   // },
 
-
   methods: {
     teste() {
       alert('oi chegou')
@@ -91,8 +86,8 @@ export default {
     },
     testando() {
       this.teste()
-    }
-   
+    },
+
   },
 }
 </script>

@@ -49,12 +49,13 @@
                 rules=""
               >
                 <b-input-group
-                append="R$"
+                  append="R$"
                 >
-                <b-form-input placeholder="Insira o valor pago pelo aluno"
-                  v-model="valor_pago"
-                  :state="errors.length > 0 ? false:null"
-                   />
+                  <b-form-input
+                    v-model="valor_pago"
+                    placeholder="Insira o valor pago pelo aluno"
+                    :state="errors.length > 0 ? false:null"
+                  />
                 </b-input-group>
 
                 <!-- <b-form-input
@@ -202,6 +203,13 @@ export default {
     vSelect,
   },
 
+  props: {
+    parcela: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+
   data() {
     return {
       userData: {},
@@ -225,13 +233,6 @@ export default {
     }
   },
 
-  props: {
-    parcela: {
-      type: Object,
-      default: () => ({})
-    },
-  },
-
   created() {
     this.$http
       .get(`alunos/${router.currentRoute.params.id}`)
@@ -249,8 +250,8 @@ export default {
   methods: {
     async informarPagamento() {
       const validator = await this.$refs.pagamentoRules.validate()
-      if(!validator) return 
-      
+      if (!validator) return
+
       const dados = {
         user_id: localStorage.getItem('user_id'),
         data_pagamento: this.data_pagamento,
@@ -258,7 +259,7 @@ export default {
         status: this.status,
         observacao: this.observacao,
       }
-      let payload = dados
+      const payload = dados
 
       this.$emit('informar-pagamento', payload)
     },
