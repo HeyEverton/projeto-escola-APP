@@ -7,17 +7,17 @@
       :show="userData === undefined"
     >
       <h4 class="alert-heading">
-        Erro ao pegar dados deste usuário
+        Erro ao pegar dados deste aluno
       </h4>
       <div class="alert-body">
-        Nenhum usuário foi encontrado com esse <strong>id</strong>. Cheque na
+        Nenhum aluno foi encontrado com esse <strong>id</strong>. Cheque na
         <b-link
           class="alert-link"
-          :to="{ name: 'apps-users-list'}"
+          :to="{ name: 'lista-alunos'}"
         >
-          Lista de usuários
+          Lista de alunos.
         </b-link>
-        para encontrar outro usuários.
+
       </div>
     </b-alert>
 
@@ -67,6 +67,18 @@
         <PagamentosTabView class="mt-2 pt-75" />
       </b-tab>
 
+      <b-tab>
+        <template #title>
+          <feather-icon
+            icon="BookOpenIcon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">Matricular</span>
+        </template>
+        <MatricularAluno class="mt-2 pt-75" />
+      </b-tab>
+
     </b-tabs>
   </component>
 </template>
@@ -89,6 +101,7 @@ import userStoreModule from './userStoreModule'
 import AlunoEditTabInformacao from './AlunoEditTabInformacao.vue'
 import AlunoEditTabEndereco from './AlunoEditTabEndereco.vue'
 import PagamentosTabView from './PagamentosTabView.vue'
+import MatricularAluno from './MatricularAluno.vue'
 
 export default {
   components: {
@@ -97,10 +110,10 @@ export default {
     BCard,
     BAlert,
     BLink,
-
     AlunoEditTabInformacao,
     AlunoEditTabEndereco,
     PagamentosTabView,
+    MatricularAluno,
   },
 
   setup() {
