@@ -117,7 +117,11 @@
                 </validation-provider>
               </b-form-group>
 
-              <!-- submit button -->
+              <b-overlay
+              :show="show"
+              spinner-variant="primary"
+              spinner-small
+              >
               <b-button
                 block
                 type="submit"
@@ -125,6 +129,7 @@
               >
                 Salvar nova senha
               </b-button>
+            </b-overlay>
             </b-form>
           </validation-observer>
 
@@ -135,7 +140,6 @@
           </p>
         </b-col>
       </b-col>
-      <!-- /Reset password-->
     </b-row>
   </div>
 </template>
@@ -145,7 +149,20 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton, BImg,
+  BRow,
+  BCol,
+  BCardTitle,
+  BCardText,
+  BForm,
+  BFormGroup,
+  BInputGroup,
+  BInputGroupAppend,
+  BLink,
+  BFormInput,
+  BButton,
+  BImg,
+  BOverlay,
+
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store/index'
@@ -168,11 +185,13 @@ export default {
     BInputGroupAppend,
     ValidationProvider,
     ValidationObserver,
+    BOverlay,
   },
   data() {
     return {
       userEmail: '',
       newPassword: '',
+      show: false,
       sideImg: require('@/assets/images/pages/reset-password-v2.svg'),
       // validation
       required,
@@ -208,6 +227,7 @@ export default {
       this.password2FieldType = this.password2FieldType === 'password' ? 'text' : 'password'
     },
     recuperaSenha() {
+      this.show = true
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
           const payload = {
@@ -216,19 +236,23 @@ export default {
             token: this.$route.query.token,
           }
           this.$http.post('recuperar-senha', payload)
-            .then(() => {
-              this.$swal({
-                icon: 'success',
-                title: 'Senha alterada com sucesso!',
-                text: 'Você alterou sua senha com sucesso. Faça login para continuar.',
-                customClass: {
-                  confirmButton: 'btn btn-success',
-                },
-              })
-              this.userEmail = ''
-              this.newPassword = ''
-              this.$router.replace('/login')
+          .then(() => {
+            this.show = false
+            this.$swal({
+              icon: 'success',
+              title: 'Senha alterada com sucesso!',
+              text: 'Você alterou sua senha com sucesso. Faça login para continuar.',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
             })
+            this.userEmail = ''
+            this.newPassword = ''
+            this.$router.replace('/login')
+          })
+        } else {
+          this.show = false
+          
         }
       })
     },

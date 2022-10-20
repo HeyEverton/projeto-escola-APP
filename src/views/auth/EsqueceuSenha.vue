@@ -49,7 +49,7 @@
           </b-card-text>
 
           <!-- form -->
-          <validation-observer ref="simpleRules">
+          <validation-observer ref="regraEsqueceuSenha">
             <b-form
               class="auth-forgot-password-form mt-2"
               @submit.prevent="esqueceuSenha"
@@ -68,19 +68,24 @@
                     v-model="userEmail"
                     :state="errors.length > 0 ? false:null"
                     name="forgot-password-email"
-                    placeholder="joao@exemplo.com"
+                    placeholder="Insira seu e-mail"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-
-              <b-button
-                type="submit"
-                variant="primary"
-                block
+              <b-overlay
+              :show="show"
+              spinner-variant="primary"
+              spinner-small
               >
-                Enviar link para mudar senha
-              </b-button>
+            <b-button
+              type="submit"
+              variant="primary"
+              block
+            >
+              Enviar link para mudar senha
+            </b-button>          
+          </b-overlay>
             </b-form>
           </validation-observer>
 
@@ -101,7 +106,17 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BLink, BCardTitle, BCardText, BImg, BForm, BFormGroup, BFormInput, BButton,
+  BRow,
+  BCol,
+  BLink,
+  BCardTitle,
+  BCardText,
+  BImg,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BButton,
+  BOverlay,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import store from '@/store/index'
@@ -122,10 +137,12 @@ export default {
     BCardText,
     ValidationProvider,
     ValidationObserver,
+    BOverlay,
   },
   data() {
     return {
       userEmail: '',
+      show: false,
       sideImg: require('@/assets/images/pages/forgot-password-v2.svg'),
       // validation
       required,
@@ -144,11 +161,13 @@ export default {
   },
   methods: {
     esqueceuSenha() {
-      this.$refs.simpleRules.validate().then(success => {
+      this.show = true
+      this.$refs.regraEsqueceuSenha.validate().then(success => {
         if (success) {
           const payload = { email: this.userEmail }
           this.$http.post('esqueceu-a-senha', payload)
             .then(() => {
+              this.show = false
               this.$swal({
                 icon: 'success',
                 title: 'Link enviado!',
@@ -158,6 +177,8 @@ export default {
                 },
               })
             })
+          } else {
+          this.show = false
         }
       })
     },

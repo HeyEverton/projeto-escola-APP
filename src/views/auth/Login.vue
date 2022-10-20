@@ -68,7 +68,7 @@
                     v-model="userEmail"
                     :state="errors.length > 0 ? false:null"
                     name="login-email"
-                    placeholder="joao@exemplo.com"
+                    placeholder="Insira seu e-mail"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -282,7 +282,7 @@ export default {
 
                 this.show = false
                 this.$router.replace('/')
-                  .then(() => {
+                .then(() => {
                     this.$toast({
                       component: ToastificationContent,
                       position: 'top-left',
@@ -294,21 +294,21 @@ export default {
                       },
                     })
                   })
-              })
-              .catch(e => {
+                })
+                .catch(e => {
+                this.show = false
                 const errorCode = e?.response?.data?.error || 'ServerError'
                 if (errorCode == 'LoginInvalidException') {
                   this.$toast({
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: 'Ops! E-mail e/ou senha incorretos!',
+                      title: 'Ops! E-mail e/ou senha incorretos    !',
                       icon: 'AlertCircleIcon',
                       variant: 'danger',
                     },
                   })
                 }
-                // console.log(e)
               })
           }
         })

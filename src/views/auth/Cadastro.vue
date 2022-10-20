@@ -369,9 +369,18 @@ export default {
           this.$router.replace('/login')
         })
         .catch(e => {
-          console.log(e)
-          console.log(e.message)
-          console.log(e?.response?.data?.message)
+          this.show = false
+          if (e?.response?.data?.error === 'EmailHasBeenTaken') {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Oops!',
+                icon: 'AlertTriangleIcon',
+                variant: 'danger',
+                text: 'Este e-mail já existe!',
+              },
+            })
+          }
         })
     },
   },
