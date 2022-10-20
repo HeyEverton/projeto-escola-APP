@@ -139,6 +139,7 @@
         <!-- Column: Actions -->
         <template #cell(actions)="data">
           <b-button
+
             v-b-tooltip.hover
             variant="danger"
             class="btn-icon"
@@ -342,6 +343,10 @@ export default {
       }
       if (this.campo == 'email') {
         this.pesquisarEmail(this.campoPesquisa)
+      }
+
+      if (this.campoPesquisa.length == 0) {
+        this.get()
       }
     },
 
