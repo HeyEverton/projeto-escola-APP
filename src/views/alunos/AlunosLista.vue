@@ -116,21 +116,11 @@
             >
               {{ data.item.nome }}
             </b-link>
-            <!-- <small >@{{ data.item.perfil }}</small> -->
           </b-media>
         </template>
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <!-- <b-button
-            v-b-tooltip.hover
-            variant="primary"
-            class="btn-icon mr-1"
-            :to="{ name: 'editar-usuario', params: { id: data.item.id } }"
-            title="Editar perfil"
-          >
-            <feather-icon icon="EditIcon" />
-          </b-button> -->
 
           <b-button
             v-b-tooltip.hover

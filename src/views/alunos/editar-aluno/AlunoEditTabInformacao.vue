@@ -190,7 +190,7 @@
               <b-form-input
                 id="whatsapp"
                 v-model="userData.whatsapp"
-                type="number"
+                type="text"
                 placeholder="Insira o whatsapp do aluno"
               />
             </b-form-group>

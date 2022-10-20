@@ -5,7 +5,7 @@
       :title="nome | truncate(17,'...')"
       style="width: 300px;"
     >
-      <b-card-text class="blog-content-truncate" >
+      <b-card-text class="blog-content-truncate">
         <p>{{ descricao | truncate(30,'...') }}</p>
       </b-card-text>
 
@@ -23,7 +23,7 @@
           md="6"
           lg="4"
           sm="4"
-         >
+        >
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="outline-primary"

@@ -45,7 +45,10 @@
           />
         </template>
 
-        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-alunos'}">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{name: 'lista-alunos'}"
+        >
           <feather-icon
             size="16"
             icon="UsersIcon"
@@ -54,7 +57,10 @@
           <span>Alunos</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-cursos'}">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{name: 'lista-cursos'}"
+        >
           <feather-icon
             size="16"
             icon="BookOpenIcon"
@@ -63,7 +69,10 @@
           <span>Cursos</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-turma'}">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{name: 'lista-turma'}"
+        >
           <feather-icon
             size="16"
             icon="BookIcon"
@@ -72,9 +81,10 @@
           <span>Turmas</span>
         </b-dropdown-item>
 
-
-
-        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'lista-professores'}">
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
+          :to="{name: 'lista-professores'}"
+        >
           <feather-icon
             size="16"
             icon="UsersIcon"

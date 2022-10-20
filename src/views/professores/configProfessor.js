@@ -15,15 +15,11 @@ export default function useUsersList() {
   // Table Handlers
   const tableColumns = [
     { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
-    // { key: z'name', label: 'Nome', sortable: true },
     { key: 'user', label: 'Professor', sortable: true },
     { key: 'professor_cpf', label: 'CPF', sortable: true },
-    { key: 'professor_rg', label: 'RG', sortable: true },
     { key: 'email', label: 'E-mail', sortable: true },
     { key: 'formacao', label: 'Formação', sortable: true },
-    // { key: 'sexo', label: 'Sexo', sortable: true },
     { key: 'tel_contato', label: 'Contato', sortable: true },
-
     { key: 'actions', label: 'Ações' },
   ]
   const perPage = ref(10)

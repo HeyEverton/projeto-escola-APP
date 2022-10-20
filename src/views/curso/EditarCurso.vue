@@ -156,12 +156,12 @@
               class="d-flex  mt-2"
             >
               <b-button
-                
+
                 type="submit"
                 variant="primary"
                 class="mr-1"
-                @click="editarCurso"
                 :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                @click="editarCurso"
               >
                 Salvar
                 <feather-icon
@@ -172,10 +172,10 @@
 
               </b-button>
               <b-button
-                
+
                 variant="outline-secondary"
-                :to="{name: 'lista-cursos'}"     
-                :block="$store.getters['app/currentBreakPoint'] === 'xs'"           
+                :to="{name: 'lista-cursos'}"
+                :block="$store.getters['app/currentBreakPoint'] === 'xs'"
               >
                 Cancelar
                 <feather-icon

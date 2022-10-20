@@ -17,10 +17,7 @@ export default function useUsersList() {
     { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
     { key: 'turma', label: 'Nome' },
     { key: 'turno', label: 'Turno' },
-    { key: 'status', label: 'Status', },
-    
-    // { key: 'professor_id', label: 'Professor' },
-    // { key: 'curso_id', label: 'Curso' },
+    { key: 'status', label: 'Status' },
     { key: 'horario_entrada', label: 'Horário entrada' },
     { key: 'horario_saida', label: 'Horário saída' },
     { key: 'qt_atual_alunos', label: 'Qt.atual. alunos' },

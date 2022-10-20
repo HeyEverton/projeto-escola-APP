@@ -228,7 +228,7 @@
                   placeholder="Insira o whatsapp do aluno"
                   type="text"
                   maxlength="10"
-                  />
+                />
 
               </b-form-group>
             </b-col>
@@ -319,8 +319,8 @@
                     v-model="cep"
                     placeholder="Insira o CEP do aluno"
                     :state="errors.length > 0 ? false:null"
-                    @input="handleInput"
                     type="number"
+                    @input="handleInput"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -979,8 +979,8 @@ export default {
       this.aluno_foto = event.target.files[0]
     },
     selectTurma() {
-      // console.log(this.turmas[0].id)
-      this.$http.get(`turma/curso/${this.turmas[0].id}`)
+      // console.log(this.turmas_id)
+      this.$http.get(`turma/curso/${this.turma_id}`)
         .then(response => {
           this.valor_curso = response.data.data.curso.preco
           // this.desconto_curso = response.data.data.curso.desconto
@@ -989,7 +989,6 @@ export default {
     },
 
     catchEventParcela(value) {
-      // console.log(value)
       this.n_parcela = value
     },
 
@@ -1001,19 +1000,10 @@ export default {
         qtd_parcelas: this.n_parcela,
       }
 
-      // console.log(payload)
-
       this.$http.post('parcelas', payload)
         .then(response => {
           this.Tableparcelas = response.data
         })
-      // .then(()=> {
-      //   let id = localStorage.getItem('aluno_id')
-      //   this.$http.get(`parcelas/aluno/${id}`)
-      //   .then(response => {
-      //     this.Tableparcelas = response.data
-      //   })
-      // })
     },
 
     formSubmitted() {
@@ -1083,49 +1073,50 @@ export default {
       payload.append('bairro', this.bairro)
       payload.append('cidade', this.cidade)
       payload.append('estado', this.estado)
+
       await this.$http.post('alunos', payload)
-          .then(response => {
-            localStorage.setItem('aluno_id', response.data.data.id)
-          }) 
-          .then(()=> {
-              this.$http.get('alunos')
-                  .then(response => {
-                  this.alunos = response.data.data
-                })
+        .then(response => {
+          localStorage.setItem('aluno_id', response.data.data.id)
+        })
+        .then(() => {
+          this.$http.get('alunos')
+            .then(response => {
+              this.alunos = response.data.data
             })
-            return new Promise((resolve, reject) => {
-                  this.$refs.infoRules.validate().then(success => {
-                    if (success) {
-                      resolve(true)
-                    } else {
-                      reject()
-                    }
-                  })
-                })            
-            .catch((e)=> {
-              if (e.message == 'Request failed with status code 403') {
-                this.$swal({
-                  title: 'Acesso negado!',
-                  text: 'Você não tem autorização para matricular um novo aluno',
-                  icon: 'error',
-                  customClass: {
-                    confirmButton: 'btn btn-primary',
-                  },
-                  buttonsStyling: false,
-                })
-              }
-              if (e.message == 'Request failed with status code 422') {
-                this.$toast({
-                component: ToastificationContent,
-                props: {
-                  title: 'Erro!',
-                  text: 'Preencha todos os campos antes de continuar.',
-                  icon: 'AlertOctagonIcon',
-                  variant: 'danger',
-                },
-              })
-              }
-            })     
+        })
+      return new Promise((resolve, reject) => {
+        this.$refs.infoRules.validate().then(success => {
+          if (success) {
+            resolve(true)
+          } else {
+            reject()
+          }
+        })
+      })
+        .catch(e => {
+          if (e.message == 'Request failed with status code 403') {
+            this.$swal({
+              title: 'Acesso negado!',
+              text: 'Você não tem autorização para matricular um novo aluno',
+              icon: 'error',
+              customClass: {
+                confirmButton: 'btn btn-primary',
+              },
+              buttonsStyling: false,
+            })
+          }
+          if (e.message == 'Request failed with status code 422') {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Erro!',
+                text: 'Preencha todos os campos antes de continuar.',
+                icon: 'AlertOctagonIcon',
+                variant: 'danger',
+              },
+            })
+          }
+        })
     },
 
     validationFormAddress() {
@@ -1187,9 +1178,6 @@ export default {
                   matricula_id: localStorage.getItem('matricula_id'),
                 }
                 this.$http.post('parcelas/matricular', payloadParcela)
-                  .then(response => {
-                    
-                  })
                   .then(() => {
                     localStorage.removeItem('aluno_id')
                     localStorage.removeItem('matricula_id')
@@ -1220,6 +1208,16 @@ export default {
       return new Promise((resolve, reject) => {
         this.$refs.impressaoRules.validate().then(success => {
           if (success) {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Sucesso!',
+                text: 'A matricula do aluno foi feita com sucesso.',
+                icon: 'CheckSquareIcon',
+                variant: 'success',
+              },
+            })
+            this.$router.replace('/lista-alunos')
             resolve(true)
           } else {
             reject()

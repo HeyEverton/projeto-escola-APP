@@ -113,17 +113,17 @@
                 name="RG"
                 rules="required"
               >
-              <cleave
-                id="professor_rg"
-                v-model="userData.professor_rg"
-                class="form-control"
-                :raw="false"
-                :options="optionsRG.customDelimiterRG"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Insira o CPF do professor"
-                type="text"
-                maxlength="12"
-              />
+                <cleave
+                  id="professor_rg"
+                  v-model="userData.professor_rg"
+                  class="form-control"
+                  :raw="false"
+                  :options="optionsRG.customDelimiterRG"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Insira o CPF do professor"
+                  type="text"
+                  maxlength="12"
+                />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -341,8 +341,7 @@ import { ref } from '@vue/composition-api'
 import router from '@/router'
 import Cleave from 'vue-cleave-component'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import {required, email} from '@validations'
-
+import { required, email } from '@validations'
 
 export default {
   components: {
@@ -385,7 +384,7 @@ export default {
           uppercase: true,
         },
       },
-      
+
       optionsRG: {
         customDelimiterRG: {
           delimiters: ['.', '.', '-'],

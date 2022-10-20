@@ -141,7 +141,7 @@
                 <validation-provider
                   #default="{ errors }"
                   name="Senha"
-                  rules="required"
+                  rules="required|min:8"
                 >
                   <b-input-group
                     class="input-group-merge"
@@ -179,14 +179,21 @@
                 </b-form-checkbox>
               </b-form-group>
 
-              <b-button
-                variant="primary"
-                block
-                type="submit"
-                @click.prevent="registrar"
+              <b-overlay
+                :show="show"
+                spinner-variant="primary"
+                spinner-small
               >
-                Criar conta
-              </b-button>
+                <b-button
+                  variant="primary"
+                  block
+                  type="submit"
+                  @click.prevent="registrar"
+                >
+                  Criar conta
+                </b-button>
+              </b-overlay>
+
             </b-form>
           </validation-observer>
 
@@ -256,10 +263,13 @@ import {
   BCardTitle,
   BCardText,
   BFormFile,
+  BOverlay,
 
 } from 'bootstrap-vue'
 
-import { required, email } from '@validations'
+import {
+  required, email, regex, min,
+} from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -285,6 +295,7 @@ export default {
     ValidationProvider,
     ValidationObserver,
     BFormFile,
+    BOverlay,
     vSelect,
 
   },
@@ -297,14 +308,17 @@ export default {
       foto: '',
       senha: '',
       cargo: '',
+      show: false,
       sideImg: require('@/assets/images/pages/register-v2.svg'),
       // validation
       required,
       email,
+      regex,
+      min,
       cargos: [
         { code: 'Aluno', nome: 'Aluno(a)' },
         { code: 'Professor', nome: 'Professor(a)' },
-        { code: 'Secretária', nome: 'Secretário(a)' },
+        { code: 'Secretaria', nome: 'Secretário(a)' },
       ],
     }
   },
@@ -330,6 +344,7 @@ export default {
       const validator = await this.$refs.registerForm.validate()
       if (!validator) return
 
+      this.show = true
       let payload = ''
       payload = new FormData()
       payload.append('profile_photo', this.foto)
@@ -350,7 +365,13 @@ export default {
               text: 'Faça login para continuar!',
             },
           })
+          this.show = false
           this.$router.replace('/login')
+        })
+        .catch(e => {
+          console.log(e)
+          console.log(e.message)
+          console.log(e?.response?.data?.message)
         })
     },
   },

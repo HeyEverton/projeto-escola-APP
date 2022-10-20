@@ -122,16 +122,21 @@
                   Lembrar meu acesso
                 </b-form-checkbox>
               </b-form-group>
-
-              <!-- submit buttons -->
-              <b-button
-                type="submit"
-                variant="primary"
-                block
-                @click="login"
+              <b-overlay
+                :show="show"
+                spinner-variant="primary"
+                spinner-small
               >
-                Entrar
-              </b-button>
+                <b-button
+                  type="submit"
+                  variant="primary"
+                  block
+                  @click="login"
+                >
+                  Entrar
+                </b-button>
+
+              </b-overlay>
             </b-form>
           </validation-observer>
 
@@ -188,7 +193,20 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton,
+  BRow,
+  BCol,
+  BLink,
+  BFormGroup,
+  BFormInput,
+  BInputGroupAppend,
+  BInputGroup,
+  BFormCheckbox,
+  BCardText,
+  BCardTitle,
+  BImg,
+  BForm,
+  BButton,
+  BOverlay,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
@@ -215,6 +233,7 @@ export default {
     VuexyLogo,
     ValidationProvider,
     ValidationObserver,
+    BOverlay,
   },
   mixins: [togglePasswordVisibility],
   data() {
@@ -222,6 +241,7 @@ export default {
       status: '',
       password: '',
       userEmail: '',
+      show: false,
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
@@ -246,10 +266,11 @@ export default {
       this.$refs.loginForm.validate()
         .then(success => {
           if (success) {
-              useJwt.login({
-                email: this.userEmail,
-                password: this.password,
-              })
+            this.show = true
+            useJwt.login({
+              email: this.userEmail,
+              password: this.password,
+            })
               .then(response => {
                 const token = `${response.data.access_token}`
                 useJwt.setToken(token)
@@ -257,8 +278,9 @@ export default {
                 localStorage.setItem('user_email', response.data.data.email)
                 localStorage.setItem('user_role', response.data.data.role)
                 localStorage.setItem('user_id', response.data.data.id)
-
                 this.$store.commit('user/STORE_USER', response.data.data)
+
+                this.show = false
                 this.$router.replace('/')
                   .then(() => {
                     this.$toast({

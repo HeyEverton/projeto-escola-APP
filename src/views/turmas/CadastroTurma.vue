@@ -176,7 +176,7 @@
                     v-model="qt_atualA"
                     type="number"
                     :state="errors.length > 0 ? false : null"
-                    placeholder="Insira a quantidade atual de alunos"                    
+                    placeholder="Insira a quantidade atual de alunos"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>

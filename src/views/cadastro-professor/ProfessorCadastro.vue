@@ -756,12 +756,11 @@ export default {
               icon: 'EditIcon',
               variant: 'success',
             },
-          })          
+          })
         })
-        .then(()=> {
+        .then(() => {
           this.$router.replace('/lista-professores')
         })
-
     },
 
     handleInput: debounce(function () {

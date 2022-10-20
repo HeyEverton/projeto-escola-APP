@@ -30,26 +30,26 @@
                       id="nome"
                       @click="event"
                     >
-                    <feather-icon icon="UserIcon"/>
-                    
-                    Nome
-                  </b-dropdown-item>
-                  
-                  <b-dropdown-item
-                  id="cpf"
-                  @click="event"
-                  >
-                  <feather-icon icon="FileTextIcon"/>
-                  CPF
-                </b-dropdown-item>
-                
-                <b-dropdown-item
-                id="email"
-                @click="event"
-                >
-                <feather-icon icon="MailIcon"/>
-                E-mail
-                </b-dropdown-item>
+                      <feather-icon icon="UserIcon" />
+
+                      Nome
+                    </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="cpf"
+                      @click="event"
+                    >
+                      <feather-icon icon="FileTextIcon" />
+                      CPF
+                    </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="email"
+                      @click="event"
+                    >
+                      <feather-icon icon="MailIcon" />
+                      E-mail
+                    </b-dropdown-item>
 
                     <b-dropdown-divider />
 
@@ -129,7 +129,7 @@
         </template>
 
         <template #cell(formacao)="data">
-          {{ data.item.formacao | truncate(12, '...') }}
+          {{ data.item.formacao | truncate(7, '...') }}
         </template>
 
         <template #cell(tel_contato)="data">
@@ -138,16 +138,6 @@
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <!-- <b-button
-            v-b-tooltip.hover
-            variant="primary"
-            class="btn-icon mr-1"
-            :to="{ name: 'editar-usuario', params: { id: data.item.id } }"
-            title="Editar perfil"
-          >
-            <feather-icon icon="EditIcon" />
-          </b-button> -->
-
           <b-button
             v-b-tooltip.hover
             variant="danger"

@@ -48,15 +48,15 @@
                       id="nome"
                       @click="event"
                     >
-                    <feather-icon icon="FileTextIcon"/>
-                   &nbsp; Nome
-                  </b-dropdown-item>
-                  
-                  <b-dropdown-item
-                  id="turno"
-                  @click="event"
-                  >
-                  <feather-icon icon="ClockIcon"/>
+                      <feather-icon icon="FileTextIcon" />
+                      &nbsp; Nome
+                    </b-dropdown-item>
+
+                    <b-dropdown-item
+                      id="turno"
+                      @click="event"
+                    >
+                      <feather-icon icon="ClockIcon" />
                       Turno
                     </b-dropdown-item>
 
@@ -151,22 +151,13 @@
             pill
             :variant="status(data.item.status)"
           >
-            {{ data.item.status}}
-            {{changeStatus}}
+            {{ data.item.status }}
+            {{ changeStatus }}
           </b-badge>
         </template>
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <!-- <b-button
-            v-b-tooltip.hover
-            variant="primary"
-            class="btn-icon mr-1"
-            :to="{ name: 'editar-usuario', params: { id: data.item.id } }"
-            title="Editar perfil"
-          >
-            <feather-icon icon="EditIcon" />
-          </b-button> -->
 
           <b-button
             v-b-tooltip.hover
@@ -256,10 +247,9 @@ import {
 import vSelect from 'vue-select'
 // import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
-import { avatarText } from '@core/utils/filter'
+import { avatarText, kFormatter } from '@core/utils/filter'
 import { debounce } from 'lodash'
 import useUsersList from './useUsersList'
-import { kFormatter } from '@core/utils/filter'
 
 export default {
   components: {
@@ -302,43 +292,40 @@ export default {
     changeStatus(status) {
       status.turmas.forEach(turmas => {
         if (turmas.status === 'A') {
-         turmas.status = 'Em aberto'
-         return 
+          turmas.status = 'Em aberto'
+          return
         }
         if (turmas.status === 'AN') {
           turmas.status = 'Em andamento'
-          return 
+          return
         }
         if (turmas.status === 'F') {
           turmas.status = 'Fechada'
-          return 
         }
-      });
+      })
 
       status.turmas.forEach(turmas => {
         if (turmas.turno === 'M') {
-         turmas.turno = 'Manhã'
-         return 
+          turmas.turno = 'Manhã'
+          return
         }
         if (turmas.turno === 'T') {
           turmas.turno = 'Tarde'
-          return 
+          return
         }
         if (turmas.turno === 'N') {
           turmas.turno = 'Noite'
-          return 
         }
-      });
-
-    }
+      })
+    },
   },
 
   methods: {
     kFormatter,
     status(status) {
-      if( status === 'Em aberto') return 'light-info' 
-      if( status === 'Em andamento') return 'light-primary'
-      if( status === 'Fechada') return 'light-danger'
+      if (status === 'Em aberto') return 'light-info'
+      if (status === 'Em andamento') return 'light-primary'
+      if (status === 'Fechada') return 'light-danger'
     },
 
     excluirTurma(id) {
@@ -438,7 +425,7 @@ export default {
 
   created() {
     this.$http.get('turmas/curso/professor')
-      .then(response =>  this.turmas = response.data.data)
+      .then(response => this.turmas = response.data.data)
   },
 
   setup() {

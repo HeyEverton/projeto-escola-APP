@@ -14,8 +14,6 @@ import {
   length as rule_length,
   image as rule_image,
 } from 'vee-validate/dist/rules'
-import ar from 'vee-validate/dist/locale/ar.json'
-// import en from 'vee-validate/dist/locale/en.json'
 
 import { messages as messagePt } from 'vee-validate/dist/locale/pt_BR'
 
