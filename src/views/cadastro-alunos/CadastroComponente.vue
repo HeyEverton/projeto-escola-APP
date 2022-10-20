@@ -9,16 +9,16 @@
       back-button-text="Anterior"
       next-button-text="Próximo"
       class="mb-3"
-      @on-complete="formSubmitted"
+      @on-complete="finalizar"      
     >
 
       <!--tab informacoes pessoais -->
       <tab-content
         title="Dados do aluno"
-        :before-change="validationForm"
+        :before-change="validarDados"        
       >
         <validation-observer
-          ref="accountRules"
+          ref="regraDados"
           tag="form"
         >
           <b-row>
@@ -287,10 +287,10 @@
       <!-- tab endereco -->
       <tab-content
         title="Endereço"
-        :before-change="validationFormInfo"
+        :before-change="validarEndereco"
       >
         <validation-observer
-          ref="infoRules"
+          ref="regraEndereco"
           tag="form"
         >
           <b-row>
@@ -366,6 +366,7 @@
                     placeholder="Insira o número da residência do aluno"
                     type="number"
                   />
+                  <small class="text-danger">{{ errors[0] }}</small>
                 </b-form-group>
               </validation-provider>
             </b-col>
@@ -458,10 +459,10 @@
       <!-- tab matricula  -->
       <tab-content
         title="Matrícula"
-        :before-change="validationFormAddress"
+        :before-change="validarMatricula"
       >
         <validation-observer
-          ref="addressRules"
+          ref="regraMatricula"
           tag="form"
         >
           <b-row>
@@ -484,13 +485,12 @@
                   name="Aluno"
                   rules="required"
                 >
-                  <v-select
-                    v-model="aluno_id"
-                    label="nome"
-                    :options="alunos"
-                    :value="alunos.nome"
-                    :reduce="alunos=> alunos.id"
-                    placeholder="Selecione o aluno para ser matriculado"
+                  <b-form-input
+                    id="aluno_id"
+                    v-model="aluno_nome"
+                    readonly
+                    placeholder="Insira o aluno"
+                    :state="errors.length > 0 ? false:null"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -527,10 +527,10 @@
       <!-- pagamento -->
       <tab-content
         title="Pagamento"
-        :before-change="validationFormSocial"
+        :before-change="validarPagamento"
       >
         <validation-observer
-          ref="socialRules"
+          ref="regraPagamento"
           tag="form"
         >
           <b-row>
@@ -559,6 +559,7 @@
                     v-model="valor_curso"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o valor do curso"
+                    readonly
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -594,6 +595,7 @@
                     v-model="valor_curso"
                     :state="errors.length > 0 ? false:null"
                     placeholder="Insira o valor total do curso"
+                    readonly
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -718,7 +720,7 @@
             </b-col>
 
             <b-col md="6">
-              <h6>
+              <h6 class="mb-1">
                 <b-link @click="viaEmail">
                   Enviar via e-mail
                 </b-link>
@@ -734,7 +736,7 @@
             </b-col>
 
             <b-col md="6">
-              <h6>
+              <h6 class="mb-1">
                 <b-link @click="viaSMS">
                   Via SMS
                 </b-link>
@@ -769,6 +771,7 @@ import Cleave from 'vue-cleave-component'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+
 import {
   BRow,
   BCol,
@@ -824,7 +827,7 @@ export default {
       whatsapp: '',
       telefone_contato: '',
       escolaridade: '',
-
+      aluno_nome: '',
       // ENDERECO
       cep: '',
       nome_rua: '',
@@ -856,14 +859,14 @@ export default {
         { key: 'data_vencimento', label: 'Data de vencimento' },
       ],
       Tableparcelas: [],
-
+      
+      // COMPONENTES
       required,
       email,
       codeIcon,
       axios,
-      // useInputImageRenderer,
-      // InputImageRenderer,
       avatarText,
+
       form: {
         cardNumber: null,
         date: null,
@@ -975,9 +978,6 @@ export default {
   },
   methods: {
 
-    catchEvent(event) {
-      this.aluno_foto = event.target.files[0]
-    },
     selectTurma() {
       // console.log(this.turmas_id)
       this.$http.get(`turma/curso/${this.turma_id}`)
@@ -999,15 +999,11 @@ export default {
         data_vencimento: this.data_vencimento,
         qtd_parcelas: this.n_parcela,
       }
-
+      
       this.$http.post('parcelas', payload)
-        .then(response => {
-          this.Tableparcelas = response.data
-        })
-    },
-
-    formSubmitted() {
-
+      .then(response => {
+        this.Tableparcelas = response.data
+      })
     },
 
     handleInput: debounce(function () {
@@ -1019,7 +1015,7 @@ export default {
     viaEmail() {
       alert('via email')
     },
-
+    
     imprimir() {
       window.print()
     },
@@ -1042,19 +1038,11 @@ export default {
         })
     },
 
-    validationForm() {
-      return new Promise((resolve, reject) => {
-        this.$refs.accountRules.validate().then(success => {
-          if (success) {
-            resolve(true)
-          } else {
-            reject()
-          }
-        })
-      })
+    catchEvent(event) {
+      this.aluno_foto = event.target.files[0]
     },
 
-    async validationFormInfo() {
+    cadastrarAluno() {
       const payload = new FormData()
       payload.append('aluno_foto', this.aluno_foto)
       payload.append('nome', this.nome)
@@ -1074,54 +1062,91 @@ export default {
       payload.append('cidade', this.cidade)
       payload.append('estado', this.estado)
 
-      await this.$http.post('alunos', payload)
+      this.$http.post('alunos', payload)
         .then(response => {
           localStorage.setItem('aluno_id', response.data.data.id)
+          localStorage.setItem('aluno_nome', response.data.data.nome)
+          this.aluno_nome = localStorage.getItem('aluno_nome')
+
+
+          // this.$http.get('alunos')
+          //   .then(response => {
+          //     this.alunos = response.data.data
+          //   })
         })
-        .then(() => {
-          this.$http.get('alunos')
-            .then(response => {
-              this.alunos = response.data.data
-            })
-        })
-      return new Promise((resolve, reject) => {
-        this.$refs.infoRules.validate().then(success => {
-          if (success) {
-            resolve(true)
-          } else {
-            reject()
-          }
-        })
-      })
+
         .catch(e => {
-          if (e.message == 'Request failed with status code 403') {
+          if (e?.response?.data?.message == 'O campo aluno foto é obrigatório.') {
+
             this.$swal({
-              title: 'Acesso negado!',
-              text: 'Você não tem autorização para matricular um novo aluno',
               icon: 'error',
+              title: 'Erro!',
+              text: 'Por favor, insira a foto do aluno.',
               customClass: {
-                confirmButton: 'btn btn-primary',
+                confirmButton: 'btn btn-success',
               },
-              buttonsStyling: false,
             })
+            // this.$toast({
+            //   component: ToastificationContent,
+            //   props: {
+            //     title: 'Erro!',
+            //     text: 'Por favor, insira a foto do aluno.',
+            //     icon: 'AlertOctagonIcon',
+            //     variant: 'danger',
+            //   },
+            // })
           }
-          if (e.message == 'Request failed with status code 422') {
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Erro!',
-                text: 'Preencha todos os campos antes de continuar.',
-                icon: 'AlertOctagonIcon',
-                variant: 'danger',
+          if (e?.response?.data?.error == 'EmailHasBeenTaken') {
+
+            this.$swal({
+              icon: 'error',
+              title: 'Erro!',
+              text: 'Este e-mail já existe.',
+              customClass: {
+                confirmButton: 'btn btn-success',
               },
             })
+            // this.$toast({
+            //   component: ToastificationContent,
+            //   props: {
+            //     title: 'Erro!',
+            //     text: 'Este e-mail já existe.',
+            //     icon: 'AlertOctagonIcon',
+            //     variant: 'danger',
+            //   },
+            // })
+          }
+          if (e?.response?.data?.error == 'InvalidCpf') {
+
+            this.$swal({
+              icon: 'error',
+              title: 'Erro!',
+              text: 'Já existe um aluno cadastrado com esse CPF.',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            })
+
           }
         })
     },
 
-    validationFormAddress() {
+    finalizar() {
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Sucesso!',
+          text: 'O aluno foi matriculado com sucesso.',
+          icon: 'CheckSquareIcon',
+          variant: 'success',
+        },
+      })
+
+    },
+
+    validarDados() {
       return new Promise((resolve, reject) => {
-        this.$refs.addressRules.validate().then(success => {
+        this.$refs.regraDados.validate().then(success => {
           if (success) {
             resolve(true)
           } else {
@@ -1131,12 +1156,38 @@ export default {
       })
     },
 
-    validationFormSocial() {
+    validarEndereco() {
       return new Promise((resolve, reject) => {
-        this.$refs.socialRules.validate().then(success => {
+        this.$refs.regraEndereco.validate().then(success => {
+          if (success) {
+            this.cadastrarAluno()
+            resolve(true)
+          } else {
+            reject()
+          }
+        })
+      })
+    },
+
+    validarMatricula() {
+      return new Promise((resolve, reject) => {
+        this.$refs.regraMatricula.validate().then(success => {
+          if (success) {
+            resolve(true)
+          }
+          else {
+            reject()
+          }
+        })
+      })
+    },
+
+    validarPagamento() {
+      return new Promise((resolve, reject) => {
+        this.$refs.regraPagamento.validate().then(success => {
           if (success) {
             const payload = {
-              aluno_id: this.aluno_id,
+              aluno_id: localStorage.getItem('aluno_id'),
               turma_id: this.turma_id,
               valor_curso: this.valor_curso,
               desconto_curso: this.desconto_curso,
@@ -1174,12 +1225,11 @@ export default {
                   data_vencimento: this.data_vencimento,
                   qtd_parcelas: this.qtd_parcelas,
                   valor_curso: this.valor_curso,
-                  aluno_id: this.aluno_id,
+                  aluno_id:localStorage.getItem('aluno_id'),
                   matricula_id: localStorage.getItem('matricula_id'),
                 }
                 this.$http.post('parcelas/matricular', payloadParcela)
                   .then(() => {
-                    localStorage.removeItem('aluno_id')
                     localStorage.removeItem('matricula_id')
                   })
               })
