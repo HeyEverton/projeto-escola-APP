@@ -61,6 +61,22 @@
             </b-form-group>
           </b-col>
 
+          <b-col
+            md="6"
+          >
+            <!-- <b-form-group
+              label="Curso"
+              label-for="curso"
+            > -->
+            <h5 class="mt-1">
+              Curso: {{ curso_nome }}
+            </h5>
+            <h6>Carga Horária: {{ carga_horaria }} <span v-if="carga_horaria">horas</span> </h6>
+
+          <!-- </b-form-group> -->
+
+          </b-col>
+
           <b-col md="6">
             <b-form-group
               label="Valor do curso"
@@ -97,7 +113,7 @@
             </b-form-group>
           </b-col>
 
-          <b-col md="6">
+          <b-col md="12">
             <b-form-group
               label="Data de vencimento"
               label-for="data_vencimento"
@@ -145,13 +161,19 @@
               label="Quantas parcelas"
               label-for="qtd_parcelas"
             >
-              <v-select
+              <!-- <v-select
                 ref="parcela"
                 v-model="qtd_parcelas"
                 label="nome"
                 :options="parcelas"
                 placeholder="Selecione a quantas parcelas terá"
                 @input="catchEventParcela"
+              /> -->
+              <b-form-input
+                id="qtd_parcelas"
+                v-model="qtd_parcelas"
+                type="number"
+                maxlength="2"
               />
             </b-form-group>
             <b-button
@@ -183,7 +205,7 @@
               </template>
 
               <template #cell(valor_parcela)="data">
-                {{ data.item.valor_parcela }} R$
+                R$ {{ data.item.valor_parcela }}
               </template>
 
               <template #cell(num_parcela)="data">
@@ -205,9 +227,7 @@
 
         </b-row>
       </validation-observer>
-
     </b-col>
-
   </div>
 </template>
 
@@ -234,6 +254,7 @@ import {
   BFormInvalidFeedback,
   BFormTextarea,
   BInputGroupAppend,
+  BCard,
 } from 'bootstrap-vue'
 
 import { FormWizard, TabContent } from 'vue-form-wizard'
@@ -243,7 +264,6 @@ import Ripple from 'vue-ripple-directive'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import SidebarPagamento from './SidebarPagamento.vue'
-import SidebarDetalhes from './SidebarDetalhes.vue'
 
 export default {
   components: {
@@ -260,7 +280,6 @@ export default {
     BBadge,
     BSidebar,
     SidebarPagamento,
-    SidebarDetalhes,
     BListGroup,
     BListGroupItem,
     BCardText,
@@ -272,6 +291,7 @@ export default {
     TabContent,
     ValidationProvider,
     ValidationObserver,
+    BCard,
   },
 
   directives: {
@@ -348,6 +368,8 @@ export default {
       num_parcela: '',
       valor_parcela: '',
       qtd_parcelas: '',
+      curso_nome: '',
+      carga_horaria: '',
       pagamentos: [
         { code: 'C', nome: 'Crédito' },
         { code: 'D', nome: 'Débito' },
@@ -368,7 +390,6 @@ export default {
         { key: 'valor_parcela', label: 'Valor da parcela' },
         { key: 'data_vencimento', label: 'Data de vencimento' },
       ],
-
     }
   },
 
@@ -448,24 +469,13 @@ export default {
         })
     },
 
-    // validationFormAddress() {
-    //   return new Promise((resolve, reject) => {
-    //     this.$refs.addressRules.validate().then(success => {
-    //       if (success) {
-    //         resolve(true)
-    //       } else {
-    //         reject()
-    //       }
-    //     })
-    //   })
-    // },
-
     gerarParcelas() {
       const payload = {
         num_parcela: 1,
         valor_curso: this.valor_curso,
         data_vencimento: this.data_vencimento,
-        qtd_parcelas: this.n_parcela,
+        qtd_parcelas: this.qtd_parcelas,
+        desconto_curso: this.desconto_curso,
       }
 
       this.$http.post('parcelas', payload)
@@ -478,14 +488,15 @@ export default {
       this.$http.get(`turma/curso/${this.turma_id}`)
         .then(response => {
           this.valor_curso = response.data.data.curso.preco
-          // this.desconto_curso = response.data.data.curso.desconto
-          this.desconto = response.data.data.curso.preco
+          this.curso_nome = response.data.data.curso.nome
+          this.carga_horaria = response.data.data.curso.carga_horaria
+          // this.desconto = response.data.data.curso.preco
         })
     },
 
-    catchEventParcela(value) {
-      this.n_parcela = value
-    },
+    // catchEventParcela(value) {
+    //   this.n_parcela = value
+    // },
   },
 }
 </script>

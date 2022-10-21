@@ -20,6 +20,9 @@
 
       </div>
     </b-alert>
+    <h1 class="mb-1">
+      Aluno: {{ alunoData.nome }}
+    </h1>
 
     <b-tabs
       v-if="userData"
@@ -133,11 +136,12 @@ export default {
     }
   },
 
-  // data() {
-  //   return {
-  //     userData,
-  //   }
-  // },
+  data() {
+    return {
+      // userData,
+      alunoData: {},
+    }
+  },
 
   created() {
     this.$http.get(`aluno/matricula/${router.currentRoute.params.id}`)
@@ -155,13 +159,14 @@ export default {
           })
           this.$router.replace('/lista-usuarios')
         }
+        this.alunoData = response.data.data[0].aluno
         this.userData = response.data
       })
-      // .catch(error => {
-      //   if (error.response.status === 404) {
-      //     userData.value = undefined
-      //   }
-      //
+      .catch(error => {
+        if (error.response.status === 404) {
+          userData.value = undefined
+        }
+      })
   },
 }
 </script>

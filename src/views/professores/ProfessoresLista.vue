@@ -57,8 +57,10 @@
                       id="turno"
                       @click="get"
                     >
+                      <feather-icon icon="UsersIcon" />
                       Listar todos
                     </b-dropdown-item>
+
                   </b-dropdown>
                 </b-input-group-prepend>
                 <b-form-input
@@ -73,8 +75,8 @@
                     @click="pesquisar"
                   >
                     <feather-icon icon="SearchIcon" />
-                  <!-- <span class="text-nowrap">Pesquisar</span> -->
                   </b-button>
+
                   <b-button
                     v-b-tooltip.hover
                     variant="outline-info"

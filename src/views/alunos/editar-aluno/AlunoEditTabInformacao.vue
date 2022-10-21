@@ -262,41 +262,11 @@
       </validation-observer>
     </b-form>
 
-    <!-- PERMISSION TABLE -->
-    <!-- <b-card
-      no-body
-      class="border mt-1"
-    >
-      <b-card-header class="p-1">
-        <b-card-title class="font-medium-2">
-          <feather-icon
-            icon="LockIcon"
-            size="18"
-          />
-          <span class="align-middle ml-50">Permissões</span>
-        </b-card-title>
-      </b-card-header>
-      <b-table
-        striped
-        responsive
-        class="mb-0"
-        :items="permissionsData"
-      >
-        <template #cell(module)="data">
-          {{ data.value }}
-        </template>
-        <template #cell()="data">
-          <b-form-checkbox :checked="data.value" />
-        </template>
-      </b-table>
-    </b-card> -->
-
-    <!-- Action Buttons -->
     <b-button
       variant="primary"
       class="mb-1 mb-sm-0 mr-0 mr-sm-1"
       :block="$store.getters['app/currentBreakPoint'] === 'xs'"
-      @click="updateUser"
+      @click="updateProfile"
     >
       Salvar
     </b-button>
@@ -421,33 +391,35 @@ export default {
           userData.value = undefined
         }
       })
-    // this.$http
-    //     .get(`aluno/matricula/${router.currentRoute.params.id}`)
-    //     .then(response => {
-    //       // console.log(response.data.data)
-    //       this.userData = response.data.data
-    //     })
-    //     .catch(error => {
-    //       if (error.response.status === 404) {
-    //         userData.value = undefined
-    //       }
-    //     })
   },
+
   methods: {
     catchEvent(event) {
       this.profile_photo_path = event.target.files[0]
     },
 
-    updateUser() {
+    updateProfile() {
       let payload = ''
       payload = new FormData()
-      payload.append('profile_photo_path', this.profile_photo_path)
-      payload.append('name', this.userData[0].user.name)
-      payload.append('email', this.userData[0].user.email)
+      payload.append('aluno_foto', this.userData.aluno_foto)
+      payload.append('nome', this.userData.nome)
+      payload.append('cpf_aluno', this.userData.cpf_aluno)
+      payload.append('email', this.userData.email)
+      payload.append('nacionalidade', this.userData.nacionalidade)
+      payload.append('data_nasc', this.userData.data_nasc)
+      payload.append('sexo', this.userData.sexo)
+      payload.append('whatsapp', this.userData.whatsapp)
+      payload.append('tel_contato', this.userData.tel_contato)
+      payload.append('escolaridade', this.userData.escolaridade)
+      payload.append('observacao', this.userData.observacao)
+      payload.append('nome_rua', this.userData.nome_rua)
+      payload.append('cep', this.userData.cep)
+      payload.append('bairro', this.userData.bairro)
+      payload.append('cidade', this.userData.cidade)
+      payload.append('estado', this.userData.estado)
       payload.append('_method', 'put')
-
       this.$http
-        .post(`users/${router.currentRoute.params.id}`, payload)
+        .post(`alunos/${router.currentRoute.params.id}`, payload)
         .then(response => {
           if (response.status == 200) {
             this.$swal({
@@ -458,16 +430,6 @@ export default {
                 confirmButton: 'btn btn-success',
               },
             })
-          } else {
-            this.$swal({
-              title: 'Falha ao editar!',
-              text: 'Ops! parece que houve um erro ao editar seus dados!',
-              icon: 'error',
-              customClass: {
-                confirmButton: 'btn btn-primary',
-              },
-              buttonsStyling: false,
-            })
           }
           this.$http
             .get(`aluno/matricula/${router.currentRoute.params.id}`)
@@ -476,17 +438,15 @@ export default {
             })
         })
         .catch(error => {
-          if (error.message) {
-            this.$swal({
-              title: 'Acesso negado!',
-              text: 'Você não tem autorização para editar os dados deste usuário!',
-              icon: 'error',
-              customClass: {
-                confirmButton: 'btn btn-primary',
-              },
-              buttonsStyling: false,
-            })
-          }
+          this.$swal({
+            title: 'Falha ao editar!',
+            text: 'Ops! parece que houve um erro ao editar seus dados!',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-primary',
+            },
+            buttonsStyling: false,
+          })
         })
     },
   },

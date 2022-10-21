@@ -6,7 +6,7 @@
       class="mb-2"
     >
       <h5 class="mb-2">
-        Suas mensalidades
+        Mensalidades de {{ alunoData.nome }}
       </h5>
 
       <b-sidebar
@@ -113,7 +113,7 @@
                   :options="statusPagamento"
                   :reduce="statusPagamento => statusPagamento.code"
                   placeholder="Selecione o status de pagamento"
-                  disbled
+                  disabled
                 />
               </b-form-group>
             </b-col>
@@ -133,21 +133,62 @@
                   readonly
                 />
               </b-form-group>
-
-              <!-- <div class="d-flex justify-content-between mt-2">
-                <b-button
-                  variant="danger"
-                  class="mb-1 mb-sm-0 mr-0"
-                  :block="$store.getters['app/currentBreakPoint'] === 'xs'"
-                  @click="hide"
-                >
-                  Voltar
-                </b-button>
-              </div> -->
             </b-col>
           </b-row>
         </b-form>
       </b-sidebar>
+
+      <div class="d-flex">
+        <b-input-group class="mb-2 ">
+          <!-- <b-input-group-prepend> -->
+          <b-dropdown
+            text="Listar todas as parcelas..."
+            variant="outline-primary"
+          >
+            <b-dropdown-item
+              @click="parcelasAbertas"
+            >
+              <span class="text-info">
+                <feather-icon icon="DollarSignIcon" />
+                Abertas</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item
+              @click="parcelasPagas"
+            >
+              <span class="text-success">
+                <feather-icon icon="CheckSquareIcon" />
+                Pagas</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item
+              @click="parcelaPagaComAtraso"
+            >
+              <span class="text-warning">
+                <feather-icon icon="AlertCircleIcon" />
+                Pagas com atraso</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item
+              @click="parcelasAtrasadas"
+            >
+              <span class="text-danger">
+                <feather-icon icon="AlertTriangleIcon" />
+                Atrasadas</span>
+            </b-dropdown-item>
+
+            <b-dropdown-divider />
+
+            <b-dropdown-item
+              @click="todasParcelas"
+            >
+              <span class="text-primary">
+
+                Listar todas</span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-input-group>
+      </div>
 
       <b-table
         small
@@ -156,7 +197,7 @@
         bordered
         responsive
         show-empty
-        empty-text="Este aluno não possui nenhuma mensalidade"
+        empty-text="Nenhuma parcela foi encontrada"
       >
 
         <template #cell(parcelas)="data">
@@ -167,8 +208,9 @@
           {{ moment(data.item.data_vencimento).format('DD/MM/YYYY') }}
         </template>
 
+        <!-- eslint-disable-next-line -->
         <template #cell(matricula)="data">
-          {{ data.item.matricula.id }}
+          {{ changeNomeTurma }}
         </template>
 
         <template #cell(data_pagamento)="data">
@@ -205,7 +247,7 @@
           </b-button>
 
           <b-button
-            v-if="data.item.status == 'Em aberto' || data.item.status == 'Atrasado'"
+            v-if="data.item.status == 'Em aberto' || data.item.status == 'Atrasada'"
             v-b-tooltip.hover
             v-b-toggle.sidebar-right
             variant="outline-primary"
@@ -213,7 +255,6 @@
             title="Informar pagamento"
             @click="toggle(data.item.id)"
           >
-
             <feather-icon icon="DollarSignIcon" />
           </b-button>
 
@@ -259,6 +300,9 @@ import {
   BFormInvalidFeedback,
   BFormTextarea,
   BInputGroupAppend,
+  BDropdown,
+  BDropdownItem,
+  BDropdownDivider,
 
 } from 'bootstrap-vue'
 
@@ -268,7 +312,6 @@ import Ripple from 'vue-ripple-directive'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { kFormatter } from '@core/utils/filter'
 import SidebarPagamento from './SidebarPagamento.vue'
-import SidebarDetalhes from './SidebarDetalhes.vue'
 
 export default {
   components: {
@@ -285,7 +328,6 @@ export default {
     BBadge,
     SidebarPagamento,
     BSidebar,
-    SidebarDetalhes,
     BListGroup,
     BListGroupItem,
     BCardText,
@@ -293,6 +335,9 @@ export default {
     BFormTextarea,
     BInputGroupAppend,
     vSelect,
+    BDropdown,
+    BDropdownItem,
+    BDropdownDivider,
   },
 
   directives: {
@@ -355,11 +400,6 @@ export default {
     }
   },
 
-  disabled: {
-    type: Boolean,
-    default: true,
-  },
-
   props: {
     parcela: {
       type: Object,
@@ -375,22 +415,13 @@ export default {
       parcela_id: '',
       matricula_id: '',
       payload: {},
+      alunoData: {},
 
-      colunas: [
-        { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
-        { key: 'parcelas', label: 'Nº Parcela' },
-        { key: 'valor_parcela', label: 'Valor' },
-        { key: 'matricula', label: 'Nº da matrícula' },
-        { key: 'data_vencimento', label: 'Data de vencimento' },
-        { key: 'valor_curso', label: 'Valor do curso' },
-        { key: 'status', label: 'Status' },
-        { key: 'actions', label: 'Ações' },
-      ],
       fields: [
         { key: 'id', thClass: 'd-none', tdClass: 'd-none' },
         { key: 'parcelas', label: 'Parcela' },
         { key: 'valor_parcela', label: 'Valor' },
-        { key: 'matricula', label: 'Nº da matrícula' },
+        { key: 'matricula', label: 'Nome da turma' },
         { key: 'data_vencimento', label: 'Data de vencimento' },
         { key: 'data_pagamento', label: 'Data de pagamento' },
         { key: 'status', label: 'Status' },
@@ -401,11 +432,14 @@ export default {
         { code: 1, nome: 'Em aberto' },
         { code: 2, nome: 'Pago com atraso' },
         { code: 3, nome: 'Pago' },
-        { code: 4, nome: 'Atrasado' },
+        { code: 4, nome: 'Atrasada' },
       ],
       pagStatus: '',
       alunoNome: '',
       recebeu: '',
+
+      parcelasMatricula: [],
+      nomeTurma: '',
     }
   },
 
@@ -426,16 +460,32 @@ export default {
         }
 
         if (parcela.status === 4) {
-          parcela.status = 'Atrasado'
+          parcela.status = 'Atrasada'
         }
       })
     },
+
+    changeNomeTurma() {
+      return this.nomeTurma
+    },
+
   },
 
   created() {
     this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
       .then(response => {
         this.mensalidades = response.data.data
+      })
+
+    this.$http.get(`parcelas/matricula/turmas/${router.currentRoute.params.id}`)
+      .then(response => {
+        this.parcelasMatricula = response.data.data
+        this.nomeTurma = this.parcelasMatricula[0].turma.nome
+      })
+    this.$http.get(`alunos/${router.currentRoute.params.id}`)
+      .then(response => {
+        // console.log(response.data.data)
+        this.alunoData = response.data.data
       })
   },
 
@@ -445,7 +495,7 @@ export default {
       if (status === 'Em aberto') return 'light-info'
       if (status === 'Pago com atraso') return 'light-warning'
       if (status === 'Pago') return 'light-success'
-      if (status === 'Atrasado') return 'light-danger'
+      if (status === 'Atrasada') return 'light-danger'
     },
 
     toggle(parcela_id) {
@@ -464,16 +514,54 @@ export default {
       const id = this.parcela_id
       this.$http.post(`pagamento/${id}`, payload)
         .then(response => {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Sucesso!',
-              text: 'O pagamento desta parcela foi informado com sucesso.',
-              icon: 'CheckIcon',
-              variant: 'success',
+          this.$swal({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'O pagamento desta parcela foi informado com sucesso',
+            customClass: {
+              confirmButton: 'btn btn-success',
             },
           })
-          console.log(response)
+        })
+        .then(() => {
+          this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
+            .then(response => {
+              this.mensalidades = response.data.data
+            })
+        })
+    },
+
+    parcelasAbertas() {
+      this.$http.get(`parcelas/abertas/${router.currentRoute.params.id}`)
+        .then(response => {
+          this.mensalidades = response.data
+        })
+    },
+    parcelasPagas() {
+      this.$http.get(`parcelas/pagas/${router.currentRoute.params.id}`)
+        .then(response => {
+          this.mensalidades = response.data
+        })
+    },
+
+    parcelaPagaComAtraso() {
+      this.$http.get(`parcelas/pagas-atraso/${router.currentRoute.params.id}`)
+        .then(response => {
+          this.mensalidades = response.data
+        })
+    },
+
+    parcelasAtrasadas() {
+      this.$http.get(`parcelas/atrasadas/${router.currentRoute.params.id}`)
+        .then(response => {
+          this.mensalidades = response.data
+        })
+    },
+
+    todasParcelas() {
+      this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
+        .then(response => {
+          this.mensalidades = response.data.data
         })
     },
   },
