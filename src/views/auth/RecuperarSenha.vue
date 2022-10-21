@@ -118,18 +118,18 @@
               </b-form-group>
 
               <b-overlay
-              :show="show"
-              spinner-variant="primary"
-              spinner-small
+                :show="show"
+                spinner-variant="primary"
+                spinner-small
               >
-              <b-button
-                block
-                type="submit"
-                variant="primary"
-              >
-                Salvar nova senha
-              </b-button>
-            </b-overlay>
+                <b-button
+                  block
+                  type="submit"
+                  variant="primary"
+                >
+                  Salvar nova senha
+                </b-button>
+              </b-overlay>
             </b-form>
           </validation-observer>
 
@@ -236,23 +236,22 @@ export default {
             token: this.$route.query.token,
           }
           this.$http.post('recuperar-senha', payload)
-          .then(() => {
-            this.show = false
-            this.$swal({
-              icon: 'success',
-              title: 'Senha alterada com sucesso!',
-              text: 'Você alterou sua senha com sucesso. Faça login para continuar.',
-              customClass: {
-                confirmButton: 'btn btn-success',
-              },
+            .then(() => {
+              this.show = false
+              this.$swal({
+                icon: 'success',
+                title: 'Senha alterada com sucesso!',
+                text: 'Você alterou sua senha com sucesso. Faça login para continuar.',
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                },
+              })
+              this.userEmail = ''
+              this.newPassword = ''
+              this.$router.replace('/login')
             })
-            this.userEmail = ''
-            this.newPassword = ''
-            this.$router.replace('/login')
-          })
         } else {
           this.show = false
-          
         }
       })
     },

@@ -30,6 +30,7 @@
                       id="nome"
                       @click="event"
                     >
+                      <feather-icon icon="UserIcon" />
                       Nome
                     </b-dropdown-item>
 
@@ -37,6 +38,7 @@
                       id="cpf"
                       @click="event"
                     >
+                      <feather-icon icon="FileTextIcon" />
                       CPF
                     </b-dropdown-item>
 
@@ -44,6 +46,7 @@
                       id="email"
                       @click="event"
                     >
+                      <feather-icon icon="MailIcon" />
                       E-mail
                     </b-dropdown-item>
 
@@ -53,6 +56,7 @@
                       id="turno"
                       @click="get"
                     >
+                      <feather-icon icon="UsersIcon" />
                       Listar todos
                     </b-dropdown-item>
                   </b-dropdown>
@@ -329,6 +333,9 @@ export default {
       }
       if (this.campo == 'email') {
         this.pesquisarEmail(this.campoPesquisa)
+      }
+      if (this.campoPesquisa == 0) {
+        this.get()
       }
     },
 

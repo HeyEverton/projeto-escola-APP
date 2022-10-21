@@ -74,18 +74,18 @@
                 </validation-provider>
               </b-form-group>
               <b-overlay
-              :show="show"
-              spinner-variant="primary"
-              spinner-small
+                :show="show"
+                spinner-variant="primary"
+                spinner-small
               >
-            <b-button
-              type="submit"
-              variant="primary"
-              block
-            >
-              Enviar link para mudar senha
-            </b-button>          
-          </b-overlay>
+                <b-button
+                  type="submit"
+                  variant="primary"
+                  block
+                >
+                  Enviar link para mudar senha
+                </b-button>
+              </b-overlay>
             </b-form>
           </validation-observer>
 
@@ -177,7 +177,7 @@ export default {
                 },
               })
             })
-          } else {
+        } else {
           this.show = false
         }
       })

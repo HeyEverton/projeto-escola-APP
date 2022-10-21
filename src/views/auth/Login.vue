@@ -282,7 +282,7 @@ export default {
 
                 this.show = false
                 this.$router.replace('/')
-                .then(() => {
+                  .then(() => {
                     this.$toast({
                       component: ToastificationContent,
                       position: 'top-left',
@@ -294,8 +294,8 @@ export default {
                       },
                     })
                   })
-                })
-                .catch(e => {
+              })
+              .catch(e => {
                 this.show = false
                 const errorCode = e?.response?.data?.error || 'ServerError'
                 if (errorCode == 'LoginInvalidException') {

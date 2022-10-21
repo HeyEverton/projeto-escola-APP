@@ -9,13 +9,13 @@
       back-button-text="Anterior"
       next-button-text="Próximo"
       class="mb-3"
-      @on-complete="finalizar"      
+      @on-complete="finalizar"
     >
 
       <!--tab informacoes pessoais -->
       <tab-content
         title="Dados do aluno"
-        :before-change="validarDados"        
+        :before-change="validarDados"
       >
         <validation-observer
           ref="regraDados"
@@ -859,7 +859,7 @@ export default {
         { key: 'data_vencimento', label: 'Data de vencimento' },
       ],
       Tableparcelas: [],
-      
+
       // COMPONENTES
       required,
       email,
@@ -999,11 +999,11 @@ export default {
         data_vencimento: this.data_vencimento,
         qtd_parcelas: this.n_parcela,
       }
-      
+
       this.$http.post('parcelas', payload)
-      .then(response => {
-        this.Tableparcelas = response.data
-      })
+        .then(response => {
+          this.Tableparcelas = response.data
+        })
     },
 
     handleInput: debounce(function () {
@@ -1015,7 +1015,7 @@ export default {
     viaEmail() {
       alert('via email')
     },
-    
+
     imprimir() {
       window.print()
     },
@@ -1068,7 +1068,6 @@ export default {
           localStorage.setItem('aluno_nome', response.data.data.nome)
           this.aluno_nome = localStorage.getItem('aluno_nome')
 
-
           // this.$http.get('alunos')
           //   .then(response => {
           //     this.alunos = response.data.data
@@ -1077,7 +1076,6 @@ export default {
 
         .catch(e => {
           if (e?.response?.data?.message == 'O campo aluno foto é obrigatório.') {
-
             this.$swal({
               icon: 'error',
               title: 'Erro!',
@@ -1097,7 +1095,6 @@ export default {
             // })
           }
           if (e?.response?.data?.error == 'EmailHasBeenTaken') {
-
             this.$swal({
               icon: 'error',
               title: 'Erro!',
@@ -1117,7 +1114,6 @@ export default {
             // })
           }
           if (e?.response?.data?.error == 'InvalidCpf') {
-
             this.$swal({
               icon: 'error',
               title: 'Erro!',
@@ -1126,7 +1122,6 @@ export default {
                 confirmButton: 'btn btn-success',
               },
             })
-
           }
         })
     },
@@ -1141,7 +1136,6 @@ export default {
           variant: 'success',
         },
       })
-
     },
 
     validarDados() {
@@ -1174,8 +1168,7 @@ export default {
         this.$refs.regraMatricula.validate().then(success => {
           if (success) {
             resolve(true)
-          }
-          else {
+          } else {
             reject()
           }
         })
@@ -1225,7 +1218,7 @@ export default {
                   data_vencimento: this.data_vencimento,
                   qtd_parcelas: this.qtd_parcelas,
                   valor_curso: this.valor_curso,
-                  aluno_id:localStorage.getItem('aluno_id'),
+                  aluno_id: localStorage.getItem('aluno_id'),
                   matricula_id: localStorage.getItem('matricula_id'),
                 }
                 this.$http.post('parcelas/matricular', payloadParcela)
