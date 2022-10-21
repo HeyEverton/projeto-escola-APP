@@ -8,7 +8,7 @@ export default {
     const token = localStorage.getItem('access_token')
 
     if (!token) {
-      next({ name: 'nao-autenticado' })
+      next({ name: 'login' })
     }
     // AINDA TEM QUE CHECAR SE O TOKEN ESTA VALIDO
     await axios
@@ -24,7 +24,7 @@ export default {
         localStorage.removeItem('user_id')
         localStorage.removeItem('user_email')
         localStorage.removeItem('user_role')
-        next({ name: 'nao-autenticado' })
+        next({ name: 'login' })
       })
 
     next()
