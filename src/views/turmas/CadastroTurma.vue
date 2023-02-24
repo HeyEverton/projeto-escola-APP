@@ -101,21 +101,12 @@
                     :state="errors.length > 0 ? false : null"
                     placeholder="Insira a data de início "
                   />
-                  <!-- <cleave
-                    id="date"
-                    v-model="data_inicio"
-                    class="form-control"
-                    :raw="false"
-
-                    placeholder="DD/MM/AA"
-                    type="date"
-                  /> -->
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
 
-            <b-col md="6">
+            <!-- <b-col md="6">
               <b-form-group
                 label="Data de término"
                 label-for="data_termino"
@@ -137,7 +128,7 @@
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-            </b-col>
+            </b-col> -->
 
             <b-col md="6">
               <b-form-group
@@ -161,7 +152,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col md="6">
+            <!-- <b-col md="6">
               <b-form-group
                 label="Quantidade atual de alunos"
                 label-for="qt_maxA"
@@ -181,7 +172,7 @@
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-            </b-col>
+            </b-col> -->
 
             <b-col md="12">
               <b-form-group

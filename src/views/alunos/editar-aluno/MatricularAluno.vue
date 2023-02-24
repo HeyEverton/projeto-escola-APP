@@ -450,8 +450,16 @@ export default {
           }
           this.$http.post('parcelas/matricular', payloadParcela)
             .then(() => {
-              localStorage.removeItem('aluno_id')
               localStorage.removeItem('matricula_id')
+            })
+            .then(()=> {
+              this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)
+                  .then(response => {
+                    console.log('matricula aluno componente')
+                    console.log(response.data.data)
+                    console.log(response.data)
+                    // this.mensalidades = response.data.data
+                  })
             })
         })
         .catch(error => {

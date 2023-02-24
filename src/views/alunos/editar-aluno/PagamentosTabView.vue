@@ -522,6 +522,7 @@ export default {
               confirmButton: 'btn btn-success',
             },
           })
+          payload = ''
         })
         .then(() => {
           this.$http.get(`dados-aluno/${router.currentRoute.params.id}`)

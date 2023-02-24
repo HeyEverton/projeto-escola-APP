@@ -238,7 +238,6 @@ export default {
       .get(`alunos/${router.currentRoute.params.id}`)
       .then(response => {
         this.userData = response.data.data
-        // console.log(this.userData)
       })
       .catch(error => {
         if (error.response.status === 404) {
@@ -262,6 +261,7 @@ export default {
       const payload = dados
 
       this.$emit('informar-pagamento', payload)
+      
     },
   },
 }

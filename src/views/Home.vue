@@ -111,7 +111,6 @@ export default {
       })
     this.$http.get('todos-cursos/hoje')
       .then(response => {
-      // console.log(response.data)
         this.teste = response.data
       })
   },

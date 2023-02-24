@@ -979,7 +979,6 @@ export default {
   methods: {
 
     selectTurma() {
-      // console.log(this.turmas_id)
       this.$http.get(`turma/curso/${this.turma_id}`)
         .then(response => {
           this.valor_curso = response.data.data.curso.preco

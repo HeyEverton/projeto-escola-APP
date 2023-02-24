@@ -250,7 +250,6 @@ export default {
     this.$http
       .get(`alunos/${router.currentRoute.params.id}`)
       .then(response => {
-        // console.log(response.data.data)
         this.userData = response.data.data
       })
       .catch(error => {

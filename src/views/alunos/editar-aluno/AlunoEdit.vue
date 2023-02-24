@@ -20,16 +20,14 @@
 
       </div>
     </b-alert>
-    <h1 class="mb-1">
+    <!-- <h1 class="mb-1">
       Aluno: {{ alunoData.nome }}
-    </h1>
+    </h1> -->
 
     <b-tabs
       v-if="userData"
       pills
     >
-
-      <!-- Tab: Account -->
       <b-tab active>
         <template #title>
           <feather-icon
@@ -159,14 +157,15 @@ export default {
           })
           this.$router.replace('/lista-usuarios')
         }
-        this.alunoData = response.data.data[0].aluno
+        // console.log(response.data.data)
+        // this.alunoData = response.data.data[0].aluno
         this.userData = response.data
       })
-      .catch(error => {
-        if (error.response.status === 404) {
-          userData.value = undefined
-        }
-      })
+      // .catch(error => {
+      //   if (error.response.status === 404) {
+      //     userData.value = undefined
+      //   }
+      // })
   },
 }
 </script>
