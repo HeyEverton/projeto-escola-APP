@@ -250,7 +250,6 @@ export default {
     this.$http
       .get(`professores/${router.currentRoute.params.id}`)
       .then(response => {
-        // console.log(response.data.data)
         this.userData = response.data.data
       })
       .catch(error => {

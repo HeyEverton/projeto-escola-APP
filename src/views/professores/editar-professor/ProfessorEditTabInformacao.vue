@@ -426,7 +426,6 @@ export default {
     this.$http
       .get(`professores/${router.currentRoute.params.id}`)
       .then(response => {
-        // console.log(response.data.data)
         this.userData = response.data.data
       })
       .catch(error => {
@@ -434,17 +433,6 @@ export default {
           userData.value = undefined
         }
       })
-    // this.$http
-    //     .get(`aluno/matricula/${router.currentRoute.params.id}`)
-    //     .then(response => {
-    //       // console.log(response.data.data)
-    //       this.userData = response.data.data
-    //     })
-    //     .catch(error => {
-    //       if (error.response.status === 404) {
-    //         userData.value = undefined
-    //       }
-    //     })
   },
   methods: {
     catchImage(event) {

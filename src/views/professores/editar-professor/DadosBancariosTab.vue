@@ -6,15 +6,22 @@
         tag="form"
       >
         <b-row>
+          <b-col
+            cols="12"
+            class="mb-2"
+          >
+            <h5 class="mb-0">
+              Dados bancários
+            </h5>
+          </b-col>
 
-          <!-- Field: Full Name -->
           <b-col
             cols="12"
             md="6"
           >
             <b-form-group
               label="Número da conta"
-              label-for="full-name"
+              label-for="numero_conta"
             >
               <b-form-input
                 id="full-name"
@@ -22,8 +29,6 @@
               />
             </b-form-group>
           </b-col>
-
-          <!-- Field: Full Name -->
 
           <b-col
             cols="12"
@@ -48,7 +53,6 @@
             </b-form-group>
           </b-col>
 
-          <!-- Field: nacionalidade -->
           <b-col md="12">
             <validation-provider
               #default="{ errors }"
@@ -70,6 +74,45 @@
               </b-form-group>
             </validation-provider>
           </b-col>
+
+          <b-col md="6">
+            <validation-provider
+              #default="{ errors }"
+              name="Forma de pagamento"
+              rules="required"
+            >
+              <b-form-group
+                label="Forma de pagamento"
+                label-for="estado"
+                :state="errors.length > 0 ? false:null"
+              >
+                <v-select
+                  v-model="forma_pagamento"
+                  label="nome"
+                  :reduce="bancos => bancos.code"
+                  :options="forma_pagamentos"
+                  placeholder="Selecione a forma de pagamento"
+                />
+              </b-form-group>
+            </validation-provider>
+          </b-col>
+
+          <b-col
+            cols="12"
+            md="6"
+          >
+            <b-form-group
+              label="Valor do salário"
+              label-for="valor_salario"
+            >
+              <b-form-input
+                id="valor_salario"
+                v-model="valor_salario"
+              />
+
+            </b-form-group>
+          </b-col>
+
         </b-row>
       </validation-observer>
     </b-form>
@@ -197,6 +240,12 @@ export default {
         { code: 'CE', nome: 'Caixa Econômica' },
         { code: 'I', nome: 'Itaú' },
         { code: 'BP', nome: 'Banco Pan' },
+      ],
+
+      forma_pagamentos: [
+        { code: 'D', nome: 'Transferência DOC' },
+        { code: 'T', nome: 'Transferência TED' },
+        { code: 'P', nome: 'Pix' },
       ],
 
     }
